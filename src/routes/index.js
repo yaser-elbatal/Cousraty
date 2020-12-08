@@ -4,32 +4,41 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Authnavigation, MainStackNavigator } from './Navigations';
 import { AsyncStorage } from 'react-native';
 
-
+export const UserContext = React.createContext();
+export const UserProvider = UserContext.Provider;
 
 function AccessRoots() {
 
-    const [Token, SetToken] = useState('')
+    const [token, settoken] = useState("");
 
-    useEffect(() => {
-        AsyncStorage.getItem('token').then((tok) => {
-            SetToken(tok)
-        })
-    }, [])
+    const setLogin = () => {
+        settoken("yasser");
+    };
+    const setLogout = () => {
+        settoken("");
+    };
 
 
 
     return (
-        <NavigationContainer>
-            <MainStackNavigator />
+        <UserProvider value={{ setLogin, setLogout }}>
 
-            {/* {
-                Token === 'Auth' ?
-                    <Authnavigation />
-                    :
+            <NavigationContainer>
 
-                    <MainStackNavigator />
-            } */}
-        </NavigationContainer>
+                {
+                    token ?
+                        <MainStackNavigator />
+                        :
+                        <Authnavigation />
+
+
+
+
+                }
+
+            </NavigationContainer>
+        </UserProvider>
+
     )
 }
 

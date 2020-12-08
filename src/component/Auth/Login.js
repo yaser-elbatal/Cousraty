@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { HeaderAuth } from '../../common/HeaderAuth'
 import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
 import { Colors } from '../../constant/Colors'
@@ -8,13 +8,15 @@ import { SText } from '../../common/SText'
 import BTN from '../../common/LoginBtn'
 import { validatePassword, validateEmail } from '../../common/Validation'
 import { Toaster } from '../../common/Toaster'
+import { UserContext } from '../../routes'
 
 function Login({ navigation }) {
 
     const [password, setPassword] = useState('');
     const [email, setemail] = useState('')
 
-    const [LoginHome, setLoginHome] = useState('')
+    const { setLogin, setLogout } = useContext(UserContext);
+
 
     const _validate = () => {
         let emailErr = validateEmail(email);
@@ -25,7 +27,7 @@ function Login({ navigation }) {
     const SubmitLogin = async () => {
         let val = _validate()
         if (!val) {
-            await AsyncStorage.setItem('token', 'Home').then(() => navigation.navigate('HomePage'))
+            setLogin()
 
         }
         else {
@@ -36,9 +38,6 @@ function Login({ navigation }) {
     }
 
 
-    useEffect(() => {
-        AsyncStorage.setItem('token', 'Auth')
-    }, [])
 
     return (
 

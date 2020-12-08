@@ -1,11 +1,17 @@
-import React from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, AsyncStorage } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
 import ProgressCircle from 'react-native-progress-circle'
+import { UserContext } from '../../routes'
 
 function CustomDrawerMenue({ navigation }) {
+
+
+    const { setLogin, setLogout } = useContext(UserContext);
+
+
     return (
         <View style={styles.constiner}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -77,7 +83,7 @@ function CustomDrawerMenue({ navigation }) {
                         <Text style={styles.AllText}>{i18n.t('Contact')}</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Touchable}>
+                    <TouchableOpacity style={styles.Touchable} onPress={() => setLogout()}>
                         <Image source={require('../../../assets/Images/logout.png')} style={styles.IconContent} resizeMode='contain' />
                         <Text style={styles.AllText}>{i18n.t('logout')}</Text>
                     </TouchableOpacity>

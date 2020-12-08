@@ -12,8 +12,18 @@ import { store, persistedStore } from './src/store/index.js';
 import './ReactotronConfig';
 import AccessRoots from './src/routes/index'
 
+
+
+
+
 export default function App() {
   const [isLoading, setisLoading] = useState(true);
+
+
+
+
+
+
 
   useEffect(() => {
 
