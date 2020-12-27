@@ -48,7 +48,7 @@ const ar = {
     Subsections: 'الاقسام الفرعية',
     subscribe: 'اشتراك',
     PricePaln: 'خطط الاسعار',
-    choosePlane: 'اختر الخطة التي تناسبك',
+    choosePlane: 'باقة الأشتراك في مجموعه الكورسات المقدمة',
     Monthlyplans: 'الخطط الشهرية',
     completeCours: 'الكورس كامل',
     month: 'شهر',
@@ -66,6 +66,13 @@ const ar = {
     new: 'جديد',
     Learningprogress: 'جاري التعلم',
     Finished: 'منتهي',
+    BankData: 'بيانات الحوالة البنكية',
+    BankName: 'اسم البنك',
+    AccName: 'رقم الحساب',
+    BankNameTr: 'اسم البنك المحول له',
+    AccNamer: 'اسم الحساب',
+    Amountpaid: 'المبلغ المسدد',
+
 
 
     PhoneErr: 'يرجي كتابة رقم جوال صحيح',
@@ -80,6 +87,7 @@ const ar = {
     AboutApp: 'كل ما يهم التطبيق',
     TermsCond: 'احكام وشروط خاصة بالتطبيق',
     RebQuestion: 'اسئلة تم تكرارها واجباتها',
+    watchPlan: 'مشاهدة خطتي الفرديه'
 
 
 }

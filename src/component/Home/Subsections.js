@@ -39,31 +39,9 @@ function Subsections({ navigation }) {
                             <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
                             <View style={styles.smallText}>
                                 <Text style={styles.Indevedual}>  {i18n.t('Individualplans')}  </Text>
-                                <Text style={styles.Price}>   15{i18n.t('Rs')}, 20{i18n.t('Lessons')}, 15{i18n.t('hours')} </Text>
                             </View>
 
-                            <View style={styles.centered}>
 
-                                <Text style={styles.percentage}>{'50%'}</Text>
-                                <ProgressCircle
-                                    percent={50}
-                                    radius={25}
-                                    borderWidth={1}
-                                    color={Colors.main}
-                                    shadowColor="white"
-                                    bgColor="white"
-                                    outerCircleStyle={{ overflow: 'hidden', alignSelf: 'flex-end' }}
-                                >
-                                    {
-                                        I18nManager.isRTL ?
-                                            <Image source={require('../../../assets/Images/green_playbutton.png')} style={styles.Icon} />
-                                            :
-                                            <Image source={require('../../../assets/Images/Play_button_right.png')} style={styles.Icon} />
-
-                                    }
-
-                                </ProgressCircle>
-                            </View>
                         </View>
                     </View>
                 </View>
@@ -78,22 +56,20 @@ function Subsections({ navigation }) {
 
                             <View style={styles.ViewClmn}>
                                 <Text style={styles.Indevedual}> {i18n.t('Individualplans')}</Text>
-                                <Text style={styles.Price}>2 ساعات, 50 {i18n.t('Rs')}</Text>
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.single,]}>
+                        <TouchableOpacity style={[styles.single, { marginTop: 50 }]}>
                             <View style={[styles.ViewNum, { backgroundColor: Colors.main }]}>
                                 <Text style={styles.num}>2</Text>
                             </View>
 
                             <View style={styles.ViewClmn}>
                                 <Text style={styles.Indevedual}> {i18n.t('Individualplans')}</Text>
-                                <Text style={styles.Price}>2 ساعات, 50 {i18n.t('Rs')}</Text>
                             </View>
                         </TouchableOpacity>
 
-                        <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 30 }} />
+                        <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 50 }} />
 
 
 

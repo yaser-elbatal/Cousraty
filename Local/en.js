@@ -55,7 +55,7 @@ const en = {
     Subsections: 'Subsections',
     subscribe: 'Subscripe',
     PricePaln: 'Price plans',
-    choosePlane: 'Choose the plan that suits you',
+    choosePlane: 'A package to participate in the total courses offered',
     Monthlyplans: 'Monthly plans',
     completeCours: 'Complete course',
     month: 'Month',
@@ -73,7 +73,13 @@ const en = {
     new: 'New',
     Learningprogress: 'Learning in progress',
     Finished: 'Finished',
-
+    watchPlan: 'Watch my Singles Plan',
+    BankData: 'Bank transfer data',
+    BankName: 'Bank name',
+    AccName: 'Account Number',
+    BankNameTr: 'The name of the transferring bank',
+    AccNamer: 'Account name',
+    Amountpaid: 'Amount paid',
 
     passwordErr: 'Please type a correct password',
     PhoneErr: 'Please type a correct phone number',

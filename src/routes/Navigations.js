@@ -29,7 +29,6 @@ import myProfile from '../component/Home/myProfile';
 const Stack = createStackNavigator();
 const MainStack = createStackNavigator();
 const DrawerNav = createDrawerNavigator();
-const HomeStack = createStackNavigator();
 
 
 

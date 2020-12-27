@@ -28,15 +28,11 @@ function HomePage({ navigation }) {
                         <Image source={require('../../../assets/Images/menu.png')} style={styles.Icon} />
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', }}>
-                        <TouchableOpacity>
-                            <Image source={require('../../../assets/Images/notification.png')} style={styles.Icon} />
-                        </TouchableOpacity>
 
-                        <TouchableOpacity style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('Notifications')}>
-                            <Image source={require('../../../assets/Images/active_notification.png')} style={styles.Icon} />
-                        </TouchableOpacity>
-                    </View>
+
+                    <TouchableOpacity style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('Notifications')}>
+                        <Image source={require('../../../assets/Images/active_notification.png')} style={styles.Icon} />
+                    </TouchableOpacity>
 
                 </View>
 
@@ -44,20 +40,23 @@ function HomePage({ navigation }) {
                     <Text style={styles.Hello}>{i18n.t('HelloApp')}</Text>
 
                     <InputIcon
+
                         placeholder={i18n.t('search')}
                         inputStyle={{ backgroundColor: 'white', color: Colors.black }}
-                        placeholderTextColor={'black'}
+                        placeholderTextColor={Colors.black}
                         styleCont={{ marginHorizontal: '1%', width: '95%', marginTop: 30 }}
-
                         image={require('../../../assets/Images/search.png')}
                     />
+
+
+
 
                     <View style={styles.card}>
                         <View style={styles.ImgText}>
                             <Image source={require('../../../assets/Images/big_lamp.png')} style={styles.ImgCard} resizeMode='contain' />
                             <View style={styles.wrabLess}>
                                 <Text style={styles.TextCard}>{i18n.t('FavLesson')}</Text>
-                                <BTN title={i18n.t('lesson')} ContainerStyle={styles.Btn} onPress={() => navigation.navigate('myProfile')} />
+                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} onPress={() => navigation.navigate('myProfile')} />
                             </View>
                         </View>
                     </View>
@@ -72,33 +71,7 @@ function HomePage({ navigation }) {
                                 <Text style={styles.Indevedual}>
                                     {i18n.t('Individualplans')}
                                 </Text>
-                                <Text style={styles.Price}>
-                                    15{i18n.t('Rs')}, 20{i18n.t('Lessons')}, 15{i18n.t('hours')}
-                                </Text>
                             </View>
-
-                            <View style={styles.centered}>
-
-                                <Text style={styles.percentage}>{'25%'}</Text>
-                                <ProgressCircle
-                                    percent={25}
-                                    radius={25}
-                                    borderWidth={1}
-                                    color={Colors.main}
-                                    shadowColor="white"
-                                    bgColor="white"
-                                    outerCircleStyle={{ overflow: 'hidden', alignSelf: 'flex-end' }}
-                                >
-                                    {
-                                        I18nManager.isRTL ?
-                                            <Image source={require('../../../assets/Images/green_playbutton.png')} style={styles.Icon} />
-                                            :
-                                            <Image source={require('../../../assets/Images/Play_button_right.png')} style={styles.Icon} />
-
-                                    }
-                                </ProgressCircle>
-                            </View>
-
                         </View>
                     </TouchableOpacity>
 
@@ -110,34 +83,7 @@ function HomePage({ navigation }) {
                                 <Text style={styles.Indevedual}>
                                     {i18n.t('Individualplans')}
                                 </Text>
-                                <Text style={styles.Price}>
-                                    15{i18n.t('Rs')}, 20{i18n.t('Lessons')}, 15{i18n.t('hours')}
-                                </Text>
                             </View>
-
-                            <View style={styles.centered}>
-
-                                <Text style={styles.percentage}>{'0%'}</Text>
-                                <ProgressCircle
-                                    percent={0}
-                                    radius={25}
-                                    borderWidth={1}
-                                    color={Colors.main}
-                                    shadowColor="white"
-                                    bgColor="white"
-                                    outerCircleStyle={{ overflow: 'hidden', alignSelf: 'flex-end' }}
-                                >
-                                    {
-                                        I18nManager.isRTL ?
-                                            <Image source={require('../../../assets/Images/green_playbutton.png')} style={styles.Icon} />
-                                            :
-                                            <Image source={require('../../../assets/Images/Play_button_right.png')} style={styles.Icon} />
-
-                                    }
-
-                                </ProgressCircle>
-                            </View>
-
                         </View>
                     </TouchableOpacity>
 
@@ -148,45 +94,14 @@ function HomePage({ navigation }) {
                                 <Text style={styles.Indevedual}>
                                     {i18n.t('Individualplans')}
                                 </Text>
-                                <Text style={styles.Price}>
-                                    15{i18n.t('Rs')}, 20{i18n.t('Lessons')}, 15{i18n.t('hours')}
-                                </Text>
-
-
                             </View>
-                            <View style={styles.centered}>
-
-                                <Text style={styles.percentage}>{'75%'}</Text>
-                                <ProgressCircle
-                                    percent={75}
-                                    radius={25}
-                                    borderWidth={1}
-                                    color={Colors.main}
-                                    shadowColor="white"
-                                    bgColor="white"
-                                    outerCircleStyle={{ overflow: 'hidden', alignSelf: 'flex-end' }}
-                                >
-                                    {
-                                        I18nManager.isRTL ?
-                                            <Image source={require('../../../assets/Images/green_playbutton.png')} style={styles.Icon} />
-                                            :
-                                            <Image source={require('../../../assets/Images/Play_button_right.png')} style={styles.Icon} />
-
-                                    }
-
-                                </ProgressCircle>
-                            </View>
-
                         </View>
                     </TouchableOpacity>
 
+
+
                 </ScrollView>
-
             </View>
-
-
-
-
         </View >
     )
 }
@@ -256,8 +171,8 @@ const styles = StyleSheet.create({
     },
     Btn: {
         marginTop: 0,
-        height: 35,
-        width: width * .4,
+        height: 50,
+        width: 170,
         marginHorizontal: '1%'
     },
     wrabLess: {

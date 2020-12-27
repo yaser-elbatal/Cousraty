@@ -23,52 +23,6 @@ function myProfile({ navigation }) {
     const [email, setemail] = useState('');
     const [Location, setLocation] = useState(i18n.t('location'))
 
-    const [routes] = useState([
-        { key: 'first', title: i18n.t('new') },
-        { key: 'second', title: i18n.t('Learningprogress') },
-        { key: 'third', title: i18n.t('Finished') },
-
-
-    ]);
-    const [index, setIndex] = useState(0);
-
-    const FirstRoute = () => (
-        <FirstRouteTab />
-    )
-
-
-    const SecondRoute = () => (
-        <FirstRouteTab />
-    )
-
-    const ThirdRoute = () => (
-        <FirstRouteTab />
-    )
-    const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-        third: ThirdRoute
-
-    });
-
-
-    const renderTabBar = props => (
-        <TabBar
-            {...props}
-            getLabelText={({ route }) => route.title}
-            activeColor={Colors.main}
-            inactiveColor={Colors.secondary}
-            labelStyle={{
-                fontSize: 12,
-                fontFamily: 'FairuzBold',
-                padding: 10
-
-            }}
-            style={{ backgroundColor: Colors.Labny, }}
-            indicatorStyle={{ backgroundColor: Colors.main, top: .4, height: 6, width: 70, marginHorizontal: 25 }}
-            pressColor={Colors.main}
-        />
-    );
 
 
     return (
@@ -78,8 +32,8 @@ function myProfile({ navigation }) {
             <View style={styles.Abs}>
 
                 <View style={styles.clmn}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: '2%' }}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginStart: 10 }}>
                             {
                                 I18nManager.isRTL ?
                                     <Image source={require('../../../assets/Images/white_back.png')} style={styles.IconBack} resizeMode='contain' />
@@ -130,19 +84,46 @@ function myProfile({ navigation }) {
                 </View>
 
 
-
                 <View style={styles.contents}>
-                    <TabView
-                        navigationState={{ index, routes }}
-                        renderScene={renderScene}
-                        onIndexChange={setIndex}
-                        initialLayout={width}
-                        style={{ borderTopLeftRadius: 55, borderTopRightRadius: 55, }}
-                        renderTabBar={renderTabBar}
-                    />
+                    <Content >
+
+                        <TouchableOpacity style={styles.SmallCard} onPress={() => navigation.navigate('Subsections')}>
+                            <View style={styles.WrabCard}>
+                                <Image source={require('../../../assets/Images/pencil.png')} style={styles.SMAllImg} resizeMode='contain' />
+                                <View style={styles.smallText}>
+                                    <Text style={styles.Indevedual}>
+                                        {i18n.t('Individualplans')}
+                                    </Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
 
 
+                        <TouchableOpacity style={[styles.SmallCard, { backgroundColor: Colors.orange, }]} onPress={() => navigation.navigate('Subsections')}>
+                            <View style={styles.WrabCard}>
+                                <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
+                                <View style={styles.smallText}>
+                                    <Text style={styles.Indevedual}>
+                                        {i18n.t('Individualplans')}
+                                    </Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={[styles.SmallCard, { backgroundColor: '#D5EFEF', }]}>
+                            <View style={styles.WrabCard}>
+                                <Image source={require('../../../assets/Images/lamp.png')} style={styles.SMAllImg} resizeMode='contain' />
+                                <View style={styles.smallText}>
+                                    <Text style={styles.Indevedual}>
+                                        {i18n.t('Individualplans')}
+                                    </Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+
+                    </Content>
                 </View>
+
             </View>
 
             <View style={[styles.centeredView,]}>
@@ -217,7 +198,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'FairuzBold',
         alignSelf: 'flex-start',
-        marginTop: 10
+        marginTop: 10,
+        marginStart: 20
     },
     Abs: {
         position: 'absolute',
@@ -226,7 +208,7 @@ const styles = StyleSheet.create({
     },
     clmn: {
         flexDirection: 'column',
-        marginHorizontal: '4%',
+        width
 
     },
     SCard: {
@@ -276,11 +258,13 @@ const styles = StyleSheet.create({
         fontFamily: 'FairuzBold',
     },
     contents: {
+
         backgroundColor: Colors.white,
         width,
         marginTop: 20,
         borderTopRightRadius: 55,
         borderTopLeftRadius: 55,
+        overflow: 'hidden',
         flex: 1,
         marginBottom: 50
 
@@ -338,7 +322,34 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15
     }
-    ,
+    , SmallCard: {
+        backgroundColor: Colors.foshia,
+        flex: 1, borderRadius: 25,
+        width: '93%',
+        marginHorizontal: '3%',
+        marginTop: 15,
+        paddingVertical: 15,
+        paddingHorizontal: 5,
+        justifyContent: 'center'
+    },
+    WrabCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: '1%'
+    },
+    SMAllImg: {
+        width: 60,
+        height: 60,
+    },
+    smallText: {
+        flexDirection: 'column',
+        marginStart: 10
+    },
+    Indevedual: {
+        fontFamily: 'FairuzBold',
+        fontSize: 14,
+        color: Colors.secondary
+    },
     Top: { flexDirection: 'row', alignItems: 'center', marginStart: 20 },
     Pic: { height: 120, width: 120, borderRadius: 50, },
     WrabClmn: { flexDirection: 'column', alignItems: 'center', marginStart: 5 },

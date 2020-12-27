@@ -35,7 +35,7 @@ const InputIcon = ({
             </Text>
 
             <TextInput
-                style={[styles.textInput, inputStyle, { borderColor: focused ? Colors.main : Colors.white, color: 'white' }]}
+                style={[styles.textInput, { borderColor: focused ? Colors.main : Colors.white, color: 'white' }, inputStyle]}
                 placeholder={focused ? null : placeholder}
                 value={value}
                 returnKeyType="done"

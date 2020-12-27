@@ -27,18 +27,16 @@ const HeaderAuth = ({ children, Icon, onPress }) => {
 
                                     }
                                 </TouchableOpacity>
-                                <Image source={require('../../assets/Images/imag.jpg')} style={styles.Imnage} />
+                                <Image source={require('../../assets/Images/logo.png')} style={styles.Imnage} resizeMode='contain' />
                             </View>
 
                             :
-                            <Image source={require('../../assets/Images/imag.jpg')} style={styles.Img} />
+                            <Image source={require('../../assets/Images/logo.png')} style={styles.Img} resizeMode='contain' />
                     }
-                    <View style={styles.Centerd}>
-                        <Text style={styles.FText}>الخطه التربويه الفرديه</Text>
-                        <Text style={styles.SText}>لبرامج التربيه الفكريه</Text>
-                    </View>
 
-                    {children}</ScrollView>
+
+                    {children}
+                </ScrollView>
             </KeyboardAvoidingView>
         </View>
     )
@@ -78,13 +76,12 @@ const styles = StyleSheet.create({
     WrabImg: {
         flexDirection: 'row',
         marginTop: 50,
-        alignItems: 'center',
     },
     Img: {
         alignSelf: 'center',
         width: 200,
-        height: 100,
-        marginTop: 40
+        height: 200,
+        marginTop: 20
     },
     IcnBack: {
         width: 25,
@@ -92,7 +89,7 @@ const styles = StyleSheet.create({
     },
     Imnage: {
         width: 200,
-        height: 100,
+        height: 140,
     }
 
 })

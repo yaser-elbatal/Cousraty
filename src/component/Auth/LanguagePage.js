@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     },
     Wrap: {
         justifyContent: 'center',
-        marginTop: 100
+        marginTop: 50
     }
 })
 

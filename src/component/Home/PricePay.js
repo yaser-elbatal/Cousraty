@@ -5,6 +5,8 @@ import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
 import { Container, Content, } from 'native-base'
 import BTN from '../../common/LoginBtn'
+import { InputApp } from '../../common/InputApp'
+import { SText } from '../../common/SText'
 
 
 
@@ -14,10 +16,17 @@ function PricePay({ navigation }) {
     const [Click, setClick] = useState(1)
     const [pay, setPay] = useState(1)
 
-    const [modalVisible, setModalVisible] = useState(false);
+    const [Bankename, setBankename] = useState('');
+    const [Accountname, SetAccountname] = useState("");
+    const [AccountNumber, setAccountNumber] = useState('');
+    const [MoneyPaid, setMoneyPaid] = useState('');
 
-    const [PayWays, setPayWays] = useState(i18n.t('Visa'));
-    const [ImagePay, setImagePay] = useState((require('../../../assets/Images/visa_icon.png')))
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible2, setModalVisible2] = useState(false);
+    const [modalVisible3, setModalVisible3] = useState(false);
+
+
+
 
     return (
         <Container style={{ flex: 1, }}>
@@ -87,30 +96,10 @@ function PricePay({ navigation }) {
                         </TouchableOpacity>
 
 
-                        <TouchableOpacity onPress={() => { setClick(3) }} style={[styles.oPress, { borderStyle: Click === 3 ? 'solid' : 'dotted', borderColor: Click === 3 ? Colors.main : 'black', borderWidth: .7 }]}>
-                            {
-                                Click === 3 ?
-                                    I18nManager.isRTL ?
-                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                        :
-                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
-
-                                    : null
-                            }
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: '4%', alignItems: 'center', marginTop: Click !== 3 ? 25 : -10 }}>
-                                <View style={{ flexDirection: 'column', }}>
-                                    <Text style={[styles.month, { color: Click === 3 ? Colors.main : Colors.secondary }]}>{i18n.t('yearPlan')}</Text>
-                                    <Text style={styles.lesson}>{i18n.t('completeCours')}/{i18n.t('month')}</Text>
-                                </View>
-                                <Text style={styles.price}>350 {i18n.t('Rs')}</Text>
-                            </View>
-
-                        </TouchableOpacity>
-
                         <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 20 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={ImagePay} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{PayWays}</Text>
+                                <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                                <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{i18n.t('Transfermony')}</Text>
                             </View>
 
                             <Image source={require('../../../assets/Images/dropdown.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
@@ -122,91 +111,151 @@ function PricePay({ navigation }) {
                                 transparent={true}
                                 visible={modalVisible} >
 
-                                <View style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
+                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
                                     <View style={styles.modalView}>
-                                        <Text style={{ alignSelf: 'center', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 10 }}>{i18n.t('choosePay')}</Text>
+                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }}>
+                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
 
-                                        <TouchableOpacity onPress={() => { setPay(1); setPayWays(i18n.t('Visa')); setImagePay(require('../../../assets/Images/visa_icon.png')) }} style={[styles.oPress, { borderStyle: pay === 1 ? 'solid' : 'dotted', borderColor: pay === 1 ? Colors.main : 'black', borderWidth: .7, height: width * .14 }]}>
-                                            {
-                                                pay === 1 ?
-                                                    I18nManager.isRTL ?
-                                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                                        :
-                                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
-
-                                                    : null
-                                            }
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 25, marginTop: pay !== 1 ? 4 : -30 }}>
-                                                <Image source={require('../../../assets/Images/visa_icon.png')} style={{ width: 20, height: 20, }} resizeMode='contain' />
-                                                <Text style={[styles.month, { color: pay === 1 ? Colors.main : Colors.secondary, paddingHorizontal: 10 }]}>{i18n.t('Visa')}</Text>
-                                            </View>
-
-                                        </TouchableOpacity>
+                                        </View>
 
 
+                                        <Content style={{ backgroundColor: Colors.white, }}>
+                                            <TouchableOpacity onPress={() => { setPay(1) }} style={[styles.oPress, { borderStyle: pay === 1 ? 'solid' : 'dotted', borderColor: pay === 1 ? Colors.main : 'black', borderWidth: .7, height: 100 }]}>
 
-                                        <TouchableOpacity onPress={() => { setPay(2); setPayWays(i18n.t('Pay')); setImagePay(require('../../../assets/Images/sadad_icon.png')) }} style={[styles.oPress, { borderStyle: pay === 2 ? 'solid' : 'dotted', borderColor: pay === 2 ? Colors.main : 'black', borderWidth: .7, height: width * .14 }]}>
-                                            {
-                                                pay === 2 ?
-                                                    I18nManager.isRTL ?
-                                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                                        :
-                                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10, }}>
+                                                    <Image source={require('../../../assets/Images/cib.png')} style={{ width: 100, height: 100, }} resizeMode='contain' />
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{i18n.t('BankName')}</Text>
+                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{i18n.t('AccName')}</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text style={[styles.month]}>:</Text>
+                                                        <Text style={[styles.month]}>:</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text numberOfLines={1} prop with ellipsizeMode="tail" style={[styles.month, { paddingHorizontal: 5, alignSelf: 'flex-start', width: 120 }]}>CIB</Text>
+                                                        <Text numberOfLines={2} style={[styles.month, { paddingHorizontal: 5 }]}>00000000000000</Text>
+                                                    </View>
+                                                </View>
 
-                                                    : null
-                                            }
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 25, marginTop: pay !== 2 ? 4 : -30 }}>
-                                                <Image source={require('../../../assets/Images/sadad_icon.png')} style={{ width: 20, height: 20, }} resizeMode='contain' />
-                                                <Text style={[styles.month, { color: pay === 2 ? Colors.main : Colors.secondary, paddingHorizontal: 10 }]}>{i18n.t('Pay')}</Text>
-                                            </View>
+                                            </TouchableOpacity>
 
-                                        </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => { setPay(2) }} style={[styles.oPress, { borderStyle: pay === 2 ? 'solid' : 'dotted', borderColor: pay === 2 ? Colors.main : 'black', borderWidth: .7, height: 100 }]}>
 
-                                        <TouchableOpacity onPress={() => { setPay(3); setPayWays(i18n.t('Pay')); setImagePay(require('../../../assets/Images/stc_icon.png')) }} style={[styles.oPress, { borderStyle: pay === 3 ? 'solid' : 'dotted', borderColor: pay === 3 ? Colors.main : 'black', borderWidth: .7, height: width * .14 }]}>
-                                            {
-                                                pay === 3 ?
-                                                    I18nManager.isRTL ?
-                                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                                        :
-                                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10, }}>
+                                                    <Image source={require('../../../assets/Images/cib.png')} style={{ width: 100, height: 100, }} resizeMode='contain' />
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{i18n.t('BankName')}</Text>
+                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{i18n.t('AccName')}</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text style={[styles.month]}>:</Text>
+                                                        <Text style={[styles.month]}>:</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text numberOfLines={1} prop with ellipsizeMode="tail" style={[styles.month, { paddingHorizontal: 5, alignSelf: 'flex-start', width: 120 }]}>CIB</Text>
+                                                        <Text numberOfLines={2} style={[styles.month, { paddingHorizontal: 5 }]}>00000000000000</Text>
+                                                    </View>
+                                                </View>
 
-                                                    : null
-                                            }
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 25, marginTop: pay !== 3 ? 4 : -30 }}>
-                                                <Image source={require('../../../assets/Images/stc_icon.png')} style={{ width: 20, height: 20, }} resizeMode='contain' />
-                                                <Text style={[styles.month, { color: pay === 3 ? Colors.main : Colors.secondary, paddingHorizontal: 10 }]}>{i18n.t('Pay')}</Text>
-                                            </View>
+                                            </TouchableOpacity>
 
-                                        </TouchableOpacity>
-
-
-                                        <TouchableOpacity onPress={() => { setPay(4); setPayWays(i18n.t('Transfermony')); setImagePay(require('../../../assets/Images/world_ball.png')) }} style={[styles.oPress, { borderStyle: pay === 4 ? 'solid' : 'dotted', borderColor: pay === 4 ? Colors.main : 'black', borderWidth: .7, height: width * .14 }]}>
-                                            {
-                                                pay === 4 ?
-                                                    I18nManager.isRTL ?
-                                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                                        :
-                                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
-
-                                                    : null
-                                            }
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 25, marginTop: pay !== 4 ? 4 : -30 }}>
-                                                <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20, }} resizeMode='contain' />
-                                                <Text style={[styles.month, { color: pay === 4 ? Colors.main : Colors.secondary, paddingHorizontal: 10 }]}>{i18n.t('Transfermony')}</Text>
-                                            </View>
-
-                                        </TouchableOpacity>
-
-                                        <BTN title={i18n.t('confirm')} onPress={() => setModalVisible(false)} ContainerStyle={{ marginTop: 30 }} />
-
-
-
+                                            <BTN title={i18n.t('confirm')} onPress={() => { setModalVisible2(true), setModalVisible(false) }} ContainerStyle={{ marginTop: 30 }} />
+                                        </Content>
                                     </View>
+
+
+                                </TouchableOpacity>
+                            </Modal>
+                        </View>
+
+
+
+
+                        <View style={styles.centeredView}>
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={modalVisible2} >
+
+                                <View style={[styles.centeredView, {}]} onPress={() => setModalVisible2(false)}>
+                                    <View style={styles.modalView}>
+                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }}>
+                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
+
+                                        </View>
+
+
+                                        <Content style={{ backgroundColor: Colors.white, }}>
+                                            <InputApp
+                                                label={i18n.t('BankNameTr')}
+                                                placeholder={i18n.t('BankNameTr')}
+                                                onChangeText={(e) => setBankename(e)}
+                                                value={Bankename}
+                                                styleCont={{ marginTop: 20 }}
+
+                                            />
+
+                                            <InputApp
+                                                label={i18n.t('AccNamer')}
+                                                placeholder={i18n.t('AccNamer')}
+                                                onChangeText={(e) => { SetAccountname(e) }}
+                                                value={Accountname}
+                                                styleCont={{ marginTop: 0 }}
+                                            />
+
+                                            <InputApp
+                                                label={i18n.t('AccNamer')}
+                                                placeholder={i18n.t('AccName')}
+                                                onChangeText={(e) => { setAccountNumber(e) }}
+                                                value={AccountNumber}
+                                                styleCont={{ marginTop: 0 }}
+                                            />
+                                            <InputApp
+                                                label={i18n.t('Amountpaid')}
+                                                placeholder={i18n.t('Amountpaid')}
+                                                onChangeText={(e) => { setMoneyPaid(e) }}
+                                                value={MoneyPaid}
+                                                keyboardType='numeric'
+                                                styleCont={{ marginTop: 0 }}
+                                            />
+
+
+
+                                            <BTN title={i18n.t('confirm')} onPress={() => setModalVisible2(false)} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
+
+                                        </Content>
+                                    </View>
+
 
                                 </View>
                             </Modal>
                         </View>
-                        <BTN title={i18n.t('payment')} onPress={() => navigation.navigate('SuccessPayment')} ContainerStyle={{ marginVertical: 10, marginTop: 0 }} />
+
+
+                        <View style={styles.centeredView}>
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={modalVisible3} >
+
+                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
+                                    <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
+                                        <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
+
+                                        <Content >
+                                            <Text>My Condition</Text>
+                                        </Content>
+                                    </View>
+
+
+                                </TouchableOpacity>
+                            </Modal>
+                        </View>
+
+                        <SText title={i18n.t('Termsconditions')} style={{ color: Colors.secondary }} onPress={() => { setModalVisible3(true) }} />
+
+                        <BTN title={i18n.t('payment')} onPress={() => navigation.navigate('SuccessPayment')} ContainerStyle={{ marginVertical: 10, marginTop: 10 }} />
 
 
                     </Content>
@@ -303,10 +352,9 @@ const styles = StyleSheet.create({
     oPress: {
         height: width * .29,
         overflow: 'hidden',
-        marginHorizontal: "10%",
+        marginHorizontal: "5%",
         backgroundColor: Colors.white,
         borderRadius: 10,
-
         marginTop: 20,
 
     },
@@ -318,7 +366,7 @@ const styles = StyleSheet.create({
     },
     month: {
         color: Colors.secondary,
-        fontSize: 18,
+        fontSize: 12,
         fontFamily: 'FairuzBold',
     },
     lesson: {
@@ -342,11 +390,11 @@ const styles = StyleSheet.create({
 
     },
     modalView: {
-        backgroundColor: Colors.white,
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
+        backgroundColor: Colors.main,
+        borderTopRightRadius: 55,
+        borderTopLeftRadius: 55,
         width: width,
-        height: height * .6,
+        height: height * .65,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
