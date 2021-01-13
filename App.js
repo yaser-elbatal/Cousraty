@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import { store, persistedStore } from './src/store/index.js';
 import './ReactotronConfig';
 import AccessRoots from './src/routes/index'
+import { Root } from 'native-base';
 
 
 
@@ -56,7 +57,9 @@ export default function App() {
     return (
       <Provider store={store}>
         <PersistGate persistor={persistedStore}>
-          <AccessRoots />
+          <Root>
+            <AccessRoots />
+          </Root>
           <StatusBar style="auto" />
         </PersistGate>
       </Provider>

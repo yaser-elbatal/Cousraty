@@ -1,33 +1,155 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { HeaderAuth } from '../../common/HeaderAuth'
-import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
+import { View, Text, StyleSheet, AsyncStorage, Alert, Platform } from 'react-native'
 import { Colors } from '../../constant/Colors'
 import { InputIcon } from '../../common/InputText'
 import i18n from '../../../Local/i18n'
 import { SText } from '../../common/SText'
 import BTN from '../../common/LoginBtn'
-import { validatePassword, validateEmail } from '../../common/Validation'
+import { validatePassword, validateEmail, validatePhone } from '../../common/Validation'
 import { Toaster } from '../../common/Toaster'
-import { UserContext } from '../../routes'
+import Constants from 'expo-constants';
+
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import Containers from '../../common/Loader'
+import { useDispatch, useSelector } from 'react-redux'
+import { SignIn } from '../../store/action/AuthAction'
 
 function Login({ navigation }) {
 
     const [password, setPassword] = useState('');
-    const [email, setemail] = useState('')
+    const [phone, setphone] = useState('')
+    const [spinner, setspinner] = useState(false)
+    const [deviceType, setdeviceType] = useState('')
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const [notification, setNotification] = useState(false);
+    const notificationListener = useRef();
+    const responseListener = useRef();
+    const dispatch = useDispatch()
+    const lang = useSelector(state => state.lang.language);
 
-    const { setLogin, setLogout } = useContext(UserContext);
+    useEffect(() => {
+
+        Platform.OS === 'android' ?
+            setdeviceType('android')
+            :
+            setdeviceType('ios')
+
+        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        });
+
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        });
+        registerForPushNotificationsAsync().then(token => AsyncStorage.setItem('deviceID', token));
+
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener);
+            Notifications.removeNotificationSubscription(responseListener);
+        };
+    }, []);
+
+    async function registerForPushNotificationsAsync() {
+        let token;
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+
+                Alert.alert(
+                    //title
+                    'Hello',
+                    //body
+                    'Failed to get push token for push notification!',
+                    [
+                        // {
+                        //     text: 'Yes',
+                        //     onPress: () => console.log('Yes Pressed')
+                        // },
+                        {
+                            text: 'ok',
+                            onPress: () => console.log('No Pressed'), style: 'cancel'
+                        },
+                    ],
+                    { cancelable: false },
+                    //clicking out side of alert will not cancel
+                );
+
+                // alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+        } else {
+            Alert.alert(
+                //title
+                'Hello',
+                //body
+                'Must use physical device for Push Notifications',
+                [
+                    // {
+                    //     text: 'Yes',
+                    //     onPress: () => console.log('Yes Pressed')
+                    // },
+                    {
+                        text: 'ok',
+                        onPress: () => console.log('No Pressed'), style: 'cancel'
+                    },
+                ],
+                { cancelable: false },
+                //clicking out side of alert will not cancel
+            );
+
+
+            // alert('Must use physical device for Push Notifications');
+        }
+
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+        AsyncStorage.setItem('deviceID', token);
+
+        return token;
+    }
+
 
 
     const _validate = () => {
-        let emailErr = validateEmail(email);
+        let phoneErr = validatePhone(phone);
         let passwordErr = validatePassword(password);
-        return emailErr || passwordErr;
+        return phoneErr || passwordErr;
     };
 
     const SubmitLogin = async () => {
         let val = _validate()
         if (!val) {
-            setLogin()
+            setspinner(true)
+            dispatch(SignIn(phone, password, expoPushToken, deviceType, lang, navigation)).then(() => setspinner(false)).catch(err => {
+
+                setspinner(false)
+                Toast.show({
+                    text: err + `${i18n.t('Somthing')}`,
+                    type: "danger",
+                    duration: 3000,
+                    textStyle: {
+                        color: "white",
+                        fontFamily: 'FairuzBold',
+                        textAlign: 'center'
+                    }
+                });
+            })
+
 
         }
         else {
@@ -47,23 +169,26 @@ function Login({ navigation }) {
 
                 <Text style={styles.TLogin}>{i18n.t('Login')}</Text>
                 <InputIcon
-                    placeholder={i18n.t('email')}
-                    onChangeText={(e) => setemail(e)}
-                    value={email}
-                    keyboardType='email-address'
+                    placeholder={i18n.t('phone')}
+                    onChangeText={(e) => setphone(e)}
+                    value={phone}
+                    keyboardType='numeric'
                     styleCont={{ marginTop: 20 }}
                 />
 
                 <InputIcon
+                    secureTextEntry={true}
                     placeholder={i18n.t('password')}
                     value={password}
                     onChangeText={(e) => setPassword(e)}
                     styleCont={{ marginTop: 0 }}
-                    secureTextEntry={true}
                 />
 
                 <SText title={i18n.t('forgetPassword')} onPress={() => navigation.navigate('ForgetPass')} />
-                <BTN title={i18n.t('entry')} onPress={SubmitLogin} ContainerStyle={{ marginTop: 20 }} />
+                <Containers loading={spinner}>
+                    <BTN title={i18n.t('entry')} onPress={SubmitLogin} ContainerStyle={{ marginTop: 20 }} />
+
+                </Containers>
 
                 <View style={styles.Centerd}>
                     <SText title={i18n.t('haveAcc')} disabled />

@@ -59,6 +59,8 @@ const en = {
     Monthlyplans: 'Monthly plans',
     completeCours: 'Complete course',
     month: 'Month',
+    Somthing: 'somthing went wrong',
+    save: 'Save',
     throwPlan: 'The throw-out plan',
     yearPlan: 'Year plan',
     choosePay: 'Choose Way to Pay',

@@ -1,13 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { HeaderAuth } from '../../common/HeaderAuth'
 import i18n from '../../../Local/i18n'
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, Image, Modal, Platform, Button } from 'react-native'
 import { InputIcon } from '../../common/InputText';
 import { Colors } from '../../constant/Colors';
-import { width } from '../../constant/Dimentions';
+import { width, height } from '../../constant/Dimentions';
 import BTN from '../../common/LoginBtn';
 import { validateUserName, validateEmail, validatePhone, validateTwoPasswords, validatePassword } from '../../common/Validation';
 import { Toaster } from '../../common/Toaster';
+import axios from "axios";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import { useDispatch, useSelector } from 'react-redux';
+import { Getregister } from '../../store/action/AuthAction';
+import Containers from '../../common/Loader';
+import { Toast } from 'native-base'
+
+
+
+const isIOS = Platform.OS === 'ios';
+const latitudeDelta = 0.0922;
+const longitudeDelta = 0.0421;
+
+
 
 function Register({ navigation }) {
 
@@ -16,9 +32,32 @@ function Register({ navigation }) {
     const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [Location, setLocation] = useState(i18n.t('location'))
+    const [Locations, setLocation] = useState('')
+    const [isopened, setisopened] = useState(false)
+    const [spinner, setspinner] = useState(false)
 
 
+    const lang = useSelector(state => state.lang.language);
+
+    const dispatch = useDispatch()
+    const [mapRegion, setMapRegion] = useState({
+        latitude: null,
+        longitude: null,
+        latitudeDelta,
+        longitudeDelta
+    });
+    let mapRef = useRef(null);
+
+    const FetchDataError = () => {
+        fetchData();
+
+    }
+    useEffect(() => {
+    }, [Locations, mapRegion]);
+
+    useEffect(() => {
+        fetchData()
+    }, []);
 
 
     const _validate = () => {
@@ -27,16 +66,108 @@ function Register({ navigation }) {
         let phoenErr = validatePhone(phone);
         let passwordErr = validatePassword(password);
         let CpasswordErr = validateTwoPasswords(password, confirmPassword);
+        let MapRegeionEroor = mapRegion.latitude == null ? FetchDataError() : null
 
-        return nameErr || emailErr || phoenErr || passwordErr || CpasswordErr
+
+        return nameErr || emailErr || phoenErr || passwordErr || CpasswordErr || MapRegeionEroor
     };
+
+    const _handleMapRegionChange = async (mapCoordinate) => {
+
+        setMapRegion({ latitude: mapCoordinate.latitude, longitude: mapCoordinate.longitude, latitudeDelta, longitudeDelta });
+
+        let getCity = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
+        getCity += mapCoordinate.latitude + ',' + mapCoordinate.longitude;
+        getCity += '&key=AIzaSyCJTSwkdcdRpIXp2yG7DfSRKFWxKhQdYhQ&language=ar&sensor=true';
+
+
+        try {
+            const { data } = await axios.get(getCity);
+            setLocation(data.results[0].formatted_address)
+
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const fetchData = async () => {
+
+        // const { status, } = await Permissions.askAsync(Permissions.LOCATION);
+
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        let userLocation = {};
+        if (status !== 'granted') {
+
+            Alert.alert(
+                //title
+                'Hello',
+                //body
+                'صلاحيات تحديد موقعك الحالي ملغاه ?',
+                [
+                    // {
+                    //     text: 'Yes',
+                    //     onPress: () => console.log('Yes Pressed')
+                    // },
+                    {
+                        text: 'ok',
+                        onPress: () => console.log('No Pressed'), style: 'cancel'
+                    },
+                ],
+                { cancelable: false },
+                //clicking out side of alert will not cancel
+            );
+
+        } else {
+            const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({});
+
+
+            userLocation = { latitude, longitude, latitudeDelta, longitudeDelta };
+
+            setMapRegion(userLocation);
+            isIOS ? mapRef.current.animateToRegion(userLocation, 1000) : false;
+
+        }
+        let getCity = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
+        getCity += userLocation.latitude + ',' + userLocation.longitude;
+        getCity += '&key=AIzaSyCJTSwkdcdRpIXp2yG7DfSRKFWxKhQdYhQ&language=ar&sensor=true';
+        // ReactotronConfig.log(getCity);
+        try {
+            const { data } = await axios.get(getCity);
+            setLocation(data.results[0].formatted_address)
+
+        } catch (e) {
+            console.log(e);
+        }
+        const { data } = await axios.get(getCity);
+        setLocation(data.results[0].formatted_address)
+    };
+
+
+
     const SubmitRegister = () => {
         let val = _validate()
         if (!val) {
-            navigation.navigate('CodeActivation')
+            setspinner(true)
+            const data = { name, phone, email, latitude: mapRegion.latitude, langtiude: mapRegion.longitude, password, lang }
+            dispatch(Getregister(data, navigation)).then(() => setspinner(false)).catch(err => {
+
+                setspinner(false)
+                Toast.show({
+                    text: err + `${i18n.t('Somthing')}`,
+                    type: "danger",
+                    duration: 3000,
+                    textStyle: {
+                        color: "white",
+                        fontFamily: 'FairuzBold',
+                        textAlign: 'center'
+                    }
+                });
+            })
         }
         else {
             Toaster(_validate())
+
+
         }
     }
 
@@ -70,8 +201,13 @@ function Register({ navigation }) {
                     styleCont={{ marginTop: 0 }}
                 />
 
-                <TouchableOpacity onPress={() => { }} style={styles.Location}>
-                    <Text style={styles.TexLoc}>{Location}</Text>
+                <TouchableOpacity onPress={() => mapRegion.latitude == null ? setisopened(false) : setisopened(true)} style={styles.Location}>
+                    {
+                        mapRegion.latitude === '' ?
+                            <Text style={styles.TexLoc}>{i18n.t('location')}</Text>
+                            :
+                            <Text style={styles.TexLoc}>{Locations}</Text>
+                    }
                     <Image source={require('../../../assets/Images/marker.png')} style={styles.Icon} resizeMode='contain' />
                 </TouchableOpacity>
 
@@ -92,8 +228,62 @@ function Register({ navigation }) {
 
                     styleCont={{ marginTop: 0 }}
                 />
-                <BTN title={i18n.t('Register')} onPress={SubmitRegister} ContainerStyle={styles.Btn} />
+                <Containers loading={spinner}>
+                    <BTN title={i18n.t('Register')} onPress={SubmitRegister} ContainerStyle={styles.Btn} />
 
+                </Containers>
+                {
+
+                    isopened ?
+                        <View style={styles.centeredView} >
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={isopened}   >
+                                {
+                                    mapRegion.latitude != null ?
+
+                                        <View style={styles.centeredView}>
+                                            <View style={styles.modalView}>
+
+                                                <MapView
+
+                                                    style={{ flex: 1, width: '100%', backgroundColor: Colors.white }}
+                                                    region={mapRegion}
+                                                    ref={mapRef}
+                                                    onRegionChangeComplete={region => setMapRegion(region)}
+                                                    onRegionChangeComplete={(e) => _handleMapRegionChange(e)}
+                                                    customMapStyle={mapStyle}
+                                                    initialRegion={mapRegion}
+                                                    showsUserLocation={true}
+                                                    zoomControlEnabled={true}
+                                                    showsTraffic={true} >
+
+                                                    <Marker
+                                                        draggable
+                                                        coordinate={mapRegion}
+                                                    // onDragEnd={(e) => _handleMapRegionChange(e.nativeEvent.coordinate)}
+
+                                                    >
+                                                        <Image source={require('../../../assets/Images/marker.png')} resizeMode='contain' style={{ width: 35, height: 35 }} />
+                                                    </Marker>
+                                                </MapView>
+                                                <View >
+                                                    <Button title={i18n.t('save')} onPress={() => setisopened(false)} color={Colors.sky} />
+                                                </View>
+
+                                            </View>
+                                        </View>
+                                        :
+                                        (<View />)
+                                }
+
+
+                            </Modal>
+                        </View>
+                        :
+                        (<View />)
+                }
             </View>
         </HeaderAuth>
     )
@@ -138,7 +328,65 @@ const styles = StyleSheet.create({
     Icon: {
         width: 15,
         height: 15
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: '#737373',
+        opacity: Platform.OS === 'ios' ? .98 : .9,
+
+    },
+    modalView: {
+        backgroundColor: "white",
+        borderRadius: 5,
+        width: width * .9,
+        height: height * .75,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
 })
 
+const mapStyle = [
+    {
+        elementType: "geometry",
+        stylers: [
+            {
+                color: '#CDCDCD'
+            }
+        ]
+    },
+    {
+        elementType: "FairuzBold",
+        stylers: [
+            {
+                color: Colors.black
+            }
+        ]
+    },
+    {
+        featureType: "water",
+        elementType: "FairuzBold",
+        stylers: [
+            {
+                color: Colors.bg
+            }
+        ]
+    },
+    {
+        featureType: "water",
+        elementType: "FairuzBold",
+        stylers: [
+            {
+                color: "#E8E8E8"
+            }
+        ]
+    }
+];
 export default Register

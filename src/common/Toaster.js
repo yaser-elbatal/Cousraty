@@ -7,16 +7,19 @@ import { width } from "../constant/Dimentions";
 
 const Toaster = (message) => {
     return Toast.show(message, {
-        position: Toast.position.CENTER,
+        position: Toast.position.BOTTOM,
         containerStyle: {
             backgroundColor: 'red',
-            paddingHorizontal: width * 0.05,
+            paddingHorizontal: width * 0.09,
             borderRadius: 5,
+            width,
+            bottom: 0
         },
         textColor: Colors.white,
         textStyle: {
             fontFamily: "FairuzBold",
             fontSize: width * 0.04,
+            flex: 1
         },
         duration: 3000,
     });

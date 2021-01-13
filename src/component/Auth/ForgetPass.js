@@ -8,10 +8,18 @@ import BTN from '../../common/LoginBtn';
 import i18n from '../../../Local/i18n'
 import { validatePhone } from '../../common/Validation';
 import { Toaster } from '../../common/Toaster';
+import { useDispatch, useSelector } from 'react-redux';
+import Containers from '../../common/Loader';
+import { CheckPhone, checkPhone } from '../../store/action/AuthAction';
+import { Toast } from 'native-base';
 
 function ForgetPass({ navigation }) {
 
     const [Phone, setPhone] = useState('');
+    const [spinner, setspinner] = useState(false)
+
+    const dispatch = useDispatch()
+    const lang = useSelector(state => state.lang.language);
 
     const _validate = () => {
         let PhoneErr = validatePhone(Phone);
@@ -22,7 +30,9 @@ function ForgetPass({ navigation }) {
     const SubmitPhoneNum = () => {
         let val = _validate()
         if (!val) {
-            navigation.navigate('NewPassword')
+            setspinner(true)
+            dispatch(checkPhone(Phone, lang, navigation)).then(() => setspinner(false))
+
         }
         else {
             Toaster(_validate());
@@ -43,8 +53,10 @@ function ForgetPass({ navigation }) {
                     value={Phone}
 
                 />
+                <Containers loading={spinner}>
+                    <BTN title={i18n.t('send')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 0 }} />
 
-                <BTN title={i18n.t('send')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 0 }} />
+                </Containers>
 
             </View>
         </HeaderAuth>

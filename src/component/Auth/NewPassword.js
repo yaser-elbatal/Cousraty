@@ -8,26 +8,33 @@ import BTN from '../../common/LoginBtn';
 import i18n from '../../../Local/i18n'
 import { validatePassword, validateTwoPasswords, validateCode } from '../../common/Validation';
 import { Toaster } from '../../common/Toaster';
+import Containers from '../../common/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { ResetPassword } from '../../store/action/AuthAction';
 
-function NewPassword({ navigation }) {
+function NewPassword({ navigation, route }) {
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [code, setCode] = useState('');
-
+    const [codes, setCode] = useState('');
+    const [spinner, setspinner] = useState(false)
+    const { code, token } = route.params
 
     const _validate = () => {
-        let CodeErr = validateCode(code);
+        let CodeErr = code != codes ? i18n.t('codeErre') : null;
         let passwordErr = validatePassword(password);
         let CpasswordErr = validateTwoPasswords(password, confirmPassword);
 
         return CodeErr || passwordErr || CpasswordErr
     };
+    const dispatch = useDispatch();
+    const lang = useSelector(state => state.lang.language);
 
     const SubmitPhoneNum = () => {
         let val = _validate()
         if (!val) {
-            navigation.navigate('Login')
+            setspinner(true)
+            dispatch(ResetPassword(password, token, navigation))
         }
         else {
 
@@ -44,7 +51,7 @@ function NewPassword({ navigation }) {
                 <InputIcon
                     placeholder={i18n.t('code')}
                     onChangeText={(e) => setCode(e)}
-                    value={code}
+                    value={codes}
                     styleCont={{ marginTop: 20 }}
                     keyboardType='numeric'
                 />
@@ -63,7 +70,10 @@ function NewPassword({ navigation }) {
                     secureTextEntry
                     styleCont={{ marginTop: 0 }}
                 />
-                <BTN title={i18n.t('confirm')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 0 }} />
+                <Containers loading={spinner}>
+                    <BTN title={i18n.t('confirm')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 0 }} />
+
+                </Containers>
 
             </View>
         </HeaderAuth>

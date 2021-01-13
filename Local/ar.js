@@ -32,6 +32,8 @@ const ar = {
     about: 'عن التطبيق',
     Frequentlquestions: 'أسئلة مكررة',
     Termsconditions: 'أحكام وشروط',
+    Somthing: 'حدث خطأ ما',
+    save: 'إحفظ',
     settings: 'الإعدادات',
     Contact: 'تواصل معنا',
     logout: 'تسجيل خروج',
@@ -77,7 +79,7 @@ const ar = {
 
     PhoneErr: 'يرجي كتابة رقم جوال صحيح',
     passwordErr: 'يرجي كتابه كلمة  مرور صحيحة',
-    codeErre: 'يرجي كتابة كود التفعيل بشكل صحيح',
+    codeErre: 'يرجي كتابة كود التفعيل  صحيح',
     emailErr: 'يرجي كتابه بريد الكتروني صحيح',
     NotMatch: 'كلمة المرور غير متطابقة',
     usernameErr: 'يرجي كتابة الاسم بشكل صحيح',

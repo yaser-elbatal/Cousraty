@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
     },
     WrabImg: {
         flexDirection: 'row',
-        marginTop: 50,
+        marginTop: 30,
+        alignItems: 'center'
     },
     Img: {
         alignSelf: 'center',
@@ -86,10 +87,12 @@ const styles = StyleSheet.create({
     IcnBack: {
         width: 25,
         height: 25,
+        marginBottom: 50,
+        padding: 10
     },
     Imnage: {
         width: 200,
-        height: 140,
+        height: 160,
     }
 
 })

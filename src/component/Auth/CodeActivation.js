@@ -11,32 +11,45 @@ import {
     useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import { validateCode } from '../../common/Validation'
+import { Toast } from 'native-base'
+import { useDispatch, useSelector } from 'react-redux'
+import { ActivationCode } from '../../store/action/AuthAction'
+import Containers from '../../common/Loader'
 import { Toaster } from '../../common/Toaster'
 
 
 const CELL_COUNT = 4;
 
-function CodeActivation({ navigation }) {
+function CodeActivation({ navigation, route }) {
 
     const [value, setValue] = useState('');
+    const dispatch = useDispatch();
+    const lang = useSelector(state => state.lang.language);
+    const [spinner, setspinner] = useState(false)
+
+
     const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
         value,
         setValue,
     });
+
+    const { code, token } = route.params
+
     const _validate = () => {
-        let CodeErr = validateCode(value);
+        let CodeErr = value != code ? i18n.t('codeErre') : null
         return CodeErr
     }
 
     const SubmitPhoneNum = () => {
         let val = _validate()
         if (!val) {
-            navigation.navigate('Login')
+            setspinner(true)
+            dispatch(ActivationCode(value, token, lang, navigation)).then(() => setspinner(false))
         }
         else {
+            Toaster(_validate())
 
-            Toaster(_validate());
 
         }
     }
@@ -64,9 +77,10 @@ function CodeActivation({ navigation }) {
                         </Text>
                     )}
                 />
+                <Containers loading={spinner}>
 
-                <BTN title={i18n.t('confirm')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 20 }} />
-
+                    <BTN title={i18n.t('confirm')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 20 }} />
+                </Containers>
             </View>
         </HeaderAuth>
     )

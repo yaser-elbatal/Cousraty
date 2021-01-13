@@ -4,13 +4,17 @@ import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
 import ProgressCircle from 'react-native-progress-circle'
-import { UserContext } from '../../routes'
+import { useDispatch, useSelector } from 'react-redux'
+import { Logout } from '../../store/action/AuthAction'
 
 function CustomDrawerMenue({ navigation }) {
 
+    const dispatch = useDispatch();
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
 
-    const { setLogin, setLogout } = useContext(UserContext);
-
+    const setLogout = () => {
+        dispatch(Logout(token))
+    }
 
     return (
         <View style={styles.constiner}>
@@ -83,7 +87,7 @@ function CustomDrawerMenue({ navigation }) {
                         <Text style={styles.AllText}>{i18n.t('Contact')}</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Touchable} onPress={() => setLogout()}>
+                    <TouchableOpacity style={styles.Touchable} onPress={setLogout}>
                         <Image source={require('../../../assets/Images/logout.png')} style={styles.IconContent} resizeMode='contain' />
                         <Text style={styles.AllText}>{i18n.t('logout')}</Text>
                     </TouchableOpacity>

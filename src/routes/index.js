@@ -2,42 +2,34 @@ import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { Authnavigation, MainStackNavigator } from './Navigations';
-import { AsyncStorage } from 'react-native';
+import { useSelector } from 'react-redux';
 
 export const UserContext = React.createContext();
 export const UserProvider = UserContext.Provider;
 
 function AccessRoots() {
 
-    const [token, settoken] = useState("");
+    const auth = useSelector(state => state.auth);
 
-    const setLogin = () => {
-        settoken("yasser");
-    };
-    const setLogout = () => {
-        settoken("");
-    };
+
 
 
 
     return (
-        <UserProvider value={{ setLogin, setLogout }}>
 
-            <NavigationContainer>
-
-                {
-                    token ?
-                        <MainStackNavigator />
-                        :
-                        <Authnavigation />
+        <NavigationContainer>
+            {
+                auth.user !== null ?
+                    <MainStackNavigator />
+                    :
+                    <Authnavigation />
 
 
 
 
-                }
+            }
 
-            </NavigationContainer>
-        </UserProvider>
+        </NavigationContainer>
 
     )
 }
