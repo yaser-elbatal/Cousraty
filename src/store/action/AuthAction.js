@@ -3,6 +3,7 @@ import { AsyncStorage, } from 'react-native';
 import { Toast } from 'native-base'
 import i18n from "../../../Local/i18n";
 import Const from '../../constant/Const';
+import { ToasterNative } from '../../common/ToasterNative';
 
 export const Sign_up = 'Sign_up';
 export const Sign_In = 'Sign_In';
@@ -10,6 +11,10 @@ export const Activate_Code = 'Activate_Code'
 export const login_failed = 'login_failed'
 export const login_success = 'login_success'
 export const logout = 'logout'
+export const Update_profile = 'Update_profile';
+
+
+
 
 export const SignIn = (phone, password, device_id, device_type, lang, navigation) => {
 
@@ -24,16 +29,10 @@ export const SignIn = (phone, password, device_id, device_type, lang, navigation
             handelLogin(dispatch, res.data, navigation)
         }).catch(error => {
 
-            Toast.show({
-                text: error + `${i18n.t('Somthing')}`,
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            })
+            ToasterNative(error + `${i18n.t('Somthing')}`, "danger", 'bottom')
+
+
+
         })
         dispatch({ type: Sign_In })
 
@@ -58,6 +57,9 @@ const loginSuccess = (dispatch, data, navigation) => {
 
         AsyncStorage.setItem('token', JSON.stringify(data.data.token))
             .then(() => dispatch({ type: login_success, data }));
+        ToasterNative(data.message, "success", 'bottom')
+
+
     }
     else {
         navigation.navigate('CodeActivation', { token: data.data.token, code: data.data.code })
@@ -73,18 +75,14 @@ const loginFailed = (dispatch, error, navigation) => {
 
         //     });
         // }
+
         dispatch({ type: login_failed, error });
 
-        Toast.show({
-            text: error.message,
-            type: "danger",
-            duration: 3000,
-            textStyle: {
-                color: "white",
-                fontFamily: 'FairuzBold',
-                textAlign: 'center'
-            }
-        });
+
+        ToasterNative(error.message, "danger", 'bottom')
+
+
+
 
     }
 };
@@ -104,7 +102,8 @@ export const Getregister = (data, navigation) => {
                     longitude: data.langtiude,
                     password: data.password,
                     device_id,
-                    lang: data.lang
+                    lang: data.lang,
+                    address: data.Locations
                 },
             }).then(response => {
                 dispatch({ type: Sign_up, payload: response.data });
@@ -116,30 +115,16 @@ export const Getregister = (data, navigation) => {
                 }
 
 
-                Toast.show({
-                    text: response.data.message,
-                    type: response.data.success ? "success" : "danger",
-                    duration: 3000,
-                    textStyle: {
-                        color: "white",
-                        fontFamily: 'FairuzBold',
-                        textAlign: 'center'
-                    }
-                });
+                ToasterNative(response.data.message, response.data.success ? "success" : "danger", 'bottom')
+
+
+
 
             }).catch((err) => {
 
+                ToasterNative(`${i18n.t('Somthing')}` + err, "danger", 'bottom')
 
-                Toast.show({
-                    text: err + `${i18n.t('Somthing')}`,
-                    type: "danger",
-                    duration: 3000,
-                    textStyle: {
-                        color: "white",
-                        fontFamily: 'FairuzBold',
-                        textAlign: 'center'
-                    }
-                });
+
             })
         })
 
@@ -166,16 +151,9 @@ export const ActivationCode = (code, token, lang, navigation) => {
                 dispatch({ type: Activate_Code, data: res.data })
 
             }
-            Toast.show({
-                text: res.data.message,
-                type: res.data.success ? "success" : "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            })
+            ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
+
+
         }
         )
 
@@ -185,36 +163,7 @@ export const ActivationCode = (code, token, lang, navigation) => {
 }
 
 
-// export const CheckPhone = (lang, phone, navigation) => {
-//     return async dispatch => {
-//         await axios({
-//             method: 'POST',
-//             url: Const.url + 'forget-password',
-//             data: { lang, phone }
-//         }).then(res => {
-//             if (res.data.success) {
 
-//                 navigation.navigate('NewPassword', {
-//                     token: res.data.data.token,
-//                     code: res.data.data.code
-//                 })
-
-//             }
-//             Toast.show({
-//                 text: res.data.message,
-//                 type: res.data.success ? "success" : "danger",
-//                 duration: 3000,
-//                 textStyle: {
-//                     color: "white",
-//                     fontFamily: 'FairuzBold',
-//                     textAlign: 'center'
-//                 }
-//             });
-
-//         })
-
-//     }
-// }
 
 export const checkPhone = (phone, lang, navigation) => {
     return async (dispatch) => {
@@ -227,17 +176,9 @@ export const checkPhone = (phone, lang, navigation) => {
                 navigation.navigate('NewPassword', { code: response.data.data.code, token: response.data.data.token });
 
             }
+            ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
 
-            Toast.show({
-                text: response.data.message,
-                type: response.data.success ? "success" : "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
+
 
         })
     }
@@ -256,29 +197,16 @@ export const ResetPassword = (password, token, navigation) => {
             }
         }).then(res => {
             if (res.data.success) {
-                navigation.navigate('Login')
-                Toast.show({
-                    text: res.data.message,
-                    type: res.data.success ? "success" : "danger",
-                    duration: 3000,
-                    textStyle: {
-                        color: "white",
-                        fontFamily: 'FairuzBold',
-                        textAlign: 'center'
-                    }
-                });
+                navigation.navigate('Login');
+
+                ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
+
             }
             else {
-                Toast.show({
-                    text: res.data.message,
-                    type: res.data.success ? "success" : "danger",
-                    duration: 3000,
-                    textStyle: {
-                        color: "white",
-                        fontFamily: 'FairuzBold',
-                        textAlign: 'center'
-                    }
-                });
+
+                ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
+
+
             }
         })
     }
@@ -308,3 +236,29 @@ export const Logout = (token) => {
 
     }
 }
+
+
+
+export const updateProfile = (name, phone, email, avatar, latitude, longitude, address, lang, token) => {
+    return async (dispatch) => {
+        await axios({
+            url: Const.url + 'update-profile',
+            method: 'POST',
+            data: { name, phone, email, avatar, latitude, longitude, address, lang, },
+            headers: {
+                Authorization: 'Bearer ' + token,
+
+            }
+        }).then(response => {
+            if (response.data.success) {
+                dispatch({ type: Update_profile, data: response.data })
+            }
+
+            ToasterNative(response.data.message, response.data.success ? "success" : "danger", 'bottom')
+
+
+
+
+        })
+    }
+};

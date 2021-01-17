@@ -1,4 +1,4 @@
-import { Activate_Code, Sign_up, login_failed, login_success, Sign_In, logout } from "../action/AuthAction";
+import { Activate_Code, Sign_up, login_failed, login_success, Sign_In, logout, Update_profile } from "../action/AuthAction";
 
 const initial_State = { user: null, loading: false, message: '', success: false, Validate: false }
 
@@ -15,6 +15,8 @@ export default (state = initial_State, action) => {
         case Sign_up:
             return { ...state, message: action.payload.message, }
         case Activate_Code:
+            return { ...state, user: action.data, message: action.data.message, success: action.data.success };
+        case Update_profile:
             return { ...state, user: action.data, message: action.data.message, success: action.data.success };
 
         case logout:

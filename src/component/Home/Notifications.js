@@ -1,12 +1,41 @@
-import React from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
 import { Container, Content, } from 'native-base'
 import { SText } from '../../common/SText'
+import { useDispatch, useSelector } from 'react-redux'
+import { useIsFocused } from '@react-navigation/native';
+import { GetnotificationsApps, deletNotfications } from '../../store/action/notificationAction'
 
 function Notifications({ navigation }) {
+
+
+
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+
+
+    const notify = useSelector(state => state.notify.notify)
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
+    const lang = useSelector(state => state.lang.language);
+
+
+
+    useEffect(() => {
+        if (isFocused) {
+            dispatch(GetnotificationsApps(lang, token))
+        }
+
+
+    }, [isFocused])
+
+
+    const DeleteNotifications = (id) => {
+        dispatch(deletNotfications(lang, token, id)).then(() => dispatch(GetnotificationsApps(lang, token)))
+    }
+
     return (
         <Container style={{ flex: 1, }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -36,81 +65,31 @@ function Notifications({ navigation }) {
 
                         <View style={styles.Line}></View>
 
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
+                        <FlatList
+                            data={notify}
+                            horizontal={false}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <View style={styles.Card}>
+                                        <View style={styles.Space}>
+                                            <Text style={styles.Tail}>{'ddm'}</Text>
+                                            <TouchableOpacity onPress={() => DeleteNotifications(item.id)}>
+                                                <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <Text style={styles.Add} >  {item.message}  </Text>
+                                        <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>{item.date}</Text>
+                                    </View>
+                                )
+                            }
+                            }
+                        />
 
 
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
 
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
 
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
-                        <View style={styles.Card}>
-                            <View style={styles.Space}>
-                                <Text style={styles.Tail}>من الأداره</Text>
-                                <TouchableOpacity>
-                                    <Image source={require('../../../assets/Images/cancel.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', alignSelf: 'flex-end' }}>4/125/2020</Text>
-                        </View>
-                        <SText title={i18n.t('createAcc')} onPress={() => { }} style={styles.FPass} />
 
                     </Content>
                 </View>
@@ -175,9 +154,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     Card: {
+        flex: 1,
         backgroundColor: '#ECF7F7',
         width: '90%',
-        height: 150,
         padding: 20,
         marginHorizontal: 20,
         borderRadius: 15,

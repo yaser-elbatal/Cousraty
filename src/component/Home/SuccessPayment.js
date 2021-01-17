@@ -7,7 +7,10 @@ import { Container, Content, } from 'native-base'
 import { SText } from '../../common/SText'
 import BTN from '../../common/LoginBtn'
 
-function SuccessPayment({ navigation }) {
+function SuccessPayment({ navigation, route }) {
+
+    const { amount } = route.params;
+    console.log(amount);
     return (
         <Container style={{ flex: 1, }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -25,12 +28,12 @@ function SuccessPayment({ navigation }) {
                         }
                     </TouchableOpacity>
                     <Text style={styles.Notify}>{i18n.t('Confirmpayment')}</Text>
-
+                    <Text></Text>
 
                 </View>
                 <View style={styles.contents}>
                     <Image source={require('../../../assets/Images/confirm_payment.png')} style={styles.BImg} resizeMode='contain' />
-                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.Payment}>{`${i18n.t('paymentMony')} 250 ${i18n.t('Rs')}`}</Text>
+                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.Payment}>{`${i18n.t('paymentMony')} ${amount} ${i18n.t('Rs')}`}</Text>
                     <BTN title={i18n.t('bacjHome')} onPress={() => navigation.navigate('HomePage')} ContainerStyle={{ bottom: 200 }} />
 
                 </View>

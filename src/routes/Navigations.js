@@ -24,6 +24,7 @@ import Subsections from '../component/Home/Subsections';
 import PricePay from '../component/Home/PricePay';
 import SuccessPayment from '../component/Home/SuccessPayment';
 import myProfile from '../component/Home/myProfile';
+import SubCategory from '../component/Home/SubCategory';
 
 
 const Stack = createStackNavigator();
@@ -58,6 +59,7 @@ export const MainStackNavigator = () => {
             <MainStack.Screen name='PricePay' component={PricePay} />
             <MainStack.Screen name='SuccessPayment' component={SuccessPayment} />
             <MainStack.Screen name='myProfile' component={myProfile} />
+            <MainStack.Screen name='SubCategory' component={SubCategory} />
 
         </MainStack.Navigator>
     )

@@ -1,11 +1,30 @@
-import React from 'react'
-import { View, Text, Image, StyleSheet, I18nManager, TouchableOpacity, Platform } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Text, Image, StyleSheet, I18nManager, TouchableOpacity, Platform, FlatList } from 'react-native'
 import { Content, Container } from 'native-base'
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
 import { height, width } from '../../constant/Dimentions'
+import { useIsFocused } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux'
+import { GetQuestionApp } from '../../store/action/DrawerAction'
 
 function Questions({ navigation }) {
+
+
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+    const lang = useSelector(state => state.lang.language);
+    const question = useSelector(state => state.drawer.question);
+
+
+
+    useEffect(() => {
+        if (isFocused) {
+            dispatch(GetQuestionApp(lang,))
+        }
+    }, [isFocused])
+
+
     return (
         <Container style={{ flex: 1 }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -33,10 +52,27 @@ function Questions({ navigation }) {
                     <Content >
                         <View style={styles.Line}></View>
 
-                        <View style={styles.Card}>
-                            <Text style={styles.Adds} numberOfLines={1} ellipsizeMode="tail"> الســـــــــــــــــــــؤال الاول؟ </Text>
-                        </View>
-                        <Text style={styles.items}> سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه </Text>
+                        <FlatList
+                            data={question}
+                            horizontal={false}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <View style={{ flex: 1 }}>
+                                        <View style={styles.Card}>
+                                            <Text style={styles.Adds} > {item.question} </Text>
+                                        </View>
+                                        <Text style={styles.items}>{item.answer} </Text>
+
+                                    </View>
+
+                                )
+                            }}
+                        />
+
+
+
 
 
                     </Content>
@@ -117,10 +153,9 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
         alignSelf: 'flex-start',
-        fontSize: 18
+        fontSize: 16
     },
     Card: {
-        height: 70,
         width: '90%',
         borderRadius: 25,
         marginStart: 20,
@@ -128,6 +163,7 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         shadowColor: Colors.white,
         marginTop: 20,
+        padding: 10,
         backgroundColor: Colors.white,
         shadowOpacity: 0.25,
         shadowRadius: 3.84,

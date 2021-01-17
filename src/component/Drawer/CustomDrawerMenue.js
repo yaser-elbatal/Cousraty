@@ -10,11 +10,17 @@ import { Logout } from '../../store/action/AuthAction'
 function CustomDrawerMenue({ navigation }) {
 
     const dispatch = useDispatch();
-    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
+
+
+    const user = useSelector(state => state.auth.user ? state.auth.user.data : null);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data ? state.auth.user.data.token : null : null);
+
+
 
     const setLogout = () => {
         dispatch(Logout(token))
     }
+
 
     return (
         <View style={styles.constiner}>
@@ -22,33 +28,35 @@ function CustomDrawerMenue({ navigation }) {
 
             <View style={styles.AbsRab}>
                 <View style={styles.Centerd}>
+                    <TouchableOpacity onPress={() => navigation.navigate('myProfile')}>
+                        <View style={styles.Top}>
+                            <ProgressCircle
+                                percent={70}
+                                radius={50}
+                                borderWidth={4}
+                                color={Colors.white}
+                                shadowColor={Colors.main}
+                                bgColor="white"
+                                outerCircleStyle={{ overflow: 'hidden', alignSelf: 'flex-end', }}
+                            >
+                                <Image source={{ uri: user.avatar }} style={styles.Pic} />
 
-                    <View style={styles.Top}>
-                        <ProgressCircle
-                            percent={70}
-                            radius={50}
-                            borderWidth={4}
-                            color={Colors.white}
-                            shadowColor={Colors.main}
-                            bgColor="white"
-                            outerCircleStyle={{ overflow: 'hidden', alignSelf: 'flex-end', }}
-                        >
-                            <Image source={require('../../../assets/Images/girl.jpeg')} style={styles.Pic} />
 
-
-                        </ProgressCircle>
-                        <View style={styles.WrabClmn}>
-                            <Text style={styles.name}>ياسر</Text>
-                            <Text style={styles.plan}>{i18n.t('Individualplans')}</Text>
-                            <View style={styles.start}>
-                                <Text style={styles.plan}>75%</Text>
-                                <Image source={require('../../../assets/Images/success.png')} style={styles.right} />
+                            </ProgressCircle>
+                            <View style={styles.WrabClmn}>
+                                <Text style={styles.name}>{user.name}</Text>
+                                <Text style={styles.plan}>{user.phone}</Text>
+                                {/* <View style={styles.start}>
+                                    <Text style={styles.plan}>75%</Text>
+                                    <Image source={require('../../../assets/Images/success.png')} style={styles.right} />
+                                </View> */}
                             </View>
                         </View>
-                    </View>
 
 
-                    <TouchableOpacity onPress={() => navigation.closeDrawer()}>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => navigation.closeDrawer()} style={{ marginBottom: 50 }}>
                         <Image source={require('../../../assets/Images/close.png')} style={styles.icon} />
                     </TouchableOpacity>
                 </View>
@@ -109,7 +117,7 @@ const styles = StyleSheet.create({
     ImgBack: { height: 230, width, },
     Centerd: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', },
     AbsRab: { position: 'absolute', top: 10, width, paddingHorizontal: '4%' },
-    Top: { flexDirection: 'row', alignItems: 'center', top: 50 },
+    Top: { flexDirection: 'row', alignItems: 'center', marginTop: 50 },
     WrabClmn: { flexDirection: 'column', alignItems: 'center', marginStart: 5 },
     Pic: { height: 100, width: 100, borderRadius: 50, },
     name: { alignSelf: 'flex-start', fontFamily: 'FairuzBold', color: Colors.white, fontSize: 18, },

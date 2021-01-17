@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, I18nManager, ScrollView } from 'react-native';
+import {
+    View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView
+} from 'react-native';
 import ProgressCircle from 'react-native-progress-circle'
 
 import { Colors } from '../../constant/Colors'
@@ -7,16 +9,29 @@ import { InputIcon } from '../../common/InputText'
 import i18n from '../../../Local/i18n'
 import BTN from '../../common/LoginBtn'
 import { height, width } from '../../constant/Dimentions'
+import { useSelector, useDispatch } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { GetPlan } from '../../store/action/HomeAction';
 
 
 
 
 function HomePage({ navigation }) {
 
+    const lang = useSelector(state => state.lang.language);
+    const plan = useSelector(state => state.plan.plan);
+
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+
 
     useEffect(() => {
-        console.log('aaaa');
-    }, [])
+
+        if (isFocused) {
+
+            dispatch(GetPlan(lang))
+        }
+    }, [isFocused])
 
     return (
         <View style={styles.container}>
@@ -29,7 +44,6 @@ function HomePage({ navigation }) {
                     </TouchableOpacity>
 
 
-
                     <TouchableOpacity style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('Notifications')}>
                         <Image source={require('../../../assets/Images/active_notification.png')} style={styles.Icon} />
                     </TouchableOpacity>
@@ -38,18 +52,6 @@ function HomePage({ navigation }) {
 
                 <ScrollView style={{ flex: 1, height: height * .86 }} showsVerticalScrollIndicator={false}>
                     <Text style={styles.Hello}>{i18n.t('HelloApp')}</Text>
-
-                    <InputIcon
-
-                        placeholder={i18n.t('search')}
-                        inputStyle={{ backgroundColor: 'white', color: Colors.black }}
-                        placeholderTextColor={Colors.black}
-                        styleCont={{ marginHorizontal: '1%', width: '95%', marginTop: 30 }}
-                        image={require('../../../assets/Images/search.png')}
-                    />
-
-
-
 
                     <View style={styles.card}>
                         <View style={styles.ImgText}>
@@ -61,44 +63,27 @@ function HomePage({ navigation }) {
                         </View>
                     </View>
 
+                    <FlatList
+                        data={plan}
+                        horizontal={false}
+                        showsVerticalScrollIndicator={false}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <TouchableOpacity style={styles.SmallCard} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name })}>
+                                    <View style={styles.WrabCard}>
+                                        <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='contain' />
+                                        <View style={styles.smallText}>
+                                            <Text style={styles.Indevedual}>
+                                                {item.name}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
 
-
-
-                    <TouchableOpacity style={styles.SmallCard}>
-                        <View style={styles.WrabCard}>
-                            <Image source={require('../../../assets/Images/pencil.png')} style={styles.SMAllImg} resizeMode='contain' />
-                            <View style={styles.smallText}>
-                                <Text style={styles.Indevedual}>
-                                    {i18n.t('Individualplans')}
-                                </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-
-                    <TouchableOpacity style={[styles.SmallCard, { backgroundColor: Colors.orange, }]} onPress={() => navigation.navigate('Subsections')}>
-                        <View style={styles.WrabCard}>
-                            <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
-                            <View style={styles.smallText}>
-                                <Text style={styles.Indevedual}>
-                                    {i18n.t('Individualplans')}
-                                </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={[styles.SmallCard, { backgroundColor: '#D5EFEF', }]}>
-                        <View style={styles.WrabCard}>
-                            <Image source={require('../../../assets/Images/lamp.png')} style={styles.SMAllImg} resizeMode='contain' />
-                            <View style={styles.smallText}>
-                                <Text style={styles.Indevedual}>
-                                    {i18n.t('Individualplans')}
-                                </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-
+                            )
+                        }}
+                    />
 
                 </ScrollView>
             </View>
@@ -145,6 +130,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         width: '95%',
         marginHorizontal: '1%',
+        marginTop: 50
     },
     SmallCard: {
         backgroundColor: Colors.foshia,

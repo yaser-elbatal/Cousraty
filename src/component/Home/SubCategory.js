@@ -1,35 +1,15 @@
+
 import React, { useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList, Linking } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
 import { Container, Content, } from 'native-base'
-import BTN from '../../common/LoginBtn'
-import { useSelector, useDispatch } from 'react-redux'
-import { useIsFocused } from '@react-navigation/native';
-import { GetToutorial } from '../../store/action/HomeAction'
 
+function SubCategory({ navigation, route }) {
+    const { data } = route.params;
+    console.log(data);
 
-
-function Subsections({ navigation, route }) {
-
-    const toutorial = useSelector(state => state.plan.toutorial ? state.plan.toutorial.data : []);
-    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
-    const lang = useSelector(state => state.lang.language);
-
-    const dispatch = useDispatch();
-    const isFocused = useIsFocused();
-    const { plan_id, plan_name } = route.params;
-
-
-
-    useEffect(() => {
-        if (isFocused) {
-            dispatch(GetToutorial(lang, token, plan_id))
-        }
-    }, [isFocused])
-
-    console.log(toutorial);
     return (
         <Container style={{ flex: 1, }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -49,51 +29,41 @@ function Subsections({ navigation, route }) {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 320, alignItems: 'center' }}>
                         <Text style={styles.Notify}>{i18n.t('Subsections')}</Text>
-                        <TouchableOpacity style={{ alignItems: 'flex-end' }}>
-                            <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                        </TouchableOpacity>
+
                     </View>
 
                     <View style={[styles.SmallCard, { backgroundColor: Colors.orange, }]} >
                         <View style={styles.WrabCard}>
                             <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
                             <View style={styles.smallText}>
-                                <Text style={styles.Indevedual}>  {plan_name}  </Text>
+                                <Text style={styles.Indevedual}>  {'مقدمه عن الادراك'}  </Text>
                             </View>
-
-
                         </View>
                     </View>
                 </View>
+
                 <View style={styles.contents}>
                     <Content >
                         <View style={styles.Line}></View>
+                        <View style={{ marginStart: 25, marginTop: 10 }}>
+                            <Text style={styles.Indevedual}>{i18n.t('downloadPdf')}</Text>
 
+                            <TouchableOpacity style={{ marginTop: 10 }} onPress={() => Linking.openURL(`${data.pdf}`)}>
+                                <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                            </TouchableOpacity>
 
-                        <FlatList
-                            data={toutorial}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={false}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <TouchableOpacity style={styles.single} onPress={() => navigation.navigate('SubCategory', { data: item })}>
-                                        <View style={styles.ViewNum}>
-                                            <Text style={styles.num}>{index + 1}</Text>
-                                        </View>
+                            <View style={styles.sLine}></View>
 
-                                        <View style={styles.ViewClmn}>
-                                            <Text style={styles.Indevedual}>{item.title}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
-                            }}
-                        />
+                            <Text style={[styles.Indevedual, { marginTop: 30 }]}>{i18n.t('watchVedio')}</Text>
 
+                            <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, marginStart: 10 }} onPress={() => Linking.openURL(`${data.link}`)}>
+                                <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
+                                    {data.link}
+                                </Text>
 
-                        <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 50 }} />
+                            </TouchableOpacity>
 
-
+                        </View>
 
                     </Content>
                 </View>
@@ -101,9 +71,6 @@ function Subsections({ navigation, route }) {
         </Container>
     )
 }
-
-
-
 const styles = StyleSheet.create({
     ImgBack: {
         width,
@@ -159,6 +126,15 @@ const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: Colors.black,
         alignSelf: 'center'
+    },
+    sLine: {
+        width: '90%',
+        height: 1.6,
+        backgroundColor: Colors.black,
+        marginTop: 40,
+        opacity: .1,
+
+
     },
     Card: {
         backgroundColor: '#ECF7F7',
@@ -258,4 +234,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Subsections
+export default SubCategory

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { HeaderAuth } from '../../common/HeaderAuth'
 import i18n from '../../../Local/i18n'
-import { View, StyleSheet, Text, TouchableOpacity, Image, Modal, Platform, Button } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, Image, Modal, Platform, Button, Alert } from 'react-native'
 import { InputIcon } from '../../common/InputText';
 import { Colors } from '../../constant/Colors';
 import { width, height } from '../../constant/Dimentions';
@@ -96,7 +96,8 @@ function Register({ navigation }) {
 
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         let userLocation = {};
-        if (status !== 'granted') {
+        console.log(status);
+        if (status != 'granted') {
 
             Alert.alert(
                 //title
@@ -148,7 +149,7 @@ function Register({ navigation }) {
         let val = _validate()
         if (!val) {
             setspinner(true)
-            const data = { name, phone, email, latitude: mapRegion.latitude, langtiude: mapRegion.longitude, password, lang }
+            const data = { name, phone, email, latitude: mapRegion.latitude, langtiude: mapRegion.longitude, password, Locations, lang }
             dispatch(Getregister(data, navigation)).then(() => setspinner(false)).catch(err => {
 
                 setspinner(false)
@@ -265,11 +266,11 @@ function Register({ navigation }) {
                                                     // onDragEnd={(e) => _handleMapRegionChange(e.nativeEvent.coordinate)}
 
                                                     >
-                                                        <Image source={require('../../../assets/Images/marker.png')} resizeMode='contain' style={{ width: 35, height: 35 }} />
+                                                        <Image source={require('../../../assets/Images/markerMap.png')} resizeMode='contain' style={{ width: 35, height: 35 }} />
                                                     </Marker>
                                                 </MapView>
                                                 <View >
-                                                    <Button title={i18n.t('save')} onPress={() => setisopened(false)} color={Colors.sky} />
+                                                    <Button title={i18n.t('save')} onPress={() => setisopened(false)} color={Colors.main} />
                                                 </View>
 
                                             </View>

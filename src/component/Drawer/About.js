@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, Image, StyleSheet, I18nManager, TouchableOpacity, Platform } from 'react-native'
 import { Content, Container } from 'native-base'
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
 import { height, width } from '../../constant/Dimentions'
+import { useIsFocused } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux'
+import { GetAboutApp } from '../../store/action/DrawerAction'
 
 function About({ navigation }) {
+
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+    const lang = useSelector(state => state.lang.language);
+    const about = useSelector(state => state.drawer.about);
+
+
+
+    useEffect(() => {
+        if (isFocused) {
+            dispatch(GetAboutApp(lang,))
+        }
+    }, [isFocused])
+
+
     return (
         <Container style={{ flex: 1 }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -35,18 +53,7 @@ function About({ navigation }) {
 
                         <View style={{ marginStart: 20 }}>
                             <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', fontSize: 20 }}> {i18n.t('Firstitem')}</Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', fontSize: 20 }}> {i18n.t('seconTerm')}</Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-
-                            <Text style={{ color: Colors.main, fontFamily: 'FairuzBold', fontSize: 20 }}> {i18n.t('seconTerm')}</Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
+                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail"> {about}  </Text>
 
 
 

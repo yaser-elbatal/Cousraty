@@ -9,6 +9,10 @@ import { height, width } from '../../constant/Dimentions'
 import { changeLanguage } from '../../store/action/LangAction'
 import BTN from '../../common/LoginBtn'
 import { InputApp } from '../../common/InputApp'
+import { GetNotificationsStatue, ChangePasswords } from '../../store/action/SettingsAction';
+import Containers from '../../common/Loader';
+import { validatePassword, validateTwoPasswords } from '../../common/Validation';
+import { ToasterNative } from '../../common/ToasterNative';
 
 
 
@@ -17,14 +21,20 @@ function Settings({ navigation }) {
 
     const Language = useSelector(state => state.lang.language)
     const dispatch = useDispatch();
-    console.log(Language);
+
+    const token = useSelector(state => state.auth.user ? state.auth.user.data ? state.auth.user.data.token : null : null);
+
 
 
     const [Lang, setLang] = useState('');
     const [Direction, setDirection] = useState('');
-
+    const [spinner, setSpinner] = useState(false)
     const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    const toggleSwitch = () => {
+        setIsEnabled(previousState => !previousState)
+        dispatch(GetNotificationsStatue(Language, token))
+    };
 
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -42,13 +52,38 @@ function Settings({ navigation }) {
 
     };
 
-    console.log(Direction);
+    const _Valdiation = () => {
+        let PasswordErr = validatePassword(password);
+        let passConfirm = validateTwoPasswords(Newpassword, confirmPassword)
+
+        return PasswordErr || passConfirm
+    }
+
 
     useEffect(() => {
         AsyncStorage.getItem("lang").then((lang) => {
             setLang(lang)
         })
     }, [])
+
+    const ChangeMyPass = () => {
+        let val = _Valdiation()
+
+        if (!val) {
+            setSpinner(true)
+            dispatch(ChangePasswords(password, Newpassword, Language, token)).then(() => setSpinner(false)).then(() => setModalPasword(false)).then(() => {
+                setPassword('')
+                setNewPassword('')
+                setConfirmPassword('')
+            })
+        }
+        else {
+            ToasterNative(_Valdiation(), "danger", 'top')
+
+        }
+
+
+    }
 
     return (
         <Container style={{ flex: 1 }}>
@@ -155,14 +190,20 @@ function Settings({ navigation }) {
 
 
 
-                        <View style={[styles.centeredView,]}>
+                        <View style={[styles.centeredView, {
+                            backgroundColor: '',
+                            opacity: Platform.OS === 'ios' ? 1 : 1,
+                        }]}>
                             <Modal
                                 animationType="slide"
                                 transparent={true}
                                 visible={modalPassword} >
 
-                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalPasword(false)}>
-                                    <View style={[styles.modalView, { height: height * .53, }]}>
+                                <TouchableOpacity style={[styles.centeredView, {
+                                    backgroundColor: '',
+                                    opacity: Platform.OS === 'ios' ? 1 : 1,
+                                }]} onPress={() => setModalPasword(false)}>
+                                    <View style={[styles.modalView, { height: height * .6, }]}>
                                         <ScrollView style={styles.Scroll} showsVerticalScrollIndicator={false}>
                                             <View style={styles.Line}></View>
                                             <KeyboardAvoidingView
@@ -203,7 +244,10 @@ function Settings({ navigation }) {
 
 
                                                 />
-                                                <BTN title={i18n.t('confirm')} onPress={() => { }} ContainerStyle={{ marginTop: 0, marginVertical: 20, }} />
+                                                <Containers loading={spinner}>
+                                                    <BTN title={i18n.t('confirm')} onPress={ChangeMyPass} ContainerStyle={{ marginTop: 0, marginVertical: 20, }} />
+                                                </Containers>
+
                                             </KeyboardAvoidingView>
                                         </ScrollView>
 

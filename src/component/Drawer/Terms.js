@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, Image, StyleSheet, I18nManager, TouchableOpacity, Platform } from 'react-native'
 import { Content, Container } from 'native-base'
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
 import { height, width } from '../../constant/Dimentions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useIsFocused } from '@react-navigation/native';
+import { GetTerms } from '../../store/action/DrawerAction'
+
+
 
 function Terms({ navigation }) {
+
+    const isFocused = useIsFocused();
+    const dispatch = useDispatch();
+
+
+    const terms = useSelector(state => state.drawer.terms);
+    const lang = useSelector(state => state.lang.language);
+
+
+
+    useEffect(() => {
+        if (isFocused) {
+
+            dispatch(GetTerms(lang))
+
+        }
+    }, [isFocused])
+
     return (
         <Container style={{ flex: 1 }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -33,19 +56,9 @@ function Terms({ navigation }) {
                     <Content >
                         <View style={styles.Line}></View>
 
-                        <View style={{ marginStart: 20 }}>
+                        <View style={{ marginStart: 20, flex: 1 }}>
                             <Text style={styles.Item}> {i18n.t('Firstitem')}</Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Item}> {i18n.t('seconTerm')}</Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-                            <Text style={styles.Add} numberOfLines={2} ellipsizeMode="tail">  سيتم فصل الخدمه عنكم في تاريخ 25 اكتوبر ويرجي تحديد الاشتراك للاستمتاع بالخدمه  </Text>
-
-
-
+                            <Text style={styles.Add} > {terms}  </Text>
                         </View>
                     </Content>
                 </View>

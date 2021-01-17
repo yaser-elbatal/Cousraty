@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
-import { View, Text, Image, StyleSheet, I18nManager, TouchableOpacity, Platform, Modal } from 'react-native'
-import { Content, Container } from 'native-base'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Image, StyleSheet, I18nManager, TouchableOpacity, Platform, Modal, Linking } from 'react-native'
+import { Content, Container, Toast } from 'native-base'
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
 import { height, width } from '../../constant/Dimentions'
 import { SText } from '../../common/SText'
 import { InputApp } from '../../common/InputApp'
 import BTN from '../../common/LoginBtn'
+import { useDispatch, useSelector } from 'react-redux'
+import { useIsFocused } from '@react-navigation/native';
+import { GetContactUS, SendComplaiment } from '../../store/action/DrawerAction'
+import { Toaster } from '../../common/Toaster'
+import { ToasterNative } from '../../common/ToasterNative'
 
 
 
@@ -15,8 +20,57 @@ function Contactus({ navigation }) {
 
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [spinner, setspinner] = useState(false);
 
-    const [Message, setMessage] = useState('')
+    const [Message, setMessage] = useState('');
+
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+
+    const lang = useSelector(state => state.lang.language);
+    const Contact = useSelector(state => state.drawer.contact ? state.drawer.contact : {});
+    const token = useSelector(state => state.auth.user ? state.auth.user.data ? state.auth.user.data.token : null : null);
+
+
+    useEffect(() => {
+        if (isFocused) {
+            dispatch(GetContactUS(lang))
+        }
+    }, [isFocused])
+
+
+    const OpenURL = (url) => {
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                console.log('Can\'t handle url: ' + url);
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+    }
+
+    const _Valdaite = () => {
+        let MessageErr = Message == '' ? i18n.t('messageErr') : null
+
+        return MessageErr
+    }
+
+    const SendComplaimentAppUser = () => {
+        let val = _Valdaite()
+
+        if (!val) {
+            setspinner(true)
+            dispatch(SendComplaiment(lang, Message, token)).then(() => setspinner(false)).then(() => setModalVisible(false)).then(() => setMessage(''))
+
+        }
+        else {
+
+
+            ToasterNative(_Valdaite(), 'danger', 'top')
+
+        }
+    }
+
 
     return (
         <Container style={{ flex: 1 }}>
@@ -43,93 +97,97 @@ function Contactus({ navigation }) {
                 </View>
 
                 <View style={styles.contents}>
-                    <Content >
-                        <View style={styles.Line}></View>
-                        <Text style={styles.Add} numberOfLines={1} ellipsizeMode="tail"> {i18n.t('Social')} </Text>
+                    {
+                        Contact
+                        &&
+                        Contact.contact &&
+                        <Content >
+                            <View style={styles.Line}></View>
+                            <Text style={styles.Add} numberOfLines={1} ellipsizeMode="tail"> {i18n.t('Social')} </Text>
 
 
-                        <View style={styles.Card}>
+                            <View style={styles.Card}>
 
-                            <View style={styles.centered}>
-                                <Image source={require('../../../assets/Images/phone_call.png')} style={styles.Icon} resizeMode='contain' />
-                                <Text style={styles.Call}>01029877654446</Text>
-                            </View>
-
-                            <View style={styles.BLine}></View>
-
-                            <View style={styles.centered}>
-                                <Image source={require('../../../assets/Images/email.png')} style={styles.Icon} resizeMode='contain' />
-                                <Text style={styles.Call}>yasser@Gmail.com</Text>
-                            </View>
-
-                            <View style={styles.BLine}></View>
-
-                            <View style={styles.centered}>
-                                <Image source={require('../../../assets/Images/whatsapp.png')} style={styles.Icon} resizeMode='contain' />
-                                <Text style={styles.Call}>01029877654446</Text>
-                            </View>
-                        </View>
-
-                        <Text style={styles.Add} numberOfLines={1} ellipsizeMode="tail"> {i18n.t('sochialMedia')} </Text>
-
-                        <View style={styles.Card}>
-
-                            <View style={styles.centered}>
-                                <Image source={require('../../../assets/Images/facebook.png')} style={styles.Icon} resizeMode='contain' />
-                                <Text style={styles.Call}>https//:www.facebook.com</Text>
-                            </View>
-
-                            <View style={[styles.BLine, { height: .9 }]}></View>
-
-                            <View style={styles.centered}>
-                                <Image source={require('../../../assets/Images/twitter.png')} style={styles.Icon} resizeMode='contain' />
-                                <Text style={styles.Call}>https//:www.twitter.com</Text>
-                            </View>
-
-                            <View style={styles.BLine}></View>
-
-                            <View style={styles.centered}>
-                                <Image source={require('../../../assets/Images/instagram.png')} style={styles.Icon} resizeMode='contain' />
-                                <Text style={styles.Call}>https//:www.instagram.com</Text>
-                            </View>
-
-
-                        </View>
-                        <SText title={i18n.t('sendComplaint')} onPress={() => setModalVisible(true)} style={styles.FPass} />
-
-
-
-
-
-                        <View style={styles.centeredView}>
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible} >
-
-                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
-                                    <View style={styles.modalView}>
-                                        <View style={styles.Line}></View>
-                                        <Text style={styles.Complain}>{i18n.t('sendComplaint')}</Text>
-
-                                        <InputApp
-                                            placeholder={i18n.t('sendComplaint')}
-                                            onChangeText={(e) => setMessage(e)}
-                                            value={Message}
-                                            multiline={true}
-                                            numberOfLines={6}
-                                            styleCont={{ marginTop: 10, height: 180 }}
-
-                                        />
-
-                                        <BTN title={i18n.t('confirm')} onPress={() => setModalVisible(false)} ContainerStyle={{ marginTop: 0, marginVertical: 15 }} />
-
-                                    </View>
-
+                                <TouchableOpacity style={styles.centered} onPress={() => { Linking.openURL(`tel://${Contact.contact.phone}`) }}>
+                                    <Image source={require('../../../assets/Images/phone_call.png')} style={styles.Icon} resizeMode='contain' />
+                                    <Text style={styles.Call}>{Contact.contact.phone}</Text>
                                 </TouchableOpacity>
-                            </Modal>
-                        </View>
-                    </Content>
+
+                                <View style={styles.BLine}></View>
+
+                                <TouchableOpacity style={styles.centered} onPress={() => { Linking.openURL('mailto:' + Contact.contact.email) }}>
+                                    <Image source={require('../../../assets/Images/email.png')} style={styles.Icon} resizeMode='contain' />
+                                    <Text style={styles.Call}>{Contact.contact.email}</Text>
+                                </TouchableOpacity>
+
+                                <View style={styles.BLine}></View>
+
+                                <TouchableOpacity style={styles.centered} onPress={() => Linking.openURL(`https://api.whatsapp.com/send?phone=${Contact.contact.whatsapp}`)} >
+                                    <Image source={require('../../../assets/Images/whatsapp.png')} style={styles.Icon} resizeMode='contain' />
+                                    <Text style={styles.Call}>{Contact.contact.whatsapp}</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <Text style={styles.Add} numberOfLines={1} ellipsizeMode="tail"> {i18n.t('sochialMedia')} </Text>
+
+                            <View style={styles.Card}>
+                                {
+                                    Contact.socials.map(soc => {
+                                        return (
+                                            <>
+                                                <TouchableOpacity style={styles.centered} key={soc.link} onPress={() => OpenURL("https://" + soc.link)}>
+                                                    <Image source={{ uri: soc.icon }} style={styles.Icon} resizeMode='contain' />
+                                                    <Text style={styles.Call}>{soc.link}</Text>
+                                                </TouchableOpacity>
+                                                <View style={[styles.BLine, { height: .9 }]}></View>
+
+
+                                            </>
+                                        )
+                                    })
+                                }
+
+
+
+                            </View>
+                            <SText title={i18n.t('sendComplaint')} onPress={() => setModalVisible(true)} style={styles.FPass} />
+
+
+
+
+
+                            <View style={styles.centeredView}>
+                                <Modal
+                                    animationType="slide"
+                                    transparent={true}
+                                    visible={modalVisible} >
+
+                                    <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
+                                        <View style={styles.modalView}>
+                                            <View style={styles.Line}></View>
+                                            <Text style={styles.Complain}>{i18n.t('sendComplaint')}</Text>
+
+                                            <InputApp
+                                                placeholder={i18n.t('sendComplaint')}
+                                                onChangeText={(e) => setMessage(e)}
+                                                value={Message}
+                                                multiline={true}
+                                                numberOfLines={10}
+                                                styleCont={{ marginTop: 10, height: 180 }}
+                                                inputStyle={{ padding: 0, top: 0, }}
+
+                                            />
+
+                                            <BTN title={i18n.t('confirm')} onPress={SendComplaimentAppUser} ContainerStyle={{ marginTop: 0, marginVertical: 15 }} />
+
+                                        </View>
+
+                                    </TouchableOpacity>
+                                </Modal>
+                            </View>
+                        </Content>
+
+                    }
 
                 </View>
             </View>
@@ -259,8 +317,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-end",
         alignItems: "center",
-        backgroundColor: '#737373',
-        opacity: Platform.OS === 'ios' ? .97 : .95,
+        // backgroundColor: '#737373',
+        // opacity: Platform.OS === 'ios' ? .97 : .95,
 
 
     },
