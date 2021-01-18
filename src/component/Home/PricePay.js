@@ -88,11 +88,11 @@ function PricePay({ navigation }) {
 
         let PlanErr = Click === 0 ? i18n.t('PlanErr') : null
         let Bankerr = pay === 0 ? i18n.t('BankErr') : null
+        let BaseErr = base64 == '' ? i18n.t('BaseErr') : null
         let BankNameErr = Bankename == '' ? i18n.t('BanknameErr') : null
         let AccountnameErr = Accountname == '' ? i18n.t('AccountnameErr') : null
         let AccountnNumberErr = AccountNumber == '' ? i18n.t('AccountnNumberErr') : null
         let MoneyPaidErr = MoneyPaid == '' ? i18n.t('MoneyPaidErr') : null
-        let BaseErr = base64 == '' ? i18n.t('BaseErr') : null
 
 
         return PlanErr || Bankerr || BankNameErr || AccountnameErr || AccountnNumberErr || MoneyPaidErr || BaseErr
@@ -104,16 +104,16 @@ function PricePay({ navigation }) {
 
 
     const _ValdationBanks = () => {
+        let BaseErr = base64 == '' ? i18n.t('BaseErr') : null
 
         let BankNameErr = Bankename == '' ? i18n.t('BanknameErr') : null
         let AccountnameErr = Accountname == '' ? i18n.t('AccountnameErr') : null
         let AccountnNumberErr = AccountNumber == '' ? i18n.t('AccountnNumberErr') : null
         let MoneyPaidErr = MoneyPaid == '' ? i18n.t('MoneyPaidErr') : null
-        let BaseErr = base64 == '' ? i18n.t('BaseErr') : null
 
 
 
-        return BankNameErr || AccountnameErr || AccountnNumberErr || MoneyPaidErr || BaseErr
+        return BaseErr || BankNameErr || AccountnameErr || AccountnNumberErr || MoneyPaidErr
 
 
     }
@@ -175,11 +175,11 @@ function PricePay({ navigation }) {
 
     const HandleBank = () => {
         if (pay === 0) {
-            setModalVisible(false)
+            // setModalVisible(false)
 
             Toast.show({
                 text: i18n.t('BankErr'),
-                position: 'bottom',
+                position: 'top',
                 type: "danger",
                 duration: 3000,
                 textStyle: {

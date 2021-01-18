@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react'
-import {
-    View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView
-} from 'react-native';
-import ProgressCircle from 'react-native-progress-circle'
-
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { Colors } from '../../constant/Colors'
-import { InputIcon } from '../../common/InputText'
 import i18n from '../../../Local/i18n'
 import BTN from '../../common/LoginBtn'
 import { height, width } from '../../constant/Dimentions'
@@ -58,7 +53,7 @@ function HomePage({ navigation }) {
                             <Image source={require('../../../assets/Images/big_lamp.png')} style={styles.ImgCard} resizeMode='contain' />
                             <View style={styles.wrabLess}>
                                 <Text style={styles.TextCard}>{i18n.t('FavLesson')}</Text>
-                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} onPress={() => navigation.navigate('myProfile')} />
+                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} onPress={() => { }} />
                             </View>
                         </View>
                     </View>

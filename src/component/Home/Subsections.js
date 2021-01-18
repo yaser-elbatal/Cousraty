@@ -16,6 +16,7 @@ function Subsections({ navigation, route }) {
     const toutorial = useSelector(state => state.plan.toutorial ? state.plan.toutorial.data : []);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const lang = useSelector(state => state.lang.language);
+    const Subscribtion = useSelector(state => state.plan.toutorial ? state.plan.toutorial : []);
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
@@ -29,7 +30,7 @@ function Subsections({ navigation, route }) {
         }
     }, [isFocused])
 
-    console.log(toutorial);
+    console.log(Subscribtion);
     return (
         <Container style={{ flex: 1, }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -66,32 +67,43 @@ function Subsections({ navigation, route }) {
                     </View>
                 </View>
                 <View style={styles.contents}>
-                    <Content >
-                        <View style={styles.Line}></View>
+                    <Content showsVerticalScrollIndicator={false} >
+                        {
+                            toutorial && toutorial.length === 0 ?
+                                <View style={{ alignItems: 'center', }}>
+                                    <Image source={require('../../../assets/Images/nodata.gif')} style={{ width, height }} resizeMode='cover' />
+                                </View>
+                                :
+                                <>
+                                    <View style={styles.Line}></View>
 
+                                    <FlatList
+                                        data={toutorial}
+                                        horizontal={false}
+                                        showsVerticalScrollIndicator={false}
+                                        keyExtractor={item => item.id}
+                                        renderItem={({ item, index }) => {
+                                            return (
+                                                <TouchableOpacity style={styles.single} onPress={() => navigation.navigate('SubCategory', { data: item, Subscribtion })}>
+                                                    <View style={styles.ViewNum}>
+                                                        <Text style={styles.num}>{index + 1}</Text>
+                                                    </View>
 
-                        <FlatList
-                            data={toutorial}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={false}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <TouchableOpacity style={styles.single} onPress={() => navigation.navigate('SubCategory', { data: item })}>
-                                        <View style={styles.ViewNum}>
-                                            <Text style={styles.num}>{index + 1}</Text>
-                                        </View>
+                                                    <View style={styles.ViewClmn}>
+                                                        <Text style={styles.Indevedual}>{item.title}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            )
+                                        }}
+                                    />
+                                </>
+                        }
+                        {
+                            Subscribtion.extra == 0 ?
+                                <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 30, marginBottom: 20 }} />
+                                : null
+                        }
 
-                                        <View style={styles.ViewClmn}>
-                                            <Text style={styles.Indevedual}>{item.title}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
-                            }}
-                        />
-
-
-                        <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 50 }} />
 
 
 

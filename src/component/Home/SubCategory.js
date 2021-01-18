@@ -7,7 +7,7 @@ import { Colors } from '../../constant/Colors'
 import { Container, Content, } from 'native-base'
 
 function SubCategory({ navigation, route }) {
-    const { data } = route.params;
+    const { data, Subscribtion } = route.params;
     console.log(data);
 
     return (
@@ -45,25 +45,34 @@ function SubCategory({ navigation, route }) {
                 <View style={styles.contents}>
                     <Content >
                         <View style={styles.Line}></View>
-                        <View style={{ marginStart: 25, marginTop: 10 }}>
-                            <Text style={styles.Indevedual}>{i18n.t('downloadPdf')}</Text>
 
-                            <TouchableOpacity style={{ marginTop: 10 }} onPress={() => Linking.openURL(`${data.pdf}`)}>
-                                <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                            </TouchableOpacity>
+                        {
+                            Subscribtion.extra == 0 ?
+                                <Image source={{ uri: data.image }} style={{ width: 300, height: 200, alignSelf: 'center', borderRadius: 25 }} resizeMode='contain' />
 
-                            <View style={styles.sLine}></View>
+                                :
+                                <View style={{ marginStart: 25, marginTop: 10 }}>
 
-                            <Text style={[styles.Indevedual, { marginTop: 30 }]}>{i18n.t('watchVedio')}</Text>
+                                    <Text style={styles.Indevedual}>{i18n.t('downloadPdf')}</Text>
 
-                            <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, marginStart: 10 }} onPress={() => Linking.openURL(`${data.link}`)}>
-                                <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
-                                    {data.link}
-                                </Text>
+                                    <TouchableOpacity style={{ marginTop: 10 }} onPress={() => Linking.openURL(`${data.pdf}`)}>
+                                        <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                                    </TouchableOpacity>
 
-                            </TouchableOpacity>
+                                    <View style={styles.sLine}></View>
 
-                        </View>
+                                    <Text style={[styles.Indevedual, { marginTop: 30 }]}>{i18n.t('watchVedio')}</Text>
+
+                                    <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, marginStart: 10 }} onPress={() => Linking.openURL(`${data.link}`)}>
+                                        <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
+                                            {data.link}
+                                        </Text>
+
+                                    </TouchableOpacity>
+
+                                </View>
+                        }
+
 
                     </Content>
                 </View>
