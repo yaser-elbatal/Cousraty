@@ -4,6 +4,8 @@ import { Toast } from 'native-base'
 import i18n from "../../../Local/i18n";
 import Const from '../../constant/Const';
 import { ToasterNative } from '../../common/ToasterNative';
+import { Toaster } from '../../common/Toaster';
+import { Colors } from '../../constant/Colors';
 
 export const Sign_up = 'Sign_up';
 export const Sign_In = 'Sign_In';
@@ -162,7 +164,35 @@ export const ActivationCode = (code, token, lang, navigation) => {
 
 }
 
+export const ResendActivationCode = (token, lang) => {
+    return async dispatch => {
+        await axios({
+            method: 'POST',
+            url: Const.url + 'resend-code',
+            params: { lang },
+            headers: {
+                Authorization: 'Bearer ' + token,
 
+            }
+
+        }
+        ).then(res => {
+            if (res.data.success) {
+
+                Toaster(res.data.data.code, Colors.Beeb)
+
+            }
+            ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
+
+
+
+        }
+        )
+
+
+    }
+
+}
 
 
 export const checkPhone = (phone, lang, navigation) => {
@@ -176,7 +206,7 @@ export const checkPhone = (phone, lang, navigation) => {
                 navigation.navigate('NewPassword', { code: response.data.data.code, token: response.data.data.token });
 
             }
-            ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
+            ToasterNative(response.data.message, response.data.success ? "success" : "danger", 'bottom')
 
 
 

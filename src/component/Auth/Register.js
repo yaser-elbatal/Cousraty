@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Getregister } from '../../store/action/AuthAction';
 import Containers from '../../common/Loader';
 import { Toast } from 'native-base'
+import { SText } from '../../common/SText';
 
 
 
@@ -207,7 +208,7 @@ function Register({ navigation }) {
                         mapRegion.latitude === '' ?
                             <Text style={styles.TexLoc}>{i18n.t('location')}</Text>
                             :
-                            <Text style={styles.TexLoc}>{Locations}</Text>
+                            <Text numberOfLines={2} style={styles.TexLoc}>{Locations}</Text>
                     }
                     <Image source={require('../../../assets/Images/marker.png')} style={styles.Icon} resizeMode='contain' />
                 </TouchableOpacity>
@@ -218,6 +219,8 @@ function Register({ navigation }) {
                     value={password}
                     secureTextEntry
                     styleCont={{ marginTop: 20 }}
+                    secureTextEntry={password === '' ? false : true}
+
 
                 />
 
@@ -226,13 +229,18 @@ function Register({ navigation }) {
                     onChangeText={(e) => setConfirmPassword(e)}
                     value={confirmPassword}
                     secureTextEntry
-
+                    secureTextEntry={confirmPassword === '' ? false : true}
                     styleCont={{ marginTop: 0 }}
                 />
                 <Containers loading={spinner}>
                     <BTN title={i18n.t('Register')} onPress={SubmitRegister} ContainerStyle={styles.Btn} />
 
                 </Containers>
+                <View style={styles.Centerd}>
+                    <SText title={i18n.t('haveacco')} disabled />
+                    <SText title={i18n.t('Login')} onPress={() => navigation.navigate('Login')} style={styles.FPass} />
+                </View>
+
                 {
 
                     isopened ?
@@ -260,14 +268,16 @@ function Register({ navigation }) {
                                                     zoomControlEnabled={true}
                                                     showsTraffic={true} >
 
+
                                                     <Marker
                                                         draggable
                                                         coordinate={mapRegion}
-                                                    // onDragEnd={(e) => _handleMapRegionChange(e.nativeEvent.coordinate)}
-
                                                     >
-                                                        <Image source={require('../../../assets/Images/markerMap.png')} resizeMode='contain' style={{ width: 35, height: 35 }} />
+                                                        <Image source={require('../../../assets/Images/markerMap.png')} resizeMode='contain' style={{ width: 35, height: 35, }} />
                                                     </Marker>
+
+                                                    <Text style={{ margin: 20, color: Colors.black, fontSize: 14, fontFamily: 'FairuzBold', alignSelf: 'flex-start' }}>{Locations}</Text>
+
                                                 </MapView>
                                                 <View >
                                                     <Button title={i18n.t('save')} onPress={() => setisopened(false)} color={Colors.main} />
@@ -351,6 +361,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3.84,
         elevation: 5
+    },
+    Centerd: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    FPass: {
+        color: Colors.main,
+        fontSize: 16,
+        textDecorationLine: 'underline'
     },
 })
 

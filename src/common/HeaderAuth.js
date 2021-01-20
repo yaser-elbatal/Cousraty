@@ -1,7 +1,7 @@
 import React from 'react'
 import { KeyboardAvoidingView, Platform, StyleSheet, ScrollView, View, Image, Text, TouchableOpacity, I18nManager } from 'react-native'
 import { height, width } from '../constant/Dimentions'
-import { Colors } from '../constant/Colors'
+// import { Colors } from '../constant/Colors'
 
 const HeaderAuth = ({ children, Icon, onPress }) => {
     return (
@@ -44,7 +44,7 @@ const HeaderAuth = ({ children, Icon, onPress }) => {
 
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
+    container: { flex: 1, },
     image: {
         position: "absolute",
         width: width,
@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
     Imnage: {
         width: 200,
         height: 160,
+        marginTop: -13
     }
 
 })

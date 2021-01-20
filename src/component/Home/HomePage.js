@@ -18,6 +18,8 @@ function HomePage({ navigation }) {
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
+    let colors = [Colors.foshia, Colors.Labny, Colors.Green, Colors.main, Colors.orange, Colors.LabnyFateh, Colors.smothblack]
+
 
 
     useEffect(() => {
@@ -46,14 +48,15 @@ function HomePage({ navigation }) {
                 </View>
 
                 <ScrollView style={{ flex: 1, height: height * .86 }} showsVerticalScrollIndicator={false}>
-                    <Text style={styles.Hello}>{i18n.t('HelloApp')}</Text>
+                    <Text numberOfLines={2} style={[styles.Hello, { width: 280 }]}>{i18n.t('HelloApp')}</Text>
 
                     <View style={styles.card}>
                         <View style={styles.ImgText}>
                             <Image source={require('../../../assets/Images/big_lamp.png')} style={styles.ImgCard} resizeMode='contain' />
                             <View style={styles.wrabLess}>
                                 <Text style={styles.TextCard}>{i18n.t('FavLesson')}</Text>
-                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} onPress={() => { }} />
+
+                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} />
                             </View>
                         </View>
                     </View>
@@ -65,7 +68,7 @@ function HomePage({ navigation }) {
                         keyExtractor={item => item.id}
                         renderItem={({ item, index }) => {
                             return (
-                                <TouchableOpacity style={styles.SmallCard} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name })}>
+                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf })}>
                                     <View style={styles.WrabCard}>
                                         <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='contain' />
                                         <View style={styles.smallText}>
@@ -154,13 +157,14 @@ const styles = StyleSheet.create({
         marginTop: 0,
         height: 50,
         width: 170,
-        marginHorizontal: '1%'
+        marginHorizontal: 0,
+        alignSelf: 'flex-start'
     },
     wrabLess: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: '10%'
+        marginHorizontal: '8%'
     },
     WrabCard: {
         flexDirection: 'row',
@@ -168,8 +172,9 @@ const styles = StyleSheet.create({
         marginHorizontal: '1%'
     },
     SMAllImg: {
-        width: 60,
+        width: 100,
         height: 60,
+        borderRadius: 25
     },
     smallText: {
         flexDirection: 'column',

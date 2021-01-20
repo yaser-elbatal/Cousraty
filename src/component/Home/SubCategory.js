@@ -36,7 +36,7 @@ function SubCategory({ navigation, route }) {
                         <View style={styles.WrabCard}>
                             <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
                             <View style={styles.smallText}>
-                                <Text style={styles.Indevedual}>  {'مقدمه عن الادراك'}  </Text>
+                                <Text style={styles.Indevedual}>  {data.title}  </Text>
                             </View>
                         </View>
                     </View>
@@ -48,7 +48,7 @@ function SubCategory({ navigation, route }) {
 
                         {
                             Subscribtion.extra == 0 ?
-                                <Image source={{ uri: data.image }} style={{ width: 300, height: 200, alignSelf: 'center', borderRadius: 25 }} resizeMode='contain' />
+                                <Image source={{ uri: data.image }} style={{ width: 300, height: 300, alignSelf: 'center', marginTop: 20, borderRadius: 25 }} resizeMode='contain' />
 
                                 :
                                 <View style={{ marginStart: 25, marginTop: 10 }}>
@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 10
+        marginStart: 10,
+        flex: 1
     },
     Indevedual: {
         fontFamily: 'FairuzBold',

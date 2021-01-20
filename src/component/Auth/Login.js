@@ -29,6 +29,8 @@ function Login({ navigation }) {
     const dispatch = useDispatch()
     const lang = useSelector(state => state.lang.language);
 
+
+
     useEffect(() => {
 
         Platform.OS === 'android' ?
@@ -177,11 +179,13 @@ function Login({ navigation }) {
                 />
 
                 <InputIcon
-                    secureTextEntry={true}
                     placeholder={i18n.t('password')}
                     value={password}
                     onChangeText={(e) => setPassword(e)}
+                    secureTextEntry={password === '' ? false : true}
                     styleCont={{ marginTop: 0 }}
+                    placeholderStyle={{ fontFamily: 'FairuzBold', }}
+
                 />
 
                 <SText title={i18n.t('forgetPassword')} onPress={() => navigation.navigate('ForgetPass')} />

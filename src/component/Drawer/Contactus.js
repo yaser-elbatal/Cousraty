@@ -93,7 +93,7 @@ function Contactus({ navigation }) {
 
                 <View style={styles.SCard}>
                     <Image source={require('../../../assets/Images/contact_us.png')} style={{ width: 190, height: 190 }} resizeMode='contain' />
-                    <Text numberOfLines={3} ellipsizeMode="tail" style={styles.SText}>{i18n.t('ContactAp')}</Text>
+                    <Text style={styles.SText}>{i18n.t('ContactAp')}</Text>
                 </View>
 
                 <View style={styles.contents}>
@@ -236,7 +236,9 @@ const styles = StyleSheet.create({
     SText: {
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
-        width: 150
+        width: 150,
+        flex: 1,
+
     },
     contents: {
         backgroundColor: Colors.white,

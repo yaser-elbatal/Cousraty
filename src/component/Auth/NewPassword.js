@@ -60,14 +60,14 @@ function NewPassword({ navigation, route }) {
                     placeholder={i18n.t('password')}
                     onChangeText={(e) => setPassword(e)}
                     value={password}
-                    secureTextEntry
+                    secureTextEntry={password === '' ? false : true}
                     styleCont={{ marginTop: 0 }}
                 />
                 <InputIcon
                     placeholder={i18n.t('confirmPass')}
                     onChangeText={(e) => setConfirmPassword(e)}
                     value={confirmPassword}
-                    secureTextEntry
+                    secureTextEntry={confirmPassword === '' ? false : true}
                     styleCont={{ marginTop: 0 }}
                 />
                 <Containers loading={spinner}>

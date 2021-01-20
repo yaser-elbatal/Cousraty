@@ -108,7 +108,9 @@ const styles = StyleSheet.create({
     SText: {
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
-        width: 150
+        width: 150,
+        flex: 1,
+
     },
     contents: {
         backgroundColor: Colors.white,

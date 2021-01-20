@@ -217,10 +217,8 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('password')}
                                                     onChangeText={(e) => setPassword(e)}
                                                     value={password}
-                                                    secureTextEntry
+                                                    secureTextEntry={password === '' ? false : true}
                                                     styleCont={{ marginTop: 30 }}
-
-
 
                                                 />
                                                 <InputApp
@@ -228,7 +226,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('NewPassword')}
                                                     onChangeText={(e) => setNewPassword(e)}
                                                     value={Newpassword}
-                                                    secureTextEntry
+                                                    secureTextEntry={Newpassword === '' ? false : true}
                                                     styleCont={{ marginTop: 10 }}
 
 
@@ -239,7 +237,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('confirmPass')}
                                                     onChangeText={(e) => setConfirmPassword(e)}
                                                     value={confirmPassword}
-                                                    secureTextEntry
+                                                    secureTextEntry={confirmPassword === '' ? false : true}
                                                     styleCont={{ marginTop: 10 }}
 
 

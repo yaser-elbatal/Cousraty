@@ -101,12 +101,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: '5%',
         width: Platform.OS === 'ios' ? width * .9 : 330,
-        marginTop: 20
+        marginTop: 20,
     },
     SText: {
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
-        width: 150
+        width: 150,
+        flex: 1
     },
     contents: {
         backgroundColor: Colors.white,

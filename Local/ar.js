@@ -9,6 +9,7 @@ const ar = {
     entry: 'دخول',
     createAcc: 'سجل الان',
     haveAcc: 'ليس لديك حساب؟',
+    haveacco: 'لديك حساب ؟',
     phone: 'رقم الجوال',
     send: 'إرسال',
     RecoverPass: 'استرجاع كلمة المرور',
@@ -98,7 +99,11 @@ const ar = {
     AboutApp: 'كل ما يهم التطبيق',
     TermsCond: 'احكام وشروط خاصة بالتطبيق',
     RebQuestion: 'اسئلة تم تكرارها واجباتها',
-    watchPlan: 'مشاهدة خطتي الفرديه'
+    watchPlan: 'مشاهدة خطتي الفرديه',
+    IBAN: 'رقم الايبان',
+    CammeraErr: 'ليس لديك صلاحيات لدخول لمعرض الصور',
+    chooseBank: 'اختر البنك ',
+    resendCode: 'إعاده إرسال الكود'
 
 
 }

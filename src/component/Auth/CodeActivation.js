@@ -13,7 +13,7 @@ import {
 import { validateCode } from '../../common/Validation'
 import { Toast } from 'native-base'
 import { useDispatch, useSelector } from 'react-redux'
-import { ActivationCode } from '../../store/action/AuthAction'
+import { ActivationCode, ResendActivationCode } from '../../store/action/AuthAction'
 import Containers from '../../common/Loader'
 import { Toaster } from '../../common/Toaster'
 
@@ -26,6 +26,8 @@ function CodeActivation({ navigation, route }) {
     const dispatch = useDispatch();
     const lang = useSelector(state => state.lang.language);
     const [spinner, setspinner] = useState(false)
+    const [loading, setLoading] = useState(false)
+
 
 
     const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
@@ -54,6 +56,11 @@ function CodeActivation({ navigation, route }) {
         }
     }
 
+    const ResendCodeToActivate = () => {
+        setLoading(true)
+        dispatch(ResendActivationCode(token, lang,)).then(() => setLoading(false))
+    }
+
     return (
         <HeaderAuth Icon onPress={() => navigation.goBack()}>
             <View style={styles.Wrap}>
@@ -80,6 +87,12 @@ function CodeActivation({ navigation, route }) {
                 <Containers loading={spinner}>
 
                     <BTN title={i18n.t('confirm')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 20 }} />
+                </Containers>
+
+
+                <Containers loading={loading}>
+
+                    <BTN title={i18n.t('resendCode')} onPress={ResendCodeToActivate} ContainerStyle={{ marginTop: 20, backgroundColor: Colors.secondary, }} />
                 </Containers>
             </View>
         </HeaderAuth>

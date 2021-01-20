@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, Platform, Modal, FlatList } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, Platform, Modal, FlatList, Keyboard } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
@@ -16,6 +16,7 @@ import * as Permissions from 'expo-permissions';
 import { Toaster } from '../../common/Toaster'
 import Containers from '../../common/Loader'
 import { GetTerms } from '../../store/action/DrawerAction'
+import { ToasterNative } from '../../common/ToasterNative'
 
 
 
@@ -71,15 +72,28 @@ function PricePay({ navigation }) {
     };
     const _pickImage = async () => {
 
-        askPermissionsAsync();
-        let result = await ImagePicker.launchImageLibraryAsync({
-            base64: true
-        });
+        let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-        if (!result.cancelled) {
-            setUserImage(result.uri);
-            setBase64(result.base64);
+        if (status === 'granted') {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                base64: true,
+                aspect: [4, 3],
+                quality: .5,
+            });
+
+            if (!result.cancelled) {
+                setUserImage(result.uri);
+                setBase64(result.base64);
+            }
+
         }
+        else {
+            ToasterNative(i18n.t('CammeraErr'), "danger", 'top')
+
+        }
+        console.log(status);
+
+
     };
 
 
@@ -105,7 +119,6 @@ function PricePay({ navigation }) {
 
     const _ValdationBanks = () => {
         let BaseErr = base64 == '' ? i18n.t('BaseErr') : null
-
         let BankNameErr = Bankename == '' ? i18n.t('BanknameErr') : null
         let AccountnameErr = Accountname == '' ? i18n.t('AccountnameErr') : null
         let AccountnNumberErr = AccountNumber == '' ? i18n.t('AccountnNumberErr') : null
@@ -121,10 +134,10 @@ function PricePay({ navigation }) {
     const HandleChangeTransfer = () => {
         let Val = _ValdationBanks();
         if (!Val) {
-
             setModalVisible2(false)
         }
         else {
+            Keyboard.dismiss()
             Toast.show({
                 text: _ValdationBanks(),
                 position: 'top',
@@ -147,7 +160,19 @@ function PricePay({ navigation }) {
         let val = _Valdation();
         if (!val) {
             setspinner(true)
-            dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false))
+            dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false)).catch((err) => {
+                setspinner(false)
+                Toast.show({
+                    text: err,
+                    type: "danger",
+                    duration: 3000,
+                    textStyle: {
+                        color: "white",
+                        fontFamily: 'FairuzBold',
+                        textAlign: 'center'
+                    }
+                })
+            })
 
             setAccountNumber('');
             setUserImage('')
@@ -219,7 +244,7 @@ function PricePay({ navigation }) {
 
                 <View style={styles.SCard}>
                     <Image source={require('../../../assets/Images/calender.png')} style={{ width: 190, height: 140 }} resizeMode='contain' />
-                    <Text numberOfLines={3} ellipsizeMode="tail" style={styles.SText}>{i18n.t('choosePlane')}</Text>
+                    <Text style={styles.SText}>{i18n.t('choosePlane')}</Text>
                 </View>
                 <View style={styles.contents}>
                     <Content >
@@ -256,10 +281,11 @@ function PricePay({ navigation }) {
                             }}
                         />
 
+                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary }}>{i18n.t('chooseBank')} : </Text>
 
 
 
-                        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 20 }}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
                                 <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{i18n.t('Transfermony')}</Text>
@@ -274,10 +300,10 @@ function PricePay({ navigation }) {
                                 transparent={true}
                                 visible={modalVisible} >
 
-                                <View style={[styles.centeredView, {}]} >
+                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
                                     <View style={styles.modalView}>
                                         <TouchableOpacity style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} onPress={() => setModalVisible(false)}>
-                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
+                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
 
                                         </TouchableOpacity>
 
@@ -293,22 +319,22 @@ function PricePay({ navigation }) {
                                                         <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
 
                                                             <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
-                                                                <Image source={{ uri: item.icon }} style={{ width: 80, height: 80, }} resizeMode='contain' />
-                                                                <View style={{ width: '100%', paddingHorizontal: 15 }}>
+                                                                <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
+                                                                <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
                                                                     <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, width: 90 }]}>{i18n.t('BankName')} : </Text>
+                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
                                                                         <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
                                                                     </View>
                                                                     <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, width: 90 }]}>{i18n.t('AccName')} : </Text>
+                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
                                                                         <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
                                                                     </View>
                                                                     <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, width: 90 }]}>{i18n.t('AccNamer')} : </Text>
+                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
                                                                         <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
                                                                     </View>
-                                                                    <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, width: 90 }]}> : IBAN</Text>
+                                                                    <View style={{ flexDirection: 'row', }}>
+                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
                                                                         <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
                                                                     </View>
                                                                 </View>
@@ -322,12 +348,13 @@ function PricePay({ navigation }) {
 
 
 
-                                            <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginTop: 30, marginBottom: 20 }} />
                                         </Content>
+                                        <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginTop: 350, marginBottom: 20, height: 50, borderRadius: 25, position: 'absolute', backgroundColor: Colors.main }} />
+
                                     </View>
 
 
-                                </View>
+                                </TouchableOpacity>
                             </Modal>
                         </View>
 
@@ -482,7 +509,9 @@ const styles = StyleSheet.create({
     SText: {
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
-        width: 150
+        width: 150,
+        flex: 1,
+
     },
     Line: {
         justifyContent: 'center',
@@ -545,7 +574,7 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
         fontSize: 12,
         fontFamily: 'FairuzBold',
-        textAlign: 'left'
+        alignSelf: 'flex-start'
     },
     lesson: {
         color: Colors.main,

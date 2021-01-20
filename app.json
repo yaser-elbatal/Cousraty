@@ -17,19 +17,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.Awmer.Courses",
+      "googleServicesFile": "./google-services.json"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBCtrxqozj9xLkL58Frh0Gl4fiQZ_oATZI"
         }
       },
-      "package": "com.yasserelbatal.Courses"
+      "package": "com.Awmer.Courses"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList, Linking } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
@@ -20,8 +20,7 @@ function Subsections({ navigation, route }) {
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
-    const { plan_id, plan_name } = route.params;
-
+    const { plan_id, plan_name, pdf } = route.params;
 
 
     useEffect(() => {
@@ -30,7 +29,6 @@ function Subsections({ navigation, route }) {
         }
     }, [isFocused])
 
-    console.log(Subscribtion);
     return (
         <Container style={{ flex: 1, }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
@@ -50,7 +48,7 @@ function Subsections({ navigation, route }) {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 320, alignItems: 'center' }}>
                         <Text style={styles.Notify}>{i18n.t('Subsections')}</Text>
-                        <TouchableOpacity style={{ alignItems: 'flex-end' }}>
+                        <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={pdf === null ? () => { } : () => Linking.openURL(`${pdf}`)}>
                             <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
                         </TouchableOpacity>
                     </View>
@@ -71,7 +69,7 @@ function Subsections({ navigation, route }) {
                         {
                             toutorial && toutorial.length === 0 ?
                                 <View style={{ alignItems: 'center', }}>
-                                    <Image source={require('../../../assets/Images/nodata.gif')} style={{ width, height }} resizeMode='cover' />
+                                    <Image source={require('../../../assets/Images/noData.png')} style={{ width, height }} resizeMode='cover' />
                                 </View>
                                 :
                                 <>
@@ -98,16 +96,17 @@ function Subsections({ navigation, route }) {
                                     />
                                 </>
                         }
-                        {
-                            Subscribtion.extra == 0 ?
-                                <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 30, marginBottom: 20 }} />
-                                : null
-                        }
+
 
 
 
 
                     </Content>
+                    {
+                        Subscribtion.extra == 0 ?
+                            <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 240, position: 'absolute' }} />
+                            : null
+                    }
                 </View>
             </View>
         </Container>
@@ -237,7 +236,8 @@ const styles = StyleSheet.create({
     Indevedual: {
         fontFamily: 'FairuzBold',
         fontSize: 14,
-        color: Colors.secondary
+        color: Colors.secondary,
+        alignSelf: 'flex-start'
     },
     Price: {
         fontFamily: 'FairuzBold',
@@ -266,7 +266,8 @@ const styles = StyleSheet.create({
     ViewClmn: {
         flexDirection: 'column',
         marginHorizontal: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1
     }
 })
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "984674261082",
+    "project_id": "courses-a48c8",
+    "storage_bucket": "courses-a48c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984674261082:android:e9372cf0a974ea2e6ce063",
+        "android_client_info": {
+          "package_name": "com.Awmer.Courses"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984674261082-h1deb7seik6r2hs62f5j172fqtu6e9vg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgFgwPYxvXq8Ksal5hl9NZp8trd7spkN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984674261082-h1deb7seik6r2hs62f5j172fqtu6e9vg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

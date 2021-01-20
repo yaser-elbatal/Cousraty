@@ -31,7 +31,11 @@ function ForgetPass({ navigation }) {
         let val = _validate()
         if (!val) {
             setspinner(true)
-            dispatch(checkPhone(Phone, lang, navigation)).then(() => setspinner(false))
+            dispatch(checkPhone(Phone, lang, navigation)).then(() => setspinner(false)).catch((err) => {
+                setspinner(false)
+                Toaster(err);
+
+            })
 
         }
         else {

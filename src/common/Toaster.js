@@ -5,15 +5,16 @@ import { Colors } from "../constant/Colors";
 import { width } from "../constant/Dimentions";
 
 
-const Toaster = (message) => {
+const Toaster = (message, backgroundColors) => {
     return Toast.show(message, {
         position: Toast.position.BOTTOM,
         containerStyle: {
-            backgroundColor: 'red',
+
+            backgroundColor: backgroundColors ? backgroundColors : 'red',
             paddingHorizontal: width * 0.09,
             borderRadius: 5,
             width,
-            bottom: 0
+            bottom: 0,
         },
         textColor: Colors.white,
         textStyle: {

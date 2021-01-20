@@ -76,6 +76,7 @@ const en = {
     Visa: 'Visa',
     Pay: 'Pay',
     messageErr: 'Write Complaiment',
+    haveacco: 'Have account?',
     Transfermony: 'Bank transfer',
     payment: 'Payment',
     Confirmpayment: 'Confirm payment',
@@ -92,13 +93,16 @@ const en = {
     BankNameTr: 'The name of the transferring bank',
     AccNamer: 'Account name',
     Amountpaid: 'Amount paid',
-
+    IBAN: 'IBAN',
     passwordErr: 'Please type a correct password',
     PhoneErr: 'Please type a correct phone number',
     codeErre: 'Please type a correct code activation ',
     emailErr: 'Please type a correct  E-mail ',
     NotMatch: 'Password not matching',
     usernameErr: 'Please type a correct name',
+    CammeraErr: 'You do not have access to the photo gallery',
+    chooseBank: 'Choose the bank :',
+    resendCode: 'Resend Code'
 
 }
 export default en
