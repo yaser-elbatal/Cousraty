@@ -231,11 +231,11 @@ const styles = StyleSheet.create({
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 10
+        marginStart: 5
     },
     Indevedual: {
         fontFamily: 'FairuzBold',
-        fontSize: 14,
+        fontSize: 12,
         color: Colors.secondary,
         alignSelf: 'flex-start'
     },

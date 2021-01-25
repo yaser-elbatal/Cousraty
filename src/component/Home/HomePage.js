@@ -178,12 +178,14 @@ const styles = StyleSheet.create({
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 10
+        marginStart: 10,
+        flex: 1
+
     },
     Indevedual: {
         fontFamily: 'FairuzBold',
         fontSize: 14,
-        color: Colors.secondary
+        color: Colors.secondary,
     },
     Price: {
         fontFamily: 'FairuzBold',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, Platform, Modal, FlatList, Keyboard } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, Platform, FlatList, Keyboard } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
@@ -13,10 +13,10 @@ import { GetSubscriptionsPrice } from '../../store/action/Subscribtionaction'
 import { GetBanks, BankTransfer } from '../../store/action/BankAction'
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { Toaster } from '../../common/Toaster'
 import Containers from '../../common/Loader'
 import { GetTerms } from '../../store/action/DrawerAction'
 import { ToasterNative } from '../../common/ToasterNative'
+import Modal from "react-native-modal";
 
 
 
@@ -48,7 +48,6 @@ function PricePay({ navigation }) {
 
 
 
-
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
 
@@ -65,17 +64,14 @@ function PricePay({ navigation }) {
 
 
 
-    const askPermissionsAsync = async () => {
-        await Permissions.askAsync(Permissions.CAMERA);
-        await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-    };
     const _pickImage = async () => {
 
         let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
         if (status === 'granted') {
             let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+
                 base64: true,
                 aspect: [4, 3],
                 quality: .5,
@@ -86,12 +82,12 @@ function PricePay({ navigation }) {
                 setBase64(result.base64);
             }
 
+
         }
         else {
             ToasterNative(i18n.t('CammeraErr'), "danger", 'top')
 
         }
-        console.log(status);
 
 
     };
@@ -163,7 +159,7 @@ function PricePay({ navigation }) {
             dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false)).catch((err) => {
                 setspinner(false)
                 Toast.show({
-                    text: err,
+                    text: err.message,
                     type: "danger",
                     duration: 3000,
                     textStyle: {
@@ -294,89 +290,88 @@ function PricePay({ navigation }) {
                             <Image source={require('../../../assets/Images/dropdown.png')} style={{ width: 15, height: 20 }} resizeMode='contain' />
                         </TouchableOpacity>
 
-                        <View style={styles.centeredView}>
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible} >
+                        <Modal
+                            onBackdropPress={() => setModalVisible(false)}
+                            onBackButtonPress={() => setModalVisible(false)}
+                            isVisible={modalVisible}
+                            style={{ marginTop: 50 }}
+                        >
 
-                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
-                                    <View style={styles.modalView}>
-                                        <TouchableOpacity style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} onPress={() => setModalVisible(false)}>
-                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
-
-                                        </TouchableOpacity>
-
-
-                                        <Content style={{ backgroundColor: Colors.white, }}>
-                                            <FlatList
-                                                data={banks}
-                                                horizontal={false}
-                                                showsVerticalScrollIndicator={false}
-                                                keyExtractor={item => item.id}
-                                                renderItem={({ item, index }) => {
-                                                    return (
-                                                        <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
-
-                                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
-                                                                <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
-                                                                <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
-                                                                    <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
-                                                                    </View>
-                                                                    <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
-                                                                    </View>
-                                                                    <View style={{ flexDirection: 'row' }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
-                                                                    </View>
-                                                                    <View style={{ flexDirection: 'row', }}>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
-                                                                        <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
-                                                                    </View>
-                                                                </View>
-                                                            </View>
-
-                                                        </TouchableOpacity>
-                                                    )
-                                                }} />
-
-
-
-
-
-                                        </Content>
-                                        <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginTop: 350, marginBottom: 20, height: 50, borderRadius: 25, position: 'absolute', backgroundColor: Colors.main }} />
-
+                            <View style={[styles.centeredView, {}]} >
+                                <View style={styles.modalView}>
+                                    <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
+                                        <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
                                     </View>
 
 
-                                </TouchableOpacity>
-                            </Modal>
-                        </View>
+                                    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
+                                        <FlatList
+                                            data={banks}
+                                            horizontal={false}
+                                            showsVerticalScrollIndicator={false}
+                                            keyExtractor={item => item.id}
+                                            renderItem={({ item, index }) => {
+                                                return (
+                                                    <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
+
+                                                        <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
+                                                            <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
+                                                            <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
+                                                                <View style={{ flexDirection: 'row' }}>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
+                                                                </View>
+                                                                <View style={{ flexDirection: 'row' }}>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
+                                                                </View>
+                                                                <View style={{ flexDirection: 'row' }}>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
+                                                                </View>
+                                                                <View style={{ flexDirection: 'row', }}>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
+                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
+                                                                </View>
+                                                            </View>
+                                                        </View>
+
+                                                    </TouchableOpacity>
+                                                )
+                                            }} />
+
+                                    </View>
+                                    <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ bottom: 0, height: 50, borderRadius: 25, position: 'absolute', backgroundColor: Colors.main }} />
+
+                                </View>
 
 
+                            </View>
+                        </Modal>
 
 
-                        <View style={[styles.centeredView]}>
+                        <View style={[styles.centeredView, {}]} >
+
+
                             <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible2} >
+                                // onBackdropPress={() => setModalVisible2(false)}
+                                onBackButtonPress={() => setModalVisible2(false)}
+                                isVisible={modalVisible2}
+                                style={{ marginTop: 50 }}
+                                avoidKeyboard={true}
+                            >
+
 
                                 <View style={[styles.centeredView, {}]} >
                                     <View style={styles.modalView}>
-                                        <TouchableOpacity style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} onPress={() => setModalVisible2(false)}>
+                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
                                             <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
 
-                                        </TouchableOpacity>
+                                        </View>
 
 
 
-                                        <Content style={{ backgroundColor: Colors.white, }}>
+                                        <Content style={{ backgroundColor: Colors.white, flex: 1 }}>
                                             <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
 
                                                 {
@@ -430,30 +425,34 @@ function PricePay({ navigation }) {
 
                                 </View>
                             </Modal>
+
+
+
+
                         </View>
+                        <Modal
+                            onBackdropPress={() => setModalVisible3(false)}
+                            onBackButtonPress={() => setModalVisible3(false)}
+                            isVisible={modalVisible3}
+                            style={{ marginTop: 50 }}
+                            avoidKeyboard={true}
+                        >
 
 
-                        <View style={styles.centeredView}>
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible3} >
+                            <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
+                                <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
+                                    <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
 
-                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
-                                    <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
-                                        <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
+                                    <Content >
+                                        <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10, marginEnd: 5 }}>{terms} </Text>
+                                        {/* <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10 }}>{terms}</Text> */}
 
-                                        <Content >
-                                            <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10, marginEnd: 5 }}>{terms} </Text>
-                                            {/* <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10 }}>{terms}</Text> */}
-
-                                        </Content>
-                                    </View>
+                                    </Content>
+                                </View>
 
 
-                                </TouchableOpacity>
-                            </Modal>
-                        </View>
+                            </TouchableOpacity>
+                        </Modal>
 
                         <SText title={i18n.t('Termsconditions')} style={{ color: Colors.secondary }} onPress={() => { setModalVisible3(true) }} />
                         <Containers loading={spinner}>
@@ -593,6 +592,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         // backgroundColor: '#737373',
         // opacity: Platform.OS === 'ios' ? .97 : .95,
+        flexDirection: 'column'
+
 
 
     },
@@ -601,7 +602,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 55,
         borderTopLeftRadius: 55,
         width: width,
-        height: height * .69,
+        height: height * .72,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

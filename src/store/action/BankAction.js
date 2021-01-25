@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Const from '../../constant/Const';
 import { Toast } from 'native-base';
+import { ToasterNative } from '../../common/ToasterNative';
 
 export const Get_Bank = 'Get_Bank';
 
@@ -35,21 +36,17 @@ export const BankTransfer = (account_name, account_number, image, amount, bank_n
             headers: {
                 Authorization: 'Bearer ' + token,
 
+
             }
         }).then(res => {
             if (res.data.success) {
                 navigation.navigate('SuccessPayment', { amount: amount })
             }
-            Toast.show({
-                text: res.data.message,
-                type: res.data.success ? "success" : "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            })
+
+            ToasterNative(res.data.message, res.data.success ? "success" : "danger", 'bottom')
+
+        }).catch(err => {
+            ToasterNative(err.message, 'danger', 'bottom')
         })
     }
 }
