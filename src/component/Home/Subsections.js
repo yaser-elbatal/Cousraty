@@ -231,13 +231,15 @@ const styles = StyleSheet.create({
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 5
+        marginStart: 5,
+        flex: 1
+
     },
     Indevedual: {
         fontFamily: 'FairuzBold',
         fontSize: 12,
         color: Colors.secondary,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
     },
     Price: {
         fontFamily: 'FairuzBold',

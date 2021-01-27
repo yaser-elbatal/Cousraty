@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, Platform, FlatList, Keyboard } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, Platform, FlatList, Keyboard, ScrollView } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
-import { Container, Content, Toast, } from 'native-base'
+import { Container, Content, Toast, Root, } from 'native-base'
 import BTN from '../../common/LoginBtn'
 import { InputApp } from '../../common/InputApp'
 import { SText } from '../../common/SText'
@@ -45,7 +45,6 @@ function PricePay({ navigation }) {
     const SubScriptions = useSelector(state => state.subs.subs);
     const banks = useSelector(state => state.banks.banks);
     const terms = useSelector(state => state.drawer.terms);
-
 
 
     const dispatch = useDispatch();
@@ -136,7 +135,7 @@ function PricePay({ navigation }) {
             Keyboard.dismiss()
             Toast.show({
                 text: _ValdationBanks(),
-                position: 'top',
+                position: 'bottom',
                 type: "danger",
                 duration: 3000,
                 textStyle: {
@@ -354,7 +353,7 @@ function PricePay({ navigation }) {
 
 
                             <Modal
-                                // onBackdropPress={() => setModalVisible2(false)}
+                                onBackdropPress={() => setModalVisible2(false)}
                                 onBackButtonPress={() => setModalVisible2(false)}
                                 isVisible={modalVisible2}
                                 style={{ marginTop: 50 }}
@@ -371,7 +370,7 @@ function PricePay({ navigation }) {
 
 
 
-                                        <Content style={{ backgroundColor: Colors.white, flex: 1 }}>
+                                        <ScrollView style={{ backgroundColor: Colors.white, flex: 1 }} keyboardShouldPersistTaps={'never'}>
                                             <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
 
                                                 {
@@ -419,11 +418,13 @@ function PricePay({ navigation }) {
 
                                             <BTN title={i18n.t('confirm')} onPress={HandleChangeTransfer} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
 
-                                        </Content>
+
+                                        </ScrollView >
                                     </View>
 
 
                                 </View>
+
                             </Modal>
 
 

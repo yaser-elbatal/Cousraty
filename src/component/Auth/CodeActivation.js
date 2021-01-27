@@ -37,7 +37,7 @@ function CodeActivation({ navigation, route }) {
     });
 
     const { code, token } = route.params
-
+    console.log(code);
     const _validate = () => {
         let CodeErr = value != code ? i18n.t('codeErre') : null
         return CodeErr
