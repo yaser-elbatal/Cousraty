@@ -1,8 +1,9 @@
 import React from 'react'
-import { Toast } from 'native-base'
+import { Toast, Root } from 'native-base'
 
 const ToasterNative = (text, type, position) => {
     return (
+
         Toast.show({
             text: text,
             type: type,
@@ -15,6 +16,8 @@ const ToasterNative = (text, type, position) => {
                 alignSelf: 'center'
             }
         })
+
+
     )
 }
 

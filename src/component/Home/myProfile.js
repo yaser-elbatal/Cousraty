@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     },
     Top: { flexDirection: 'row', alignItems: 'center', marginStart: 20, justifyContent: 'center', },
     Pic: { height: 120, width: 120, borderRadius: 50, },
-    WrabClmn: { flexDirection: 'column', alignItems: 'center', marginStart: 5, flex: 1 },
+    WrabClmn: { flexDirection: 'column', alignItems: 'center', marginStart: 5, flex: 1, marginEnd: 5 },
     name: { alignSelf: 'flex-start', fontFamily: 'FairuzBold', color: Colors.white, fontSize: 14, },
     plan: { alignSelf: 'flex-start', fontFamily: 'FairuzBold', color: Colors.secondary, fontSize: 12, },
     start: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start' },

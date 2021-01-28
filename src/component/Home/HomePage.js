@@ -70,7 +70,7 @@ function HomePage({ navigation }) {
                             return (
                                 <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf })}>
                                     <View style={styles.WrabCard}>
-                                        <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='contain' />
+                                        <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='cover' />
                                         <View style={styles.smallText}>
                                             <Text style={styles.Indevedual}>
                                                 {item.name}
@@ -131,13 +131,12 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     SmallCard: {
-        backgroundColor: Colors.foshia,
-        flex: 1, borderRadius: 25,
+        flex: 1,
+        borderRadius: 20,
         width: '95%',
         marginHorizontal: '1%',
         marginTop: 15,
-        paddingVertical: 15,
-        paddingHorizontal: 5,
+
         justifyContent: 'center'
     },
     ImgText: {
@@ -147,6 +146,8 @@ const styles = StyleSheet.create({
     ImgCard: {
         width: 100,
         height: 140,
+        borderRadius: 25,
+
     },
     TextCard: {
         fontFamily: 'FairuzBold',
@@ -169,16 +170,16 @@ const styles = StyleSheet.create({
     WrabCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: '1%'
     },
     SMAllImg: {
-        width: 100,
-        height: 60,
-        borderRadius: 25
+        width: 80,
+        height: 80,
+        borderRadius: 20,
+        margin: 10,
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 10,
+        marginStart: 5,
         flex: 1
 
     },
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
         fontFamily: 'FairuzBold',
         fontSize: 14,
         color: Colors.secondary,
+        alignSelf: 'flex-start'
     },
     Price: {
         fontFamily: 'FairuzBold',

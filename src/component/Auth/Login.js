@@ -30,6 +30,35 @@ function Login({ navigation }) {
     const lang = useSelector(state => state.lang.language);
 
 
+    // const getDeviceId = async () => {
+    //     const { status: existingStatus } = await Permissions.getAsync(
+    //         Permissions.NOTIFICATIONS
+    //     );
+
+    //     let finalStatus = existingStatus;
+
+    //     if (existingStatus !== 'granted') {
+    //         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    //         finalStatus = status;
+    //     }
+
+    //     if (finalStatus !== 'granted') {
+    //         return;
+    //     }
+
+    //     const deviceId = await Notifications.getExpoPushTokenAsync();
+
+    //     setDeviceId(deviceId);
+    //     setUserId(null);
+
+    //     AsyncStorage.setItem('deviceID', deviceId);
+    // };
+    // useEffect(() => {
+    //     getDeviceId()
+    //     setSpinner(false)
+    // }, []);
+
+
 
     useEffect(() => {
 
@@ -125,7 +154,7 @@ function Login({ navigation }) {
         return token;
     }
 
-
+    console.log(expoPushToken);
 
     const _validate = () => {
         let phoneErr = validatePhone(phone);
@@ -182,7 +211,7 @@ function Login({ navigation }) {
                     placeholder={i18n.t('password')}
                     value={password}
                     onChangeText={(e) => setPassword(e)}
-                    secureTextEntry={password === '' ? false : true}
+                    secureTextEntry={Platform.OS === 'android' ? password === '' ? false : true : true}
                     styleCont={{ marginTop: 0 }}
                     placeholderStyle={{ fontFamily: 'FairuzBold', }}
 

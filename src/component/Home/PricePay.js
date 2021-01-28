@@ -132,18 +132,10 @@ function PricePay({ navigation }) {
             setModalVisible2(false)
         }
         else {
-            Keyboard.dismiss()
-            Toast.show({
-                text: _ValdationBanks(),
-                position: 'bottom',
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
+            Keyboard.dismiss();
+            ToasterNative(_ValdationBanks(), 'danger', 'top')
+
+
 
         }
 
@@ -155,19 +147,7 @@ function PricePay({ navigation }) {
         let val = _Valdation();
         if (!val) {
             setspinner(true)
-            dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false)).catch((err) => {
-                setspinner(false)
-                Toast.show({
-                    text: err.message,
-                    type: "danger",
-                    duration: 3000,
-                    textStyle: {
-                        color: "white",
-                        fontFamily: 'FairuzBold',
-                        textAlign: 'center'
-                    }
-                })
-            })
+            dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false))
 
             setAccountNumber('');
             setUserImage('')
@@ -177,17 +157,10 @@ function PricePay({ navigation }) {
 
         }
         else {
-            Toast.show({
-                text: _Valdation(),
-                position: 'bottom',
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
+
+
+            ToasterNative(_Valdation(), 'danger', 'bottom')
+
 
         }
 
@@ -212,13 +185,17 @@ function PricePay({ navigation }) {
 
         }
         else {
-            setModalVisible2(true)
             setModalVisible(false)
+            setTimeout(() => {
+                setModalVisible2(true)
+
+            }, 50);
 
         }
     }
 
     return (
+
         <Container style={{ flex: 1, }}>
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
 
@@ -276,7 +253,7 @@ function PricePay({ navigation }) {
                             }}
                         />
 
-                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary }}>{i18n.t('chooseBank')} : </Text>
+                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary, alignSelf: 'flex-start' }}>{i18n.t('chooseBank')} : </Text>
 
 
 
@@ -356,7 +333,6 @@ function PricePay({ navigation }) {
                                 onBackdropPress={() => setModalVisible2(false)}
                                 onBackButtonPress={() => setModalVisible2(false)}
                                 isVisible={modalVisible2}
-                                style={{ marginTop: 50 }}
                                 avoidKeyboard={true}
                             >
 
@@ -370,7 +346,8 @@ function PricePay({ navigation }) {
 
 
 
-                                        <ScrollView style={{ backgroundColor: Colors.white, flex: 1 }} keyboardShouldPersistTaps={'never'}>
+                                        <Content style={{ backgroundColor: Colors.white, flex: 1 }} >
+
                                             <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
 
                                                 {
@@ -419,7 +396,7 @@ function PricePay({ navigation }) {
                                             <BTN title={i18n.t('confirm')} onPress={HandleChangeTransfer} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
 
 
-                                        </ScrollView >
+                                        </Content >
                                     </View>
 
 
@@ -467,6 +444,8 @@ function PricePay({ navigation }) {
 
             </View>
         </Container>
+
+
     )
 }
 
@@ -499,7 +478,7 @@ const styles = StyleSheet.create({
     SCard: {
         backgroundColor: Colors.white,
         flexDirection: 'row',
-        height: 110,
+        height: 120,
         borderRadius: 25,
         alignItems: 'center',
         marginHorizontal: '5%',
@@ -509,7 +488,6 @@ const styles = StyleSheet.create({
     SText: {
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
-        width: 150,
         flex: 1,
 
     },
@@ -603,7 +581,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 55,
         borderTopLeftRadius: 55,
         width: width,
-        height: height * .72,
+        height: height * .79,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

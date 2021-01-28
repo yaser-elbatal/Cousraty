@@ -29,7 +29,7 @@ function Settings({ navigation }) {
     const [Lang, setLang] = useState('');
     const [Direction, setDirection] = useState('');
     const [spinner, setSpinner] = useState(false)
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(true);
 
     const toggleSwitch = () => {
         setIsEnabled(previousState => !previousState)
