@@ -217,7 +217,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('password')}
                                                     onChangeText={(e) => setPassword(e)}
                                                     value={password}
-                                                    secureTextEntry={password === '' ? false : true}
+                                                    secureTextEntry={Platform.OS === 'android' ? password === '' ? false : true : true}
                                                     styleCont={{ marginTop: 30 }}
 
                                                 />
@@ -226,7 +226,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('NewPassword')}
                                                     onChangeText={(e) => setNewPassword(e)}
                                                     value={Newpassword}
-                                                    secureTextEntry={Newpassword === '' ? false : true}
+                                                    secureTextEntry={Platform.OS === 'android' ? Newpassword === '' ? false : true : true}
                                                     styleCont={{ marginTop: 10 }}
 
 
@@ -237,7 +237,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('confirmPass')}
                                                     onChangeText={(e) => setConfirmPassword(e)}
                                                     value={confirmPassword}
-                                                    secureTextEntry={confirmPassword === '' ? false : true}
+                                                    secureTextEntry={Platform.OS === 'android' ? confirmPassword === '' ? false : true : true}
                                                     styleCont={{ marginTop: 10 }}
 
 

@@ -5,6 +5,7 @@ import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
 import { Container, Content, } from 'native-base'
+import { ToasterNative } from '../../common/ToasterNative'
 
 function SubCategory({ navigation, route }) {
     const { data, Subscribtion } = route.params;
@@ -55,20 +56,36 @@ function SubCategory({ navigation, route }) {
 
                                     <Text style={styles.Indevedual}>{i18n.t('downloadPdf')}</Text>
 
-                                    <TouchableOpacity style={{ marginTop: 10 }} onPress={() => Linking.openURL(`${data.pdf}`)}>
+                                    <TouchableOpacity style={{ marginTop: 10 }} onPress={data.pdf === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.pdf}`)}>
                                         <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
                                     </TouchableOpacity>
 
                                     <View style={styles.sLine}></View>
 
+                                    <Text style={[styles.Indevedual, { marginTop: 30 }]}>{i18n.t('wordDownlod')}</Text>
+
+
+                                    <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, }} onPress={data.word === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.word}`)}>
+                                        <Image source={require('../../../assets/Images/word.png')} style={{ width: 60, height: 30 }} resizeMode='contain' />
+
+                                        <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
+                                            {data.word}
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <View style={styles.sLine}></View>
+
                                     <Text style={[styles.Indevedual, { marginTop: 30 }]}>{i18n.t('watchVedio')}</Text>
 
-                                    <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, marginStart: 10 }} onPress={() => Linking.openURL(`${data.link}`)}>
+
+
+                                    <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, flexDirection: 'row' }} onPress={data.link === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.link}`)}>
+                                        <Image source={require('../../../assets/Images/youtube.jpg')} style={{ width: 60, height: 30 }} resizeMode='contain' />
+
                                         <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
                                             {data.link}
                                         </Text>
-
                                     </TouchableOpacity>
+
 
                                 </View>
                         }
@@ -211,7 +228,8 @@ const styles = StyleSheet.create({
     Indevedual: {
         fontFamily: 'FairuzBold',
         fontSize: 14,
-        color: Colors.secondary
+        color: Colors.secondary,
+        alignSelf: 'flex-start',
     },
     Price: {
         fontFamily: 'FairuzBold',

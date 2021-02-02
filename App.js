@@ -55,14 +55,15 @@ export default function App() {
 
   else {
     return (
-      <Provider store={store}>
-        <PersistGate persistor={persistedStore}>
-          <Root>
+      <Root>
+        <Provider store={store}>
+          <PersistGate persistor={persistedStore}>
             <AccessRoots />
-          </Root>
-          <StatusBar style="auto" />
-        </PersistGate>
-      </Provider>
+            <StatusBar style="auto" />
+          </PersistGate>
+        </Provider>
+      </Root>
+
     );
   }
 }

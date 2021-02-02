@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Linking } from 'react-native';
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
 import BTN from '../../common/LoginBtn'
@@ -7,6 +7,7 @@ import { height, width } from '../../constant/Dimentions'
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { GetPlan } from '../../store/action/HomeAction';
+import { GetContactUS } from '../../store/action/DrawerAction';
 
 
 
@@ -15,6 +16,9 @@ function HomePage({ navigation }) {
 
     const lang = useSelector(state => state.lang.language);
     const plan = useSelector(state => state.plan.plan);
+    const Contact = useSelector(state => state.drawer.contact ? state.drawer.contact : {});
+
+    console.log(plan);
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
@@ -26,7 +30,7 @@ function HomePage({ navigation }) {
 
         if (isFocused) {
 
-            dispatch(GetPlan(lang))
+            dispatch(GetPlan(lang)).then(() => dispatch(GetContactUS(lang)))
         }
     }, [isFocused])
 
@@ -56,7 +60,7 @@ function HomePage({ navigation }) {
                             <View style={styles.wrabLess}>
                                 <Text style={styles.TextCard}>{i18n.t('FavLesson')}</Text>
 
-                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} />
+                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} onPress={() => Linking.openURL(`https://api.whatsapp.com/send?phone=${Contact.contact.whatsapp}`)} />
                             </View>
                         </View>
                     </View>
@@ -68,9 +72,9 @@ function HomePage({ navigation }) {
                         keyExtractor={item => item.id}
                         renderItem={({ item, index }) => {
                             return (
-                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf })}>
+                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf, word: item.word })}>
                                     <View style={styles.WrabCard}>
-                                        <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='cover' />
+                                        <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='contain' />
                                         <View style={styles.smallText}>
                                             <Text style={styles.Indevedual}>
                                                 {item.name}
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'FairuzBold',
         alignSelf: 'flex-start',
-        marginTop: 40
+        marginTop: 50
     },
     card: {
         backgroundColor: Colors.Labny,
@@ -173,13 +177,12 @@ const styles = StyleSheet.create({
     },
     SMAllImg: {
         width: 80,
-        height: 80,
+        height: 100,
         borderRadius: 20,
-        margin: 10,
+        margin: 5,
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 5,
         flex: 1
 
     },

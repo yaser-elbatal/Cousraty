@@ -158,6 +158,7 @@ function PricePay({ navigation }) {
         }
         else {
 
+            setspinner(false)
 
             ToasterNative(_Valdation(), 'danger', 'bottom')
 
@@ -169,122 +170,119 @@ function PricePay({ navigation }) {
     const HandleBank = () => {
         if (pay === 0) {
             // setModalVisible(false)
+            ToasterNative(i18n.t('BankErr'), "danger", 'top')
 
-            Toast.show({
-                text: i18n.t('BankErr'),
-                position: 'top',
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
 
 
         }
         else {
             setModalVisible(false)
+
+
             setTimeout(() => {
                 setModalVisible2(true)
 
-            }, 50);
+            }, 1000);
+
 
         }
     }
 
     return (
+        <Root>
 
-        <Container style={{ flex: 1, }}>
-            <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
+            <Container style={{ flex: 1, }}>
 
-            <View style={styles.Abs}>
+                <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
 
-                <View style={styles.clmn}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        {
-                            I18nManager.isRTL ?
-                                <Image source={require('../../../assets/Images/white_back.png')} style={styles.IconBack} resizeMode='contain' />
-                                :
-                                <Image source={require('../../../assets/Images/arrow_left.png')} style={styles.IconBack} resizeMode='contain' />
+                <View style={styles.Abs}>
 
-                        }
-                    </TouchableOpacity>
-                    <Text style={styles.Notify}>{i18n.t('PricePaln')}</Text>
-                </View>
+                    <View style={styles.clmn}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            {
+                                I18nManager.isRTL ?
+                                    <Image source={require('../../../assets/Images/white_back.png')} style={styles.IconBack} resizeMode='contain' />
+                                    :
+                                    <Image source={require('../../../assets/Images/arrow_left.png')} style={styles.IconBack} resizeMode='contain' />
 
-                <View style={styles.SCard}>
-                    <Image source={require('../../../assets/Images/calender.png')} style={{ width: 190, height: 140 }} resizeMode='contain' />
-                    <Text style={styles.SText}>{i18n.t('choosePlane')}</Text>
-                </View>
-                <View style={styles.contents}>
-                    <Content >
-                        <View style={styles.Line}></View>
+                            }
+                        </TouchableOpacity>
+                        <Text style={styles.Notify}>{i18n.t('PricePaln')}</Text>
+                    </View>
 
-                        <FlatList
-                            data={SubScriptions}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={false}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item, index }) => {
-                                return (
+                    <View style={styles.SCard}>
+                        <Image source={require('../../../assets/Images/calender.png')} style={{ width: 190, height: 140 }} resizeMode='contain' />
+                        <Text style={styles.SText}>{i18n.t('choosePlane')}</Text>
+                    </View>
+                    <View style={styles.contents}>
+                        <Content >
+                            <View style={styles.Line}></View>
 
-                                    <TouchableOpacity onPress={() => { setClick(item.id) }} style={[styles.oPress, { borderStyle: Click === item.id ? 'solid' : 'dotted', borderColor: Click === item.id ? Colors.main : 'black', borderWidth: 1 }]}>
-                                        {
-                                            Click === item.id ?
-                                                I18nManager.isRTL ?
-                                                    <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                                    :
-                                                    <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
+                            <FlatList
+                                data={SubScriptions}
+                                horizontal={false}
+                                showsVerticalScrollIndicator={false}
+                                keyExtractor={item => item.id}
+                                renderItem={({ item, index }) => {
+                                    return (
 
-                                                : null
-                                        }
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: '4%', alignItems: 'center', marginTop: Click !== item.id ? 25 : -10 }}>
-                                            <View style={{ flexDirection: 'column', }}>
-                                                <Text style={[styles.month, { color: Click === item.id ? Colors.main : Colors.secondary }]}>{item.title}</Text>
-                                                <Text style={styles.lesson}>{item.duration_word}</Text>
+                                        <TouchableOpacity onPress={() => { setClick(item.id) }} style={[styles.oPress, { borderStyle: Click === item.id ? 'solid' : 'dotted', borderColor: Click === item.id ? Colors.main : 'black', borderWidth: 1 }]}>
+                                            {
+                                                Click === item.id ?
+                                                    I18nManager.isRTL ?
+                                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
+                                                        :
+                                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
+
+                                                    : null
+                                            }
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: '4%', alignItems: 'center', marginTop: Click !== item.id ? 25 : -10 }}>
+                                                <View style={{ flexDirection: 'column', }}>
+                                                    <Text style={[styles.month, { color: Click === item.id ? Colors.main : Colors.secondary }]}>{item.title}</Text>
+                                                    <Text style={styles.lesson}>{item.duration_word}</Text>
+                                                </View>
+                                                <Text style={styles.price}>{item.price} {i18n.t('Rs')}</Text>
                                             </View>
-                                            <Text style={styles.price}>{item.price} {i18n.t('Rs')}</Text>
+
+                                        </TouchableOpacity>
+                                    )
+                                }}
+                            />
+
+                            <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary, alignSelf: 'flex-start' }}>{i18n.t('chooseBank')} : </Text>
+
+
+
+                            <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                                    <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{i18n.t('Transfermony')}</Text>
+                                </View>
+
+                                <Image source={require('../../../assets/Images/dropdown.png')} style={{ width: 15, height: 20 }} resizeMode='contain' />
+                            </TouchableOpacity>
+
+                            <Modal
+
+                                onBackdropPress={() => setModalVisible(false)}
+                                onBackButtonPress={() => setModalVisible(false)}
+                                isVisible={modalVisible}
+                                style={{ marginBottom: 0, }}
+
+
+                            >
+                                <View style={[styles.centeredView, {}]} >
+                                    <View style={styles.modalView}>
+                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
+                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
                                         </View>
 
-                                    </TouchableOpacity>
-                                )
-                            }}
-                        />
 
-                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary, alignSelf: 'flex-start' }}>{i18n.t('chooseBank')} : </Text>
-
-
-
-                        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{i18n.t('Transfermony')}</Text>
-                            </View>
-
-                            <Image source={require('../../../assets/Images/dropdown.png')} style={{ width: 15, height: 20 }} resizeMode='contain' />
-                        </TouchableOpacity>
-
-                        <Modal
-                            onBackdropPress={() => setModalVisible(false)}
-                            onBackButtonPress={() => setModalVisible(false)}
-                            isVisible={modalVisible}
-                            style={{ marginTop: 50 }}
-                        >
-
-                            <View style={[styles.centeredView, {}]} >
-                                <View style={styles.modalView}>
-                                    <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
-                                        <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
-                                    </View>
-
-
-                                    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
                                         <FlatList
                                             data={banks}
                                             horizontal={false}
                                             showsVerticalScrollIndicator={false}
+                                            style={{ flex: 1, backgroundColor: Colors.white }}
                                             keyExtractor={item => item.id}
                                             renderItem={({ item, index }) => {
                                                 return (
@@ -315,18 +313,22 @@ function PricePay({ navigation }) {
                                                     </TouchableOpacity>
                                                 )
                                             }} />
-
+                                        <View style={{ backgroundColor: Colors.white, }}>
+                                            <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginBottom: 5 }} />
+                                        </View>
                                     </View>
-                                    <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ bottom: 0, height: 50, borderRadius: 25, position: 'absolute', backgroundColor: Colors.main }} />
+
+
+
 
                                 </View>
 
 
-                            </View>
-                        </Modal>
+
+                            </Modal>
 
 
-                        <View style={[styles.centeredView, {}]} >
+
 
 
                             <Modal
@@ -334,8 +336,14 @@ function PricePay({ navigation }) {
                                 onBackButtonPress={() => setModalVisible2(false)}
                                 isVisible={modalVisible2}
                                 avoidKeyboard={true}
-                            >
+                                coverScreen={true}
+                                Scrollable={true}
+                                propagateSwipe={true}
+                                transparent={true}
+                                style={{ flex: 1, marginBottom: 0 }}
 
+
+                            >
 
                                 <View style={[styles.centeredView, {}]} >
                                     <View style={styles.modalView}>
@@ -364,6 +372,8 @@ function PricePay({ navigation }) {
                                                 onChangeText={(e) => setBankename(e)}
                                                 value={Bankename}
                                                 styleCont={{ marginTop: 20 }}
+                                                multiline={true}
+                                                numberOfLines={1}
 
                                             />
 
@@ -373,6 +383,8 @@ function PricePay({ navigation }) {
                                                 onChangeText={(e) => { SetAccountname(e) }}
                                                 value={Accountname}
                                                 styleCont={{ marginTop: 0 }}
+                                                multiline={true}
+                                                numberOfLines={1}
                                             />
 
                                             <InputApp
@@ -381,6 +393,8 @@ function PricePay({ navigation }) {
                                                 onChangeText={(e) => { setAccountNumber(e) }}
                                                 value={AccountNumber}
                                                 styleCont={{ marginTop: 0 }}
+                                                multiline={true}
+                                                numberOfLines={1}
                                             />
                                             <InputApp
                                                 label={i18n.t('Amountpaid')}
@@ -389,6 +403,8 @@ function PricePay({ navigation }) {
                                                 value={MoneyPaid}
                                                 keyboardType='numeric'
                                                 styleCont={{ marginTop: 0 }}
+                                                multiline={true}
+                                                numberOfLines={1}
                                             />
 
 
@@ -401,49 +417,51 @@ function PricePay({ navigation }) {
 
 
                                 </View>
-
                             </Modal>
 
 
 
 
-                        </View>
-                        <Modal
-                            onBackdropPress={() => setModalVisible3(false)}
-                            onBackButtonPress={() => setModalVisible3(false)}
-                            isVisible={modalVisible3}
-                            style={{ marginTop: 50 }}
-                            avoidKeyboard={true}
-                        >
+                            <Modal
+                                onBackdropPress={() => setModalVisible3(false)}
+                                onBackButtonPress={() => setModalVisible3(false)}
+                                isVisible={modalVisible3}
+                                style={{ marginTop: 50 }}
+                                avoidKeyboard={true}
 
 
-                            <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
-                                <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
-                                    <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
-
-                                    <Content >
-                                        <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10, marginEnd: 5 }}>{terms} </Text>
-                                        {/* <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10 }}>{terms}</Text> */}
-
-                                    </Content>
-                                </View>
+                            >
 
 
-                            </TouchableOpacity>
-                        </Modal>
+                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
+                                    <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
+                                        <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
 
-                        <SText title={i18n.t('Termsconditions')} style={{ color: Colors.secondary }} onPress={() => { setModalVisible3(true) }} />
-                        <Containers loading={spinner}>
-                            <BTN title={i18n.t('payment')} onPress={SentBankTransfer} ContainerStyle={{ marginVertical: 10, marginTop: 10 }} />
+                                        <Content >
+                                            <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10, marginEnd: 5 }}>{terms} </Text>
+                                            {/* <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10 }}>{terms}</Text> */}
 
-                        </Containers>
+                                        </Content>
+                                    </View>
 
 
-                    </Content>
+                                </TouchableOpacity>
+                            </Modal>
+
+                            <SText title={i18n.t('Termsconditions')} style={{ color: Colors.secondary }} onPress={() => { setModalVisible3(true) }} />
+                            <Containers loading={spinner}>
+                                <BTN title={i18n.t('payment')} onPress={SentBankTransfer} ContainerStyle={{ marginVertical: 10, marginTop: 10 }} />
+
+                            </Containers>
+
+
+                        </Content>
+                    </View>
+
                 </View>
 
-            </View>
-        </Container>
+            </Container>
+        </Root>
 
 
     )

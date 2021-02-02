@@ -72,9 +72,9 @@ function Login({ navigation }) {
             setNotification(notification);
         });
 
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        });
-        registerForPushNotificationsAsync().then(token => AsyncStorage.setItem('deviceID', token));
+        // responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        // });
+        // registerForPushNotificationsAsync().then(token => AsyncStorage.setItem('deviceID', token));
 
 
         return () => {
@@ -117,6 +117,9 @@ function Login({ navigation }) {
                 return;
             }
             token = (await Notifications.getExpoPushTokenAsync()).data;
+            AsyncStorage.setItem('deviceID', token);
+
+            return token;
         } else {
             Alert.alert(
                 //title
@@ -149,9 +152,7 @@ function Login({ navigation }) {
                 lightColor: '#FF231F7C',
             });
         }
-        AsyncStorage.setItem('deviceID', token);
 
-        return token;
     }
 
     console.log(expoPushToken);
