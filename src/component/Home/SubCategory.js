@@ -44,7 +44,7 @@ function SubCategory({ navigation, route }) {
                 </View>
 
                 <View style={styles.contents}>
-                    <Content >
+                    <Content showsVerticalScrollIndicator={false}>
                         <View style={styles.Line}></View>
 
                         {
@@ -56,8 +56,10 @@ function SubCategory({ navigation, route }) {
 
                                     <Text style={styles.Indevedual}>{i18n.t('downloadPdf')}</Text>
 
-                                    <TouchableOpacity style={{ marginTop: 10 }} onPress={data.pdf === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.pdf}`)}>
-                                        <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                                    <TouchableOpacity style={{ marginTop: 10, flexDirection: 'row' }} onPress={data.pdf === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.pdf}`)}>
+                                        <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 60, height: 60 }} resizeMode='contain' />
+                                        <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
+                                        </Text>
                                     </TouchableOpacity>
 
                                     <View style={styles.sLine}></View>
@@ -66,11 +68,11 @@ function SubCategory({ navigation, route }) {
 
 
                                     <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, }} onPress={data.word === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.word}`)}>
-                                        <Image source={require('../../../assets/Images/word.png')} style={{ width: 60, height: 30 }} resizeMode='contain' />
+                                        <Image source={require('../../../assets/Images/word.png')} style={{ width: 60, height: 60 }} resizeMode='contain' />
 
-                                        <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
-                                            {data.word}
-                                        </Text>
+                                        {/* <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
+                                            {data.word ? data.word.length > 30 ? (data.word).substr(0, 30) + '...' : data.word : null}
+                                        </Text> */}
                                     </TouchableOpacity>
                                     <View style={styles.sLine}></View>
 
@@ -79,11 +81,11 @@ function SubCategory({ navigation, route }) {
 
 
                                     <TouchableOpacity style={{ marginTop: 10, alignSelf: 'flex-start', marginEnd: 10, flexDirection: 'row' }} onPress={data.link === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${data.link}`)}>
-                                        <Image source={require('../../../assets/Images/youtube.jpg')} style={{ width: 60, height: 30 }} resizeMode='contain' />
+                                        <Image source={require('../../../assets/Images/youtube.jpg')} style={{ width: 60, height: 60 }} />
 
-                                        <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
-                                            {data.link}
-                                        </Text>
+                                        {/* <Text style={[styles.Indevedual, { textDecorationLine: 'underline' }]}>
+                                            {data.link ? data.link.length > 30 ? (data.link).substr(0, 30) + '...' : data.link : null}
+                                        </Text> */}
                                     </TouchableOpacity>
 
 
