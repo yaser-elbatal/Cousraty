@@ -54,9 +54,10 @@ function Settings({ navigation }) {
 
     const _Valdiation = () => {
         let PasswordErr = validatePassword(password);
+        let PasswordE = validatePassword(Newpassword);
         let passConfirm = validateTwoPasswords(Newpassword, confirmPassword)
 
-        return PasswordErr || passConfirm
+        return PasswordErr || PasswordE || passConfirm
     }
 
 

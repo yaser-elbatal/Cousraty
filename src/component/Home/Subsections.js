@@ -23,7 +23,7 @@ function Subsections({ navigation, route }) {
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
-    const { plan_id, plan_name, pdf, word } = route.params;
+    const { plan_id, plan_name, pdf, word, icon, item } = route.params;
 
 
     useEffect(() => {
@@ -31,7 +31,6 @@ function Subsections({ navigation, route }) {
             dispatch(GetToutorial(lang, token, plan_id))
         }
     }, [isFocused])
-
 
 
     return (
@@ -66,7 +65,7 @@ function Subsections({ navigation, route }) {
 
                     <View style={[styles.SmallCard, { backgroundColor: Colors.orange, }]} >
                         <View style={styles.WrabCard}>
-                            <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
+                            <Image source={{ uri: icon }} style={styles.SMAllImg} resizeMode='contain' />
                             <View style={styles.smallText}>
                                 <Text style={styles.Indevedual}>  {plan_name}  </Text>
                             </View>
@@ -85,12 +84,17 @@ function Subsections({ navigation, route }) {
                                 :
                                 <>
                                     <View style={styles.Line}></View>
+                                    {
+                                        item.image ?
+                                            <Image source={{ uri: item.image }} style={{ width: 150, height: 150, alignSelf: 'center', borderRadius: 10 }} resizeMode='contain' />
+                                            : null
+                                    }
 
                                     <FlatList
                                         data={toutorial}
                                         horizontal={false}
                                         showsVerticalScrollIndicator={false}
-                                        keyExtractor={item => item.id}
+                                        keyExtractor={item => item.id.toString()}
                                         renderItem={({ item, index }) => {
                                             return (
                                                 <TouchableOpacity style={styles.single} onPress={() => navigation.navigate('SubCategory', { data: item, Subscribtion })}>
@@ -263,7 +267,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginStart: 20,
         alignItems: 'center',
-        marginTop: 30
+        marginTop: 25
     },
     ViewNum: {
         backgroundColor: Colors.orange,
@@ -272,7 +276,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 15
     },
     num: {
         color: Colors.black,

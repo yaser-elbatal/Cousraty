@@ -266,8 +266,9 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
         fontSize: 16,
-        marginHorizontal: 25
-
+        alignSelf: 'flex-start',
+        marginVertical: 15,
+        marginStart: 5
     },
 
     Card: {

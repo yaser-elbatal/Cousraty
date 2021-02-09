@@ -38,7 +38,7 @@ function CodeActivation({ navigation, route }) {
     });
 
     const { code, token } = route.params
-    console.log(code);
+
     const _validate = () => {
         let CodeErr = value != code ? i18n.t('codeErre') : null
         return CodeErr
@@ -91,16 +91,16 @@ function CodeActivation({ navigation, route }) {
                 {
                     showCounter ?
                         <>
-                            <Text style={styles.Text}>{i18n.t("sentCode")}</Text>
+                            <Text style={styles.TLogin}>{i18n.t("sentCode")}</Text>
                             <CountDown
                                 id={counterID}
                                 until={60 * 2}
                                 size={20}
                                 onFinish={() => { setShowCounter(false); }}
                                 digitStyle={{ backgroundColor: '#FFF' }}
-                                digitTxtStyle={{ color: Colors.sky }}
+                                digitTxtStyle={{ color: Colors.main }}
                                 timeLabelStyle={{ color: 'red', fontWeight: 'bold' }}
-                                separatorStyle={{ color: Colors.sky }}
+                                separatorStyle={{ color: Colors.main }}
                                 timeToShow={['M', 'S']}
                                 timeLabels={{ m: null, s: null }}
                                 showSeparator={true}

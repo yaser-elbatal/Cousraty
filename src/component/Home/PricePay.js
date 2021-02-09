@@ -189,279 +189,281 @@ function PricePay({ navigation }) {
     }
 
     return (
-        <Root>
 
-            <Container style={{ flex: 1, }}>
+        <Container style={{ flex: 1, }}>
 
-                <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
+            <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
 
-                <View style={styles.Abs}>
+            <View style={styles.Abs}>
 
-                    <View style={styles.clmn}>
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            {
-                                I18nManager.isRTL ?
-                                    <Image source={require('../../../assets/Images/white_back.png')} style={styles.IconBack} resizeMode='contain' />
-                                    :
-                                    <Image source={require('../../../assets/Images/arrow_left.png')} style={styles.IconBack} resizeMode='contain' />
+                <View style={styles.clmn}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        {
+                            I18nManager.isRTL ?
+                                <Image source={require('../../../assets/Images/white_back.png')} style={styles.IconBack} resizeMode='contain' />
+                                :
+                                <Image source={require('../../../assets/Images/arrow_left.png')} style={styles.IconBack} resizeMode='contain' />
 
-                            }
-                        </TouchableOpacity>
-                        <Text style={styles.Notify}>{i18n.t('PricePaln')}</Text>
-                    </View>
-
-                    <View style={styles.SCard}>
-                        <Image source={require('../../../assets/Images/calender.png')} style={{ width: 190, height: 140 }} resizeMode='contain' />
-                        <Text style={styles.SText}>{i18n.t('choosePlane')}</Text>
-                    </View>
-                    <View style={styles.contents}>
-                        <Content >
-                            <View style={styles.Line}></View>
-
-                            <FlatList
-                                data={SubScriptions}
-                                horizontal={false}
-                                showsVerticalScrollIndicator={false}
-                                keyExtractor={item => item.id}
-                                renderItem={({ item, index }) => {
-                                    return (
-
-                                        <TouchableOpacity onPress={() => { setClick(item.id) }} style={[styles.oPress, { borderStyle: Click === item.id ? 'solid' : 'dotted', borderColor: Click === item.id ? Colors.main : 'black', borderWidth: 1 }]}>
-                                            {
-                                                Click === item.id ?
-                                                    I18nManager.isRTL ?
-                                                        <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
-                                                        :
-                                                        <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
-
-                                                    : null
-                                            }
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: '4%', alignItems: 'center', marginTop: Click !== item.id ? 25 : -10 }}>
-                                                <View style={{ flexDirection: 'column', }}>
-                                                    <Text style={[styles.month, { color: Click === item.id ? Colors.main : Colors.secondary }]}>{item.title}</Text>
-                                                    <Text style={styles.lesson}>{item.duration_word}</Text>
-                                                </View>
-                                                <Text style={styles.price}>{item.price} {i18n.t('Rs')}</Text>
-                                            </View>
-
-                                        </TouchableOpacity>
-                                    )
-                                }}
-                            />
-
-                            <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary, alignSelf: 'flex-start' }}>{i18n.t('chooseBank')} : </Text>
-
-
-
-                            <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                    <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{i18n.t('Transfermony')}</Text>
-                                </View>
-
-                                <Image source={require('../../../assets/Images/dropdown.png')} style={{ width: 15, height: 20 }} resizeMode='contain' />
-                            </TouchableOpacity>
-
-                            <Modal
-
-                                onBackdropPress={() => setModalVisible(false)}
-                                onBackButtonPress={() => setModalVisible(false)}
-                                isVisible={modalVisible}
-                                style={{ marginBottom: 0, }}
-
-
-                            >
-                                <View style={[styles.centeredView, {}]} >
-                                    <View style={styles.modalView}>
-                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
-                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
-                                        </View>
-
-
-                                        <FlatList
-                                            data={banks}
-                                            horizontal={false}
-                                            showsVerticalScrollIndicator={false}
-                                            style={{ flex: 1, backgroundColor: Colors.white }}
-                                            keyExtractor={item => item.id}
-                                            renderItem={({ item, index }) => {
-                                                return (
-                                                    <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
-
-                                                        <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
-                                                            <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
-                                                            <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
-                                                                </View>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
-                                                                </View>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
-                                                                </View>
-                                                                <View style={{ flexDirection: 'row', }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
-                                                                </View>
-                                                            </View>
-                                                        </View>
-
-                                                    </TouchableOpacity>
-                                                )
-                                            }} />
-                                        <View style={{ backgroundColor: Colors.white, }}>
-                                            <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginBottom: 5 }} />
-                                        </View>
-                                    </View>
-
-
-
-
-                                </View>
-
-
-
-                            </Modal>
-
-
-
-
-
-                            <Modal
-                                onBackdropPress={() => setModalVisible2(false)}
-                                onBackButtonPress={() => setModalVisible2(false)}
-                                isVisible={modalVisible2}
-                                avoidKeyboard={true}
-                                coverScreen={true}
-                                Scrollable={true}
-                                propagateSwipe={true}
-                                transparent={true}
-                                style={{ flex: 1, marginBottom: 0 }}
-
-
-                            >
-
-                                <View style={[styles.centeredView, {}]} >
-                                    <View style={styles.modalView}>
-                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
-                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
-
-                                        </View>
-
-
-
-                                        <Content style={{ backgroundColor: Colors.white, flex: 1 }} >
-
-                                            <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
-
-                                                {
-                                                    userImage === '' ?
-                                                        <Image source={require('../../../assets/Images/add_photo.png')} style={{ width: 100, height: 80, marginTop: 30, alignSelf: 'center', borderRadius: 5 }} resizeMode='contain' />
-                                                        :
-                                                        <Image source={{ uri: userImage }} style={{ width: 200, height: 150, marginTop: 30, alignSelf: 'center', borderRadius: 15 }} resizeMode='contain' />
-
-                                                }
-                                            </TouchableOpacity>
-                                            <InputApp
-                                                label={i18n.t('BankNameTr')}
-                                                placeholder={i18n.t('BankNameTr')}
-                                                onChangeText={(e) => setBankename(e)}
-                                                value={Bankename}
-                                                styleCont={{ marginTop: 20 }}
-                                                multiline={true}
-                                                numberOfLines={1}
-
-                                            />
-
-                                            <InputApp
-                                                label={i18n.t('AccNamer')}
-                                                placeholder={i18n.t('AccNamer')}
-                                                onChangeText={(e) => { SetAccountname(e) }}
-                                                value={Accountname}
-                                                styleCont={{ marginTop: 0 }}
-                                                multiline={true}
-                                                numberOfLines={1}
-                                            />
-
-                                            <InputApp
-                                                label={i18n.t('AccName')}
-                                                placeholder={i18n.t('AccName')}
-                                                onChangeText={(e) => { setAccountNumber(e) }}
-                                                value={AccountNumber}
-                                                styleCont={{ marginTop: 0 }}
-                                                multiline={true}
-                                                numberOfLines={1}
-                                            />
-                                            <InputApp
-                                                label={i18n.t('Amountpaid')}
-                                                placeholder={i18n.t('Amountpaid')}
-                                                onChangeText={(e) => { setMoneyPaid(e) }}
-                                                value={MoneyPaid}
-                                                keyboardType='numeric'
-                                                styleCont={{ marginTop: 0 }}
-                                                multiline={true}
-                                                numberOfLines={1}
-                                            />
-
-
-
-                                            <BTN title={i18n.t('confirm')} onPress={HandleChangeTransfer} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
-
-
-                                        </Content >
-                                    </View>
-
-
-                                </View>
-                            </Modal>
-
-
-
-
-                            <Modal
-                                onBackdropPress={() => setModalVisible3(false)}
-                                onBackButtonPress={() => setModalVisible3(false)}
-                                isVisible={modalVisible3}
-                                style={{ marginTop: 50 }}
-                                avoidKeyboard={true}
-
-
-                            >
-
-
-                                <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
-                                    <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
-                                        <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
-
-                                        <Content >
-                                            <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10, marginEnd: 5 }}>{terms} </Text>
-                                            {/* <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10 }}>{terms}</Text> */}
-
-                                        </Content>
-                                    </View>
-
-
-                                </TouchableOpacity>
-                            </Modal>
-
-                            <SText title={i18n.t('Termsconditions')} style={{ color: Colors.secondary }} onPress={() => { setModalVisible3(true) }} />
-                            <Containers loading={spinner}>
-                                <BTN title={i18n.t('payment')} onPress={SentBankTransfer} ContainerStyle={{ marginVertical: 10, marginTop: 10 }} />
-
-                            </Containers>
-
-
-                        </Content>
-                    </View>
-
+                        }
+                    </TouchableOpacity>
+                    <Text style={styles.Notify}>{i18n.t('PricePaln')}</Text>
                 </View>
 
-            </Container>
-        </Root>
+                <View style={styles.SCard}>
+                    <Image source={require('../../../assets/Images/calender.png')} style={{ width: 190, height: 140 }} resizeMode='contain' />
+                    <Text style={styles.SText}>{i18n.t('choosePlane')}</Text>
+                </View>
+
+
+                <View style={styles.contents}>
+                    <Content >
+                        <View style={styles.Line}></View>
+
+                        <FlatList
+                            data={SubScriptions}
+                            horizontal={false}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item, index }) => {
+                                return (
+
+                                    <TouchableOpacity onPress={() => { setClick(item.id) }} style={[styles.oPress, { borderStyle: Click === item.id ? 'solid' : 'dotted', borderColor: Click === item.id ? Colors.main : 'black', borderWidth: 1 }]}>
+                                        {
+                                            Click === item.id ?
+                                                I18nManager.isRTL ?
+                                                    <Image source={require('../../../assets/Images/active_box.png')} style={styles.Img} resizeMode='contain' />
+                                                    :
+                                                    <Image source={require('../../../assets/Images/active_box_inverse.png')} style={styles.Img} resizeMode='contain' />
+
+                                                : null
+                                        }
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: '4%', alignItems: 'center', marginTop: Click !== item.id ? 25 : -10 }}>
+                                            <View style={{ flexDirection: 'column', }}>
+                                                <Text style={[styles.month, { color: Click === item.id ? Colors.main : Colors.secondary }]}>{item.title}</Text>
+                                                <Text style={styles.lesson}>{item.duration_word}</Text>
+                                            </View>
+                                            <Text style={styles.price}>{item.price} {i18n.t('Rs')}</Text>
+                                        </View>
+
+                                    </TouchableOpacity>
+                                )
+                            }}
+                        />
+
+                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary, alignSelf: 'flex-start' }}>{i18n.t('chooseBank')} </Text>
+
+                        {/* <ModalCommon selectItem={(modal) => {
+                            setmodaLvisible(false)
+                            console.log('modal ------------------', modal)
+                        }}
+                            visible={modaLvisible}>
+                            </ModalCommon> */}
+
+                        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image source={require('../../../assets/Images/world_ball.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                                <Text style={{ color: Colors.secondary, fontFamily: 'FairuzBold', fontSize: 14, marginStart: 10 }} numberOfLines={1}>{i18n.t('Transfermony')}</Text>
+                            </View>
+
+                            <Image source={require('../../../assets/Images/dropdown.png')} style={{ width: 15, height: 20 }} resizeMode='contain' />
+                        </TouchableOpacity>
+
+                        <Modal
+
+                            onBackdropPress={() => setModalVisible(false)}
+                            onBackButtonPress={() => setModalVisible(false)}
+                            isVisible={modalVisible}
+                            style={{ marginBottom: 0, }}
+
+
+                        >
+                            <View style={[styles.centeredView, {}]} >
+                                <View style={styles.modalView}>
+                                    <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
+                                        <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('chooseBank')}</Text>
+                                    </View>
+
+
+                                    <FlatList
+                                        data={banks}
+                                        horizontal={false}
+                                        showsVerticalScrollIndicator={false}
+                                        style={{ flex: 1, backgroundColor: Colors.white }}
+                                        keyExtractor={item => item.id}
+                                        renderItem={({ item, index }) => {
+                                            return (
+                                                <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
+
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
+                                                        <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
+                                                        <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
+                                                            </View>
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
+                                                            </View>
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
+                                                            </View>
+                                                            <View style={{ flexDirection: 'row', }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
+                                                            </View>
+                                                        </View>
+                                                    </View>
+
+                                                </TouchableOpacity>
+                                            )
+                                        }} />
+                                    <View style={{ backgroundColor: Colors.white, }}>
+                                        <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginBottom: 5 }} />
+                                    </View>
+                                </View>
+
+
+
+
+                            </View>
+
+
+
+                        </Modal>
+
+
+
+
+
+                        <Modal
+                            onBackdropPress={() => setModalVisible2(false)}
+                            onBackButtonPress={() => setModalVisible2(false)}
+                            isVisible={modalVisible2}
+                            avoidKeyboard={true}
+                            transparent={true}
+                            style={{ flex: 1, marginBottom: 0 }}
+
+
+                        >
+
+                            <View style={[styles.centeredView, {}]} >
+                                <View style={styles.modalView}>
+                                    <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
+                                        <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
+
+                                    </View>
+
+
+
+                                    <Content style={{ backgroundColor: Colors.white, flex: 1 }} >
+
+                                        <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
+
+                                            {
+                                                userImage === '' ?
+                                                    <Image source={require('../../../assets/Images/add_photo.png')} style={{ width: 100, height: 80, marginTop: 30, alignSelf: 'center', borderRadius: 5 }} resizeMode='contain' />
+                                                    :
+                                                    <Image source={{ uri: userImage }} style={{ width: 200, height: 150, marginTop: 30, alignSelf: 'center', borderRadius: 15 }} resizeMode='contain' />
+
+                                            }
+                                        </TouchableOpacity>
+                                        <InputApp
+                                            label={i18n.t('BankNameTr')}
+                                            placeholder={i18n.t('BankNameTr')}
+                                            onChangeText={(e) => setBankename(e)}
+                                            value={Bankename}
+                                            styleCont={{ marginTop: 20 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+
+                                        />
+
+                                        <InputApp
+                                            label={i18n.t('AccNamer')}
+                                            placeholder={i18n.t('AccNamer')}
+                                            onChangeText={(e) => { SetAccountname(e) }}
+                                            value={Accountname}
+                                            styleCont={{ marginTop: 0 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+                                        />
+
+                                        <InputApp
+                                            label={i18n.t('AccName')}
+                                            placeholder={i18n.t('AccName')}
+                                            onChangeText={(e) => { setAccountNumber(e) }}
+                                            value={AccountNumber}
+                                            styleCont={{ marginTop: 0 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+                                        />
+                                        <InputApp
+                                            label={i18n.t('Amountpaid')}
+                                            placeholder={i18n.t('Amountpaid')}
+                                            onChangeText={(e) => { setMoneyPaid(e) }}
+                                            value={MoneyPaid}
+                                            keyboardType='numeric'
+                                            styleCont={{ marginTop: 0 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+                                        />
+
+
+
+                                        <BTN title={i18n.t('confirm')} onPress={HandleChangeTransfer} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
+
+
+                                    </Content >
+                                </View>
+
+
+                            </View>
+                        </Modal>
+
+
+
+
+                        <Modal
+                            onBackdropPress={() => setModalVisible3(false)}
+                            onBackButtonPress={() => setModalVisible3(false)}
+                            isVisible={modalVisible3}
+                            style={{ marginTop: 50 }}
+                            avoidKeyboard={true}
+
+
+                        >
+
+
+                            <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible3(false)}>
+                                <View style={[styles.modalView, { backgroundColor: Colors.white }]}>
+                                    <Text style={{ alignSelf: 'center', color: Colors.main, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('Termsconditions')}</Text>
+
+                                    <Content >
+                                        <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10, marginEnd: 5 }}>{terms} </Text>
+                                        {/* <Text style={{ alignSelf: 'flex-start', color: Colors.secondary, fontFamily: 'FairuzBold', marginTop: 14, marginStart: 10 }}>{terms}</Text> */}
+
+                                    </Content>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        </Modal>
+
+                        <SText title={i18n.t('Termsconditions')} style={{ color: Colors.secondary }} onPress={() => { setModalVisible3(true) }} />
+                        <Containers loading={spinner}>
+                            <BTN title={i18n.t('payment')} onPress={SentBankTransfer} ContainerStyle={{ marginVertical: 10, marginTop: 10 }} />
+
+                        </Containers>
+
+
+                    </Content>
+                </View>
+
+            </View>
+
+        </Container>
 
 
     )

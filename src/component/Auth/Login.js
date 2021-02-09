@@ -155,7 +155,6 @@ function Login({ navigation }) {
 
     }
 
-    console.log(expoPushToken);
 
     const _validate = () => {
         let phoneErr = validatePhone(phone);

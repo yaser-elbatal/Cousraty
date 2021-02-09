@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Linking } from 'react-native';
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
@@ -18,8 +18,7 @@ function HomePage({ navigation }) {
     const plan = useSelector(state => state.plan.plan);
     const Contact = useSelector(state => state.drawer.contact ? state.drawer.contact : {});
 
-    console.log(plan);
-
+    const [modaLvisible, setmodaLvisible] = useState(false)
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     let colors = [Colors.foshia, Colors.Labny, Colors.Green, Colors.main, Colors.orange, Colors.LabnyFateh, Colors.smothblack]
@@ -52,8 +51,8 @@ function HomePage({ navigation }) {
                 </View>
 
                 <ScrollView style={{ flex: 1, height: height * .86 }} showsVerticalScrollIndicator={false}>
-                    <Text numberOfLines={2} style={[styles.Hello, { width: 280 }]}>{i18n.t('HelloApp')}</Text>
-
+                    <Text style={[styles.Hello, {}]}>{i18n.t('HelloApp')}</Text>
+                    <Text style={[styles.Hello, { marginTop: 0 }]}> {i18n.t('Educ')}</Text>
                     <View style={styles.card}>
                         <View style={styles.ImgText}>
                             <Image source={require('../../../assets/Images/big_lamp.png')} style={styles.ImgCard} resizeMode='contain' />
@@ -69,10 +68,10 @@ function HomePage({ navigation }) {
                         data={plan}
                         horizontal={false}
                         showsVerticalScrollIndicator={false}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id.toString()}
                         renderItem={({ item, index }) => {
                             return (
-                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf, word: item.word })}>
+                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf, word: item.word, icon: item.icon, item: item })}>
                                     <View style={styles.WrabCard}>
                                         <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='contain' />
                                         <View style={styles.smallText}>
@@ -88,6 +87,8 @@ function HomePage({ navigation }) {
                     />
 
                 </ScrollView>
+
+
             </View>
         </View >
     )

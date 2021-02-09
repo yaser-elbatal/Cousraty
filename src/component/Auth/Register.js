@@ -97,7 +97,6 @@ function Register({ navigation }) {
 
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         let userLocation = {};
-        console.log(status);
         if (status != 'granted') {
 
             Alert.alert(
