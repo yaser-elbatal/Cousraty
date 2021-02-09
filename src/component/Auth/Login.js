@@ -152,6 +152,10 @@ function Login({ navigation }) {
                 lightColor: '#FF231F7C',
             });
         }
+        if (token)
+            AsyncStorage.setItem('deviceID', token);
+
+        return token;
 
     }
 
