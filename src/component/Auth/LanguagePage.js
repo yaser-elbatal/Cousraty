@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     oPress: {
         height: width * .14,
         flexDirection: 'row',
+        width :'90%',
         overflow: 'hidden',
         marginHorizontal: "10%",
         backgroundColor: 'rgba(255,255,255,0.2)',
@@ -104,7 +105,8 @@ const styles = StyleSheet.create({
     },
     Wrap: {
         justifyContent: 'center',
-        marginTop: 50
+        marginTop: 50,
+        alignItems: 'center'
     }
 })
 

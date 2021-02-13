@@ -1,13 +1,18 @@
 {
   "expo": {
-    "name": "تعليمي",
-    "slug": "Courses",
-    "version": "1.0.0",
+    "name": "البرنامج التربوي الفردي",
+    "slug": "tarbawi",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#2E234D",
+      "translucent": false
+    },
+    "version": "0.0.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -18,24 +23,42 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.Awmer.Courses",
-      "googleServicesFile": "./google-services.json"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "googleServicesFile": "./google-services.json",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyBCtrxqozj9xLkL58Frh0Gl4fiQZ_oATZI"
-        }
-      },
-      "package": "com.Awmer.Courses"
+      "bundleIdentifier": "com.awmer.tarbawi",
+      "userInterfaceStyle": "light",
+      "infoPlist": {
+        "NSCameraUsageDescription": "App need this permission to update profile photo.",
+        "NSPhotoLibraryAddUsageDescription": "App need this permission to update profile photo.",
+        "NSLocationWhenInUseUsageDescription": "App need this permission to return the nearest providers.",
+        "NSPhotoLibraryUsageDescription": "App need this permission to update profile photo."
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.awmer.tarbawis",
+      "versionCode": 6,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "CAMERA_ROLL",
+        "READ_PHONE_STATE",
+        "NOTIFICATIONS",
+        "MEDIA_LIBRARY",
+        "MEDIA_LIBRARY_WRITE_ONLY" ,
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_INTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"],
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBQu-aDY--uY14s4U3ok-XwwqhsnhLFe5Q"
+        }
+      }
     }
   }
 }
