@@ -10,12 +10,12 @@ import {
     useBlurOnFulfill,
     useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import { validateCode } from '../../common/Validation'
-import { Toast } from 'native-base'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { ActivationCode, ResendActivationCode } from '../../store/action/AuthAction'
 import Containers from '../../common/Loader'
 import { Toaster } from '../../common/Toaster'
+import CountDown from 'react-native-countdown-component';
 
 
 const CELL_COUNT = 4;
@@ -27,7 +27,8 @@ function CodeActivation({ navigation, route }) {
     const lang = useSelector(state => state.lang.language);
     const [spinner, setspinner] = useState(false)
     const [loading, setLoading] = useState(false)
-
+    const [showCounter, setShowCounter] = useState(true);
+    const [counterID, setCounterID] = useState(1);
 
 
     const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
@@ -37,7 +38,7 @@ function CodeActivation({ navigation, route }) {
     });
 
     const { code, token } = route.params
-    console.log(code);
+
     const _validate = () => {
         let CodeErr = value != code ? i18n.t('codeErre') : null
         return CodeErr
@@ -57,8 +58,7 @@ function CodeActivation({ navigation, route }) {
     }
 
     const ResendCodeToActivate = () => {
-        setLoading(true)
-        dispatch(ResendActivationCode(token, lang,)).then(() => setLoading(false))
+        dispatch(ResendActivationCode(token, lang,)).then(() => { setShowCounter(true); setCounterID(counterID + 1); })
     }
 
     return (
@@ -88,12 +88,29 @@ function CodeActivation({ navigation, route }) {
 
                     <BTN title={i18n.t('confirm')} onPress={SubmitPhoneNum} ContainerStyle={{ marginTop: 20 }} />
                 </Containers>
+                {
+                    showCounter ?
+                        <>
+                            <Text style={styles.TLogin}>{i18n.t("sentCode")}</Text>
+                            <CountDown
+                                id={counterID}
+                                until={60 * 2}
+                                size={20}
+                                onFinish={() => { setShowCounter(false); }}
+                                digitStyle={{ backgroundColor: '#FFF' }}
+                                digitTxtStyle={{ color: Colors.main }}
+                                timeLabelStyle={{ color: 'red', fontWeight: 'bold' }}
+                                separatorStyle={{ color: Colors.main }}
+                                timeToShow={['M', 'S']}
+                                timeLabels={{ m: null, s: null }}
+                                showSeparator={true}
+                                style={{ flexDirection: 'row-reverse', justifyContent: 'center' }}
+                            />
+                        </> :
 
 
-                <Containers loading={loading}>
-
-                    <BTN title={i18n.t('resendCode')} onPress={ResendCodeToActivate} ContainerStyle={{ marginTop: 20, backgroundColor: Colors.secondary, }} />
-                </Containers>
+                        <BTN title={i18n.t('resendCode')} onPress={ResendCodeToActivate} ContainerStyle={{ marginTop: 20, backgroundColor: Colors.secondary, }} />
+                }
             </View>
         </HeaderAuth>
     )

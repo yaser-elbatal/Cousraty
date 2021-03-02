@@ -40,8 +40,7 @@ const InputApp = ({
                 value={value}
                 returnKeyType="done"
                 onChangeText={onChangeText}
-                multiline={true}
-                numberOfLines={1}
+
                 onFocus={() => setFocused(true)}
                 onBlur={value ? () => setFocused(true) : () => setFocused(false)}
 

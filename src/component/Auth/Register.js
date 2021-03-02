@@ -97,7 +97,6 @@ function Register({ navigation }) {
 
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         let userLocation = {};
-        console.log(status);
         if (status != 'granted') {
 
             Alert.alert(
@@ -217,9 +216,8 @@ function Register({ navigation }) {
                     placeholder={i18n.t('password')}
                     onChangeText={(e) => setPassword(e)}
                     value={password}
-                    secureTextEntry
                     styleCont={{ marginTop: 20 }}
-                    secureTextEntry={password === '' ? false : true}
+                    secureTextEntry={Platform.OS === 'android' ? password === '' ? false : true : true}
 
 
                 />
@@ -228,8 +226,7 @@ function Register({ navigation }) {
                     placeholder={i18n.t('confirmPass')}
                     onChangeText={(e) => setConfirmPassword(e)}
                     value={confirmPassword}
-                    secureTextEntry
-                    secureTextEntry={confirmPassword === '' ? false : true}
+                    secureTextEntry={Platform.OS === 'android' ? confirmPassword === '' ? false : true : true}
                     styleCont={{ marginTop: 0 }}
                 />
                 <Containers loading={spinner}>

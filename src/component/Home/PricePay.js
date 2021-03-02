@@ -132,18 +132,10 @@ function PricePay({ navigation }) {
             setModalVisible2(false)
         }
         else {
-            Keyboard.dismiss()
-            Toast.show({
-                text: _ValdationBanks(),
-                position: 'bottom',
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
+            Keyboard.dismiss();
+            ToasterNative(_ValdationBanks(), 'danger', 'top')
+
+
 
         }
 
@@ -155,19 +147,7 @@ function PricePay({ navigation }) {
         let val = _Valdation();
         if (!val) {
             setspinner(true)
-            dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false)).catch((err) => {
-                setspinner(false)
-                Toast.show({
-                    text: err.message,
-                    type: "danger",
-                    duration: 3000,
-                    textStyle: {
-                        color: "white",
-                        fontFamily: 'FairuzBold',
-                        textAlign: 'center'
-                    }
-                })
-            })
+            dispatch(BankTransfer(Accountname, AccountNumber, base64, MoneyPaid, Bankename, pay, Click, token, lang, navigation)).then(() => setspinner(false))
 
             setAccountNumber('');
             setUserImage('')
@@ -177,17 +157,11 @@ function PricePay({ navigation }) {
 
         }
         else {
-            Toast.show({
-                text: _Valdation(),
-                position: 'bottom',
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
+
+            setspinner(false)
+
+            ToasterNative(_Valdation(), 'danger', 'bottom')
+
 
         }
 
@@ -196,30 +170,28 @@ function PricePay({ navigation }) {
     const HandleBank = () => {
         if (pay === 0) {
             // setModalVisible(false)
+            ToasterNative(i18n.t('BankErr'), "danger", 'top')
 
-            Toast.show({
-                text: i18n.t('BankErr'),
-                position: 'top',
-                type: "danger",
-                duration: 3000,
-                textStyle: {
-                    color: "white",
-                    fontFamily: 'FairuzBold',
-                    textAlign: 'center'
-                }
-            });
 
 
         }
         else {
-            setModalVisible2(true)
             setModalVisible(false)
+
+
+            setTimeout(() => {
+                setModalVisible2(true)
+
+            }, 1000);
+
 
         }
     }
 
     return (
+
         <Container style={{ flex: 1, }}>
+
             <Image source={require('../../../assets/Images/img_menu.png')} style={styles.ImgBack} />
 
             <View style={styles.Abs}>
@@ -241,6 +213,8 @@ function PricePay({ navigation }) {
                     <Image source={require('../../../assets/Images/calender.png')} style={{ width: 190, height: 140 }} resizeMode='contain' />
                     <Text style={styles.SText}>{i18n.t('choosePlane')}</Text>
                 </View>
+
+
                 <View style={styles.contents}>
                     <Content >
                         <View style={styles.Line}></View>
@@ -276,9 +250,14 @@ function PricePay({ navigation }) {
                             }}
                         />
 
-                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary }}>{i18n.t('chooseBank')} : </Text>
+                        <Text style={{ fontFamily: 'FairuzBold', fontSize: 16, margin: 20, color: Colors.secondary, alignSelf: 'flex-start' }}>{i18n.t('chooseBank')} </Text>
 
-
+                        {/* <ModalCommon selectItem={(modal) => {
+                            setmodaLvisible(false)
+                            console.log('modal ------------------', modal)
+                        }}
+                            visible={modaLvisible}>
+                            </ModalCommon> */}
 
                         <TouchableOpacity onPress={() => setModalVisible(true)} style={{ height: width * .14, flexDirection: 'row', overflow: 'hidden', marginHorizontal: "10%", borderWidth: .3, borderColor: Colors.InputColor, borderRadius: 5, alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -290,12 +269,14 @@ function PricePay({ navigation }) {
                         </TouchableOpacity>
 
                         <Modal
+
                             onBackdropPress={() => setModalVisible(false)}
                             onBackButtonPress={() => setModalVisible(false)}
                             isVisible={modalVisible}
-                            style={{ marginTop: 50 }}
-                        >
+                            style={{ marginBottom: 0, }}
 
+
+                        >
                             <View style={[styles.centeredView, {}]} >
                                 <View style={styles.modalView}>
                                     <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
@@ -303,45 +284,138 @@ function PricePay({ navigation }) {
                                     </View>
 
 
-                                    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-                                        <FlatList
-                                            data={banks}
-                                            horizontal={false}
-                                            showsVerticalScrollIndicator={false}
-                                            keyExtractor={item => item.id}
-                                            renderItem={({ item, index }) => {
-                                                return (
-                                                    <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
+                                    <FlatList
+                                        data={banks}
+                                        horizontal={false}
+                                        showsVerticalScrollIndicator={false}
+                                        style={{ flex: 1, backgroundColor: Colors.white }}
+                                        keyExtractor={item => item.id}
+                                        renderItem={({ item, index }) => {
+                                            return (
+                                                <TouchableOpacity onPress={() => { setPay(item.id) }} style={[styles.oPress, { borderStyle: pay === item.id ? 'solid' : 'dotted', borderColor: pay === item.id ? Colors.main : 'black', borderWidth: 1.8, height: 100 }]}>
 
-                                                        <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
-                                                            <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
-                                                            <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
-                                                                </View>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
-                                                                </View>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
-                                                                </View>
-                                                                <View style={{ flexDirection: 'row', }}>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
-                                                                    <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
-                                                                </View>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: 10 }}>
+                                                        <Image source={{ uri: item.icon }} style={{ width: 80, height: 90, }} resizeMode='contain' />
+                                                        <View style={{ width: '100%', paddingHorizontal: 15, flex: 1 }}>
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('BankName')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.name}</Text>
+                                                            </View>
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccName')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}> {item.account_number}</Text>
+                                                            </View>
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('AccNamer')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.account_name}</Text>
+                                                            </View>
+                                                            <View style={{ flexDirection: 'row', }}>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5, }]}>{i18n.t('IBAN')} : </Text>
+                                                                <Text style={[styles.month, { paddingHorizontal: 5 }]}>{item.iban}</Text>
                                                             </View>
                                                         </View>
+                                                    </View>
 
-                                                    </TouchableOpacity>
-                                                )
-                                            }} />
+                                                </TouchableOpacity>
+                                            )
+                                        }} />
+                                    <View style={{ backgroundColor: Colors.white, }}>
+                                        <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ marginBottom: 5 }} />
+                                    </View>
+                                </View>
+
+
+
+
+                            </View>
+
+
+
+                        </Modal>
+
+
+
+
+
+                        <Modal
+                            onBackdropPress={() => setModalVisible2(false)}
+                            onBackButtonPress={() => setModalVisible2(false)}
+                            isVisible={modalVisible2}
+                            avoidKeyboard={true}
+                            transparent={true}
+                            style={{ flex: 1, marginBottom: 0 }}
+
+
+                        >
+
+                            <View style={[styles.centeredView, {}]} >
+                                <View style={styles.modalView}>
+                                    <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
+                                        <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
 
                                     </View>
-                                    <BTN title={i18n.t('confirm')} onPress={HandleBank} ContainerStyle={{ bottom: 0, height: 50, borderRadius: 25, position: 'absolute', backgroundColor: Colors.main }} />
 
+
+
+                                    <Content style={{ backgroundColor: Colors.white, flex: 1 }} >
+
+                                        <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
+
+                                            {
+                                                userImage === '' ?
+                                                    <Image source={require('../../../assets/Images/add_photo.png')} style={{ width: 100, height: 80, marginTop: 30, alignSelf: 'center', borderRadius: 5 }} resizeMode='contain' />
+                                                    :
+                                                    <Image source={{ uri: userImage }} style={{ width: 200, height: 150, marginTop: 30, alignSelf: 'center', borderRadius: 15 }} resizeMode='contain' />
+
+                                            }
+                                        </TouchableOpacity>
+                                        <InputApp
+                                            label={i18n.t('BankNameTr')}
+                                            placeholder={i18n.t('BankNameTr')}
+                                            onChangeText={(e) => setBankename(e)}
+                                            value={Bankename}
+                                            styleCont={{ marginTop: 20 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+
+                                        />
+
+                                        <InputApp
+                                            label={i18n.t('AccNamer')}
+                                            placeholder={i18n.t('AccNamer')}
+                                            onChangeText={(e) => { SetAccountname(e) }}
+                                            value={Accountname}
+                                            styleCont={{ marginTop: 0 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+                                        />
+
+                                        <InputApp
+                                            label={i18n.t('AccName')}
+                                            placeholder={i18n.t('AccName')}
+                                            onChangeText={(e) => { setAccountNumber(e) }}
+                                            value={AccountNumber}
+                                            styleCont={{ marginTop: 0 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+                                        />
+                                        <InputApp
+                                            label={i18n.t('Amountpaid')}
+                                            placeholder={i18n.t('Amountpaid')}
+                                            onChangeText={(e) => { setMoneyPaid(e) }}
+                                            value={MoneyPaid}
+                                            keyboardType='numeric'
+                                            styleCont={{ marginTop: 0 }}
+                                            multiline={true}
+                                            numberOfLines={1}
+                                        />
+
+
+
+                                        <BTN title={i18n.t('confirm')} onPress={HandleChangeTransfer} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
+
+
+                                    </Content >
                                 </View>
 
 
@@ -349,94 +423,16 @@ function PricePay({ navigation }) {
                         </Modal>
 
 
-                        <View style={[styles.centeredView, {}]} >
 
 
-                            <Modal
-                                onBackdropPress={() => setModalVisible2(false)}
-                                onBackButtonPress={() => setModalVisible2(false)}
-                                isVisible={modalVisible2}
-                                style={{ marginTop: 50 }}
-                                avoidKeyboard={true}
-                            >
-
-
-                                <View style={[styles.centeredView, {}]} >
-                                    <View style={styles.modalView}>
-                                        <View style={{ borderRadius: 55, height: 80, justifyContent: 'center' }} >
-                                            <Text style={{ alignSelf: 'center', color: Colors.white, fontFamily: 'FairuzBold', marginTop: 14 }}>{i18n.t('BankData')}</Text>
-
-                                        </View>
-
-
-
-                                        <ScrollView style={{ backgroundColor: Colors.white, flex: 1 }} keyboardShouldPersistTaps={'never'}>
-                                            <TouchableOpacity onPress={_pickImage} style={{ marginHorizontal: '15%', marginVertical: '6%' }}>
-
-                                                {
-                                                    userImage === '' ?
-                                                        <Image source={require('../../../assets/Images/add_photo.png')} style={{ width: 100, height: 80, marginTop: 30, alignSelf: 'center', borderRadius: 5 }} resizeMode='contain' />
-                                                        :
-                                                        <Image source={{ uri: userImage }} style={{ width: 200, height: 150, marginTop: 30, alignSelf: 'center', borderRadius: 15 }} resizeMode='contain' />
-
-                                                }
-                                            </TouchableOpacity>
-                                            <InputApp
-                                                label={i18n.t('BankNameTr')}
-                                                placeholder={i18n.t('BankNameTr')}
-                                                onChangeText={(e) => setBankename(e)}
-                                                value={Bankename}
-                                                styleCont={{ marginTop: 20 }}
-
-                                            />
-
-                                            <InputApp
-                                                label={i18n.t('AccNamer')}
-                                                placeholder={i18n.t('AccNamer')}
-                                                onChangeText={(e) => { SetAccountname(e) }}
-                                                value={Accountname}
-                                                styleCont={{ marginTop: 0 }}
-                                            />
-
-                                            <InputApp
-                                                label={i18n.t('AccName')}
-                                                placeholder={i18n.t('AccName')}
-                                                onChangeText={(e) => { setAccountNumber(e) }}
-                                                value={AccountNumber}
-                                                styleCont={{ marginTop: 0 }}
-                                            />
-                                            <InputApp
-                                                label={i18n.t('Amountpaid')}
-                                                placeholder={i18n.t('Amountpaid')}
-                                                onChangeText={(e) => { setMoneyPaid(e) }}
-                                                value={MoneyPaid}
-                                                keyboardType='numeric'
-                                                styleCont={{ marginTop: 0 }}
-                                            />
-
-
-
-                                            <BTN title={i18n.t('confirm')} onPress={HandleChangeTransfer} ContainerStyle={{ marginTop: 0, marginBottom: 10 }} />
-
-
-                                        </ScrollView >
-                                    </View>
-
-
-                                </View>
-
-                            </Modal>
-
-
-
-
-                        </View>
                         <Modal
                             onBackdropPress={() => setModalVisible3(false)}
                             onBackButtonPress={() => setModalVisible3(false)}
                             isVisible={modalVisible3}
                             style={{ marginTop: 50 }}
                             avoidKeyboard={true}
+
+
                         >
 
 
@@ -466,7 +462,10 @@ function PricePay({ navigation }) {
                 </View>
 
             </View>
+
         </Container>
+
+
     )
 }
 
@@ -499,7 +498,7 @@ const styles = StyleSheet.create({
     SCard: {
         backgroundColor: Colors.white,
         flexDirection: 'row',
-        height: 110,
+        height: 120,
         borderRadius: 25,
         alignItems: 'center',
         marginHorizontal: '5%',
@@ -509,7 +508,6 @@ const styles = StyleSheet.create({
     SText: {
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
-        width: 150,
         flex: 1,
 
     },
@@ -603,7 +601,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 55,
         borderTopLeftRadius: 55,
         width: width,
-        height: height * .72,
+        height: height * .79,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

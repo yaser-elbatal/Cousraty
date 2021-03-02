@@ -53,7 +53,6 @@ const handelLogin = (dispatch, data, navigation) => {
 
 
 const loginSuccess = (dispatch, data, navigation) => {
-    console.log(data.data.active);
 
     if (data.data.active) {
 

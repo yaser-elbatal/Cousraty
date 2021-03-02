@@ -7,7 +7,7 @@
       "backgroundColor": "#2E234D",
       "translucent": false
     },
-    "version": "0.0.6",
+    "version": "0.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -37,7 +37,7 @@
     },
     "android": {
       "package": "com.awmer.tarbawis",
-      "versionCode": 6,
+      "versionCode": 9,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",

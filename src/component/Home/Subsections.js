@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList, Linking } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, Text, I18nManager, ScrollView, FlatList, Linking, Platform } from 'react-native'
 import { height, width } from '../../constant/Dimentions'
 import i18n from '../../../Local/i18n'
 import { Colors } from '../../constant/Colors'
@@ -8,6 +8,8 @@ import BTN from '../../common/LoginBtn'
 import { useSelector, useDispatch } from 'react-redux'
 import { useIsFocused } from '@react-navigation/native';
 import { GetToutorial } from '../../store/action/HomeAction'
+import { ToasterNative } from '../../common/ToasterNative'
+import { WebView } from 'react-native-webview';
 
 
 
@@ -17,10 +19,11 @@ function Subsections({ navigation, route }) {
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const lang = useSelector(state => state.lang.language);
     const Subscribtion = useSelector(state => state.plan.toutorial ? state.plan.toutorial : []);
+    let colors = [Colors.foshia, Colors.Labny, Colors.Green, Colors.main, Colors.orange, Colors.LabnyFateh, Colors.smothblack]
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
-    const { plan_id, plan_name, pdf } = route.params;
+    const { plan_id, plan_name, pdf, word, icon, item } = route.params;
 
 
     useEffect(() => {
@@ -28,6 +31,7 @@ function Subsections({ navigation, route }) {
             dispatch(GetToutorial(lang, token, plan_id))
         }
     }, [isFocused])
+
 
     return (
         <Container style={{ flex: 1, }}>
@@ -48,14 +52,20 @@ function Subsections({ navigation, route }) {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 320, alignItems: 'center' }}>
                         <Text style={styles.Notify}>{i18n.t('Subsections')}</Text>
-                        <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={pdf === null ? () => { } : () => Linking.openURL(`${pdf}`)}>
-                            <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', }}>
+                            <TouchableOpacity style={{ alignItems: 'flex-end', paddingHorizontal: 15 }} onPress={pdf === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${pdf}`)}>
+                                <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{ alignItems: 'flex-end', }} onPress={word === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${word}`)}>
+                                <Image source={require('../../../assets/Images/word.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
 
                     <View style={[styles.SmallCard, { backgroundColor: Colors.orange, }]} >
                         <View style={styles.WrabCard}>
-                            <Image source={require('../../../assets/Images/brain.png')} style={styles.SMAllImg} resizeMode='contain' />
+                            <Image source={{ uri: icon }} style={styles.SMAllImg} resizeMode='contain' />
                             <View style={styles.smallText}>
                                 <Text style={styles.Indevedual}>  {plan_name}  </Text>
                             </View>
@@ -74,16 +84,21 @@ function Subsections({ navigation, route }) {
                                 :
                                 <>
                                     <View style={styles.Line}></View>
+                                    {
+                                        item.image ?
+                                            <Image source={{ uri: item.image }} style={{ width: 150, height: 150, alignSelf: 'center', borderRadius: 10 }} resizeMode='contain' />
+                                            : null
+                                    }
 
                                     <FlatList
                                         data={toutorial}
                                         horizontal={false}
                                         showsVerticalScrollIndicator={false}
-                                        keyExtractor={item => item.id}
+                                        keyExtractor={item => item.id.toString()}
                                         renderItem={({ item, index }) => {
                                             return (
                                                 <TouchableOpacity style={styles.single} onPress={() => navigation.navigate('SubCategory', { data: item, Subscribtion })}>
-                                                    <View style={styles.ViewNum}>
+                                                    <View style={[styles.ViewNum, { backgroundColor: colors[index % colors.length] }]}>
                                                         <Text style={styles.num}>{index + 1}</Text>
                                                     </View>
 
@@ -104,7 +119,9 @@ function Subsections({ navigation, route }) {
                     </Content>
                     {
                         Subscribtion.extra == 0 ?
-                            <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} ContainerStyle={{ marginTop: 240, position: 'absolute' }} />
+                            <View style={{ marginBottom: Platform.OS == 'ios' ? 50 : 20 }}>
+                                <BTN title={i18n.t('subscribe')} onPress={() => navigation.navigate('PricePay')} />
+                            </View>
                             : null
                     }
                 </View>
@@ -250,7 +267,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginStart: 20,
         alignItems: 'center',
-        marginTop: 30
+        marginTop: 25
     },
     ViewNum: {
         backgroundColor: Colors.orange,
@@ -259,7 +276,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 15
     },
     num: {
         color: Colors.black,

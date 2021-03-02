@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Linking } from 'react-native';
 import { Colors } from '../../constant/Colors'
 import i18n from '../../../Local/i18n'
 import BTN from '../../common/LoginBtn'
@@ -7,6 +7,7 @@ import { height, width } from '../../constant/Dimentions'
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { GetPlan } from '../../store/action/HomeAction';
+import { GetContactUS } from '../../store/action/DrawerAction';
 
 
 
@@ -15,7 +16,9 @@ function HomePage({ navigation }) {
 
     const lang = useSelector(state => state.lang.language);
     const plan = useSelector(state => state.plan.plan);
+    const Contact = useSelector(state => state.drawer.contact ? state.drawer.contact : {});
 
+    const [modaLvisible, setmodaLvisible] = useState(false)
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     let colors = [Colors.foshia, Colors.Labny, Colors.Green, Colors.main, Colors.orange, Colors.LabnyFateh, Colors.smothblack]
@@ -26,7 +29,7 @@ function HomePage({ navigation }) {
 
         if (isFocused) {
 
-            dispatch(GetPlan(lang))
+            dispatch(GetPlan(lang)).then(() => dispatch(GetContactUS(lang)))
         }
     }, [isFocused])
 
@@ -48,15 +51,15 @@ function HomePage({ navigation }) {
                 </View>
 
                 <ScrollView style={{ flex: 1, height: height * .86 }} showsVerticalScrollIndicator={false}>
-                    <Text numberOfLines={2} style={[styles.Hello, { width: 280 }]}>{i18n.t('HelloApp')}</Text>
-
+                    <Text style={[styles.Hello, {}]}>{i18n.t('HelloApp')}</Text>
+                    <Text style={[styles.Hello, { marginTop: 0 }]}> {i18n.t('Educ')}</Text>
                     <View style={styles.card}>
                         <View style={styles.ImgText}>
                             <Image source={require('../../../assets/Images/big_lamp.png')} style={styles.ImgCard} resizeMode='contain' />
                             <View style={styles.wrabLess}>
                                 <Text style={styles.TextCard}>{i18n.t('FavLesson')}</Text>
 
-                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} />
+                                <BTN title={i18n.t('watchPlan')} ContainerStyle={styles.Btn} TextStyle={{ fontSize: 12, }} onPress={() => Linking.openURL(`https://api.whatsapp.com/send?phone=${Contact.contact.whatsapp}`)} />
                             </View>
                         </View>
                     </View>
@@ -65,10 +68,10 @@ function HomePage({ navigation }) {
                         data={plan}
                         horizontal={false}
                         showsVerticalScrollIndicator={false}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id.toString()}
                         renderItem={({ item, index }) => {
                             return (
-                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf })}>
+                                <TouchableOpacity style={[styles.SmallCard, { backgroundColor: colors[index % colors.length] }]} onPress={() => navigation.navigate('Subsections', { plan_id: item.id, plan_name: item.name, pdf: item.pdf, word: item.word, icon: item.icon, item: item })}>
                                     <View style={styles.WrabCard}>
                                         <Image source={{ uri: item.icon }} style={styles.SMAllImg} resizeMode='contain' />
                                         <View style={styles.smallText}>
@@ -84,6 +87,8 @@ function HomePage({ navigation }) {
                     />
 
                 </ScrollView>
+
+
             </View>
         </View >
     )
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'FairuzBold',
         alignSelf: 'flex-start',
-        marginTop: 40
+        marginTop: 50
     },
     card: {
         backgroundColor: Colors.Labny,
@@ -131,13 +136,12 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     SmallCard: {
-        backgroundColor: Colors.foshia,
-        flex: 1, borderRadius: 25,
+        flex: 1,
+        borderRadius: 20,
         width: '95%',
         marginHorizontal: '1%',
         marginTop: 15,
-        paddingVertical: 15,
-        paddingHorizontal: 5,
+
         justifyContent: 'center'
     },
     ImgText: {
@@ -147,6 +151,8 @@ const styles = StyleSheet.create({
     ImgCard: {
         width: 100,
         height: 140,
+        borderRadius: 25,
+
     },
     TextCard: {
         fontFamily: 'FairuzBold',
@@ -169,16 +175,15 @@ const styles = StyleSheet.create({
     WrabCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: '1%'
     },
     SMAllImg: {
-        width: 100,
-        height: 60,
-        borderRadius: 25
+        width: 80,
+        height: 100,
+        borderRadius: 20,
+        margin: 5,
     },
     smallText: {
         flexDirection: 'column',
-        marginStart: 10,
         flex: 1
 
     },
@@ -186,6 +191,7 @@ const styles = StyleSheet.create({
         fontFamily: 'FairuzBold',
         fontSize: 14,
         color: Colors.secondary,
+        alignSelf: 'flex-start'
     },
     Price: {
         fontFamily: 'FairuzBold',

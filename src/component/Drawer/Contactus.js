@@ -150,46 +150,47 @@ function Contactus({ navigation }) {
 
 
                             </View>
-                            <SText title={i18n.t('sendComplaint')} onPress={() => setModalVisible(true)} style={styles.FPass} />
 
 
 
 
 
-                            <View style={styles.centeredView}>
-                                <Modal
-                                    animationType="slide"
-                                    transparent={true}
-                                    visible={modalVisible} >
 
-                                    <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
-                                        <View style={styles.modalView}>
-                                            <View style={styles.Line}></View>
-                                            <Text style={styles.Complain}>{i18n.t('sendComplaint')}</Text>
-
-                                            <InputApp
-                                                placeholder={i18n.t('sendComplaint')}
-                                                onChangeText={(e) => setMessage(e)}
-                                                value={Message}
-                                                multiline={true}
-                                                numberOfLines={10}
-                                                styleCont={{ marginTop: 10, height: 180 }}
-                                                inputStyle={{ padding: 0, top: 0, }}
-
-                                            />
-
-                                            <BTN title={i18n.t('confirm')} onPress={SendComplaimentAppUser} ContainerStyle={{ marginTop: 0, marginVertical: 15 }} />
-
-                                        </View>
-
-                                    </TouchableOpacity>
-                                </Modal>
-                            </View>
                         </Content>
 
                     }
+                    <SText title={i18n.t('sendComplaint')} onPress={() => setModalVisible(true)} style={styles.FPass} />
 
                 </View>
+            </View>
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible} >
+
+                    <TouchableOpacity style={[styles.centeredView, {}]} onPress={() => setModalVisible(false)}>
+                        <View style={styles.modalView}>
+                            <View style={styles.Line}></View>
+                            <Text style={styles.Complain}>{i18n.t('sendComplaint')}</Text>
+
+                            <InputApp
+                                placeholder={i18n.t('sendComplaint')}
+                                onChangeText={(e) => setMessage(e)}
+                                value={Message}
+                                multiline={true}
+                                numberOfLines={10}
+                                styleCont={{ marginTop: 10, height: 180 }}
+                                inputStyle={{ padding: 0, top: 0, }}
+
+                            />
+
+                            <BTN title={i18n.t('confirm')} onPress={SendComplaimentAppUser} ContainerStyle={{ marginTop: 0, marginVertical: 15 }} />
+
+                        </View>
+
+                    </TouchableOpacity>
+                </Modal>
             </View>
         </Container>
 
@@ -265,8 +266,9 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
         fontFamily: 'FairuzBold',
         fontSize: 16,
-        marginHorizontal: 25
-
+        alignSelf: 'flex-start',
+        marginVertical: 15,
+        marginStart: 5
     },
 
     Card: {

@@ -30,24 +30,50 @@ function Login({ navigation }) {
     const lang = useSelector(state => state.lang.language);
 
 
+    // const getDeviceId = async () => {
+    //     const { status: existingStatus } = await Permissions.getAsync(
+    //         Permissions.NOTIFICATIONS
+    //     );
+
+    //     let finalStatus = existingStatus;
+
+    //     if (existingStatus !== 'granted') {
+    //         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    //         finalStatus = status;
+    //     }
+
+    //     if (finalStatus !== 'granted') {
+    //         return;
+    //     }
+
+    //     const deviceId = await Notifications.getExpoPushTokenAsync();
+
+    //     setDeviceId(deviceId);
+    //     setUserId(null);
+
+    //     AsyncStorage.setItem('deviceID', deviceId);
+    // };
+    // useEffect(() => {
+    //     getDeviceId()
+    //     setSpinner(false)
+    // }, []);
+
+
 
     useEffect(() => {
 
-        setTimeout(()=>{
-            registerForPushNotificationsAsync();
-        },6000)
         Platform.OS === 'android' ?
             setdeviceType('android')
             :
             setdeviceType('ios')
 
+        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
         });
 
-
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        });
+        // responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        // });
         // registerForPushNotificationsAsync().then(token => AsyncStorage.setItem('deviceID', token));
 
 
@@ -68,15 +94,54 @@ function Login({ navigation }) {
             }
             if (finalStatus !== 'granted') {
 
+                Alert.alert(
+                    //title
+                    'Hello',
+                    //body
+                    'Failed to get push token for push notification!',
+                    [
+                        // {
+                        //     text: 'Yes',
+                        //     onPress: () => console.log('Yes Pressed')
+                        // },
+                        {
+                            text: 'ok',
+                            onPress: () => console.log('No Pressed'), style: 'cancel'
+                        },
+                    ],
+                    { cancelable: false },
+                    //clicking out side of alert will not cancel
+                );
+
                 // alert('Failed to get push token for push notification!');
                 return;
             }
             token = (await Notifications.getExpoPushTokenAsync()).data;
-            setExpoPushToken(token)
-
             AsyncStorage.setItem('deviceID', token);
+
             return token;
         } else {
+            Alert.alert(
+                //title
+                'Hello',
+                //body
+                'Must use physical device for Push Notifications',
+                [
+                    // {
+                    //     text: 'Yes',
+                    //     onPress: () => console.log('Yes Pressed')
+                    // },
+                    {
+                        text: 'ok',
+                        onPress: () => console.log('No Pressed'), style: 'cancel'
+                    },
+                ],
+                { cancelable: false },
+                //clicking out side of alert will not cancel
+            );
+
+
+            // alert('Must use physical device for Push Notifications');
         }
 
         if (Platform.OS === 'android') {
@@ -87,9 +152,12 @@ function Login({ navigation }) {
                 lightColor: '#FF231F7C',
             });
         }
+        if (token)
+            AsyncStorage.setItem('deviceID', token);
+
+        return token;
 
     }
-
 
 
     const _validate = () => {
@@ -147,7 +215,7 @@ function Login({ navigation }) {
                     placeholder={i18n.t('password')}
                     value={password}
                     onChangeText={(e) => setPassword(e)}
-                     secureTextEntry={ true}
+                    secureTextEntry={Platform.OS === 'android' ? password === '' ? false : true : true}
                     styleCont={{ marginTop: 0 }}
                     placeholderStyle={{ fontFamily: 'FairuzBold', }}
 

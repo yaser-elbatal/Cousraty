@@ -29,7 +29,7 @@ function Settings({ navigation }) {
     const [Lang, setLang] = useState('');
     const [Direction, setDirection] = useState('');
     const [spinner, setSpinner] = useState(false)
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(true);
 
     const toggleSwitch = () => {
         setIsEnabled(previousState => !previousState)
@@ -54,9 +54,10 @@ function Settings({ navigation }) {
 
     const _Valdiation = () => {
         let PasswordErr = validatePassword(password);
+        let PasswordE = validatePassword(Newpassword);
         let passConfirm = validateTwoPasswords(Newpassword, confirmPassword)
 
-        return PasswordErr || passConfirm
+        return PasswordErr || PasswordE || passConfirm
     }
 
 
@@ -217,7 +218,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('password')}
                                                     onChangeText={(e) => setPassword(e)}
                                                     value={password}
-                                                    secureTextEntry={password === '' ? false : true}
+                                                    secureTextEntry={Platform.OS === 'android' ? password === '' ? false : true : true}
                                                     styleCont={{ marginTop: 30 }}
 
                                                 />
@@ -226,7 +227,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('NewPassword')}
                                                     onChangeText={(e) => setNewPassword(e)}
                                                     value={Newpassword}
-                                                    secureTextEntry={Newpassword === '' ? false : true}
+                                                    secureTextEntry={Platform.OS === 'android' ? Newpassword === '' ? false : true : true}
                                                     styleCont={{ marginTop: 10 }}
 
 
@@ -237,7 +238,7 @@ function Settings({ navigation }) {
                                                     placeholder={i18n.t('confirmPass')}
                                                     onChangeText={(e) => setConfirmPassword(e)}
                                                     value={confirmPassword}
-                                                    secureTextEntry={confirmPassword === '' ? false : true}
+                                                    secureTextEntry={Platform.OS === 'android' ? confirmPassword === '' ? false : true : true}
                                                     styleCont={{ marginTop: 10 }}
 
 

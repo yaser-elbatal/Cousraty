@@ -60,9 +60,9 @@ export default function App() {
           <Root>
             <AccessRoots />
           </Root>
-          <StatusBar style="auto" />
         </PersistGate>
       </Provider>
+
     );
   }
 }

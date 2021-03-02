@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, Platform } from 'react-native'
 
 import { HeaderAuth } from '../../common/HeaderAuth'
 import { Colors } from '../../constant/Colors'
@@ -60,14 +60,14 @@ function NewPassword({ navigation, route }) {
                     placeholder={i18n.t('password')}
                     onChangeText={(e) => setPassword(e)}
                     value={password}
-                    secureTextEntry={password === '' ? false : true}
+                    secureTextEntry={Platform.OS === 'android' ? password === '' ? false : true : true}
                     styleCont={{ marginTop: 0 }}
                 />
                 <InputIcon
                     placeholder={i18n.t('confirmPass')}
                     onChangeText={(e) => setConfirmPassword(e)}
                     value={confirmPassword}
-                    secureTextEntry={confirmPassword === '' ? false : true}
+                    secureTextEntry={Platform.OS === 'android' ? confirmPassword === '' ? false : true : true}
                     styleCont={{ marginTop: 0 }}
                 />
                 <Containers loading={spinner}>
