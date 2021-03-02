@@ -52,15 +52,19 @@ function Subsections({ navigation, route }) {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 320, alignItems: 'center' }}>
                         <Text style={styles.Notify}>{i18n.t('Subsections')}</Text>
-                        <View style={{ flexDirection: 'row', }}>
-                            <TouchableOpacity style={{ alignItems: 'flex-end', paddingHorizontal: 15 }} onPress={pdf === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${pdf}`)}>
-                                <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{ alignItems: 'flex-end', }} onPress={word === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${word}`)}>
-                                <Image source={require('../../../assets/Images/word.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                            </TouchableOpacity>
-                        </View>
+                        {
+                            Subscribtion.extra == 0 ?
+                                null :
 
+                                <View style={{ flexDirection: 'row', }}>
+                                    <TouchableOpacity style={{ alignItems: 'flex-end', paddingHorizontal: 15 }} onPress={pdf === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${pdf}`)}>
+                                        <Image source={require('../../../assets/Images/pdf.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{ alignItems: 'flex-end', }} onPress={word === null ? () => ToasterNative(i18n.t('notFile'), "danger") : () => Linking.openURL(`${word}`)}>
+                                        <Image source={require('../../../assets/Images/word.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                                    </TouchableOpacity>
+                                </View>
+                        }
                     </View>
 
                     <View style={[styles.SmallCard, { backgroundColor: Colors.orange, }]} >
